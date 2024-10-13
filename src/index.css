@@ -1,0 +1,8 @@
+.toastBody {
+  font-family: "Atlas Grotesk Web", Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+}
+.whiteToast {
+  background-color: white !important;
+  color: black !important;
+}
