@@ -40,6 +40,9 @@ const Home = () => {
   const handleCategoryClick = (categoryId) => {
     navigate('/product-list', { state: { categoryId: categoryId } });
   };
+  const handleBannerClick = ()=>{
+    navigate("/product-list")
+  }
   useEffect(() => {
     dispatch(fetchProductsAsync());
     dispatch(fetchCategoriesAsync());
@@ -121,36 +124,28 @@ const Home = () => {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-6">
               <div className="row">
-                <div className="col-lg-12">
+                <div className="col-lg-12" onClick={handleBannerClick}>
                   <div className="banner-item mb-4 img_hover rounded-2">
-                    <a href="#">
                       <img src="/images/advertisement/khand.jpg" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                    </a>
                   </div>
                 </div>
-                <div className="col-lg-12">
+                <div className="col-lg-12" onClick={handleBannerClick}>
                   <div className="banner-item img_hover rounded-2">
-                    <a href="#">
                       <img src="/images/advertisement/flour.jpg" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                    </a>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-6">
               <div className="row">
-                <div className="col-lg-12">
+                <div className="col-lg-12" onClick={handleBannerClick}>
                   <div className="banner-item mb-4 img_hover rounded-2">
-                    <a href="#">
                       <img src="/images/advertisement/oil.jpg" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                    </a>
                   </div>
                 </div>
-                <div className="col-lg-12">
+                <div className="col-lg-12" onClick={handleBannerClick}>
                   <div className="banner-item img_hover rounded-2">
-                    <a href="#">
                       <img src="/images/advertisement/dairy_four.png" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                    </a>
                   </div>
                 </div>
               </div>
@@ -280,21 +275,21 @@ const Home = () => {
       <div className="container-fluid foot_banner py-md-5">
         <div className="container">
           <div className="row">
-            <div className="col-lg-4">
+            <div className="col-lg-4" onClick={handleBannerClick}>
               <div className="banner-item mb-4 img_hover rounded-2">
                 <a href="#">
                   <img src="/images/advertisement/khand.jpg" style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
                 </a>
               </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-4" onClick={handleBannerClick}>
               <div className="banner-item mb-4 img_hover rounded-2">
                 <a href="#">
                   <img src="/images/advertisement/dairy_four.png" style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
                 </a>
               </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-4" onClick={handleBannerClick}>
               <div className="banner-item mb-4 img_hover rounded-2">
                 <a href="#">
                   <img src="/images/advertisement/dairy_three.png" style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />

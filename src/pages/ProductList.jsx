@@ -182,7 +182,9 @@ const ProductList = () => {
                     </div>
                   ))
                 ) : (
-                  <h4 className="text-center">Products not found</h4>
+                  <div>
+                     <img src="/images/no-product-found.png" alt="" className='w-100 img-fluid' />
+                  </div>
                 )}
               </div>
               {/* <div className="col-lg-7 col-md-7 col-12">

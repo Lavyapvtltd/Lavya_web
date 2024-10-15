@@ -1,34 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IMAGE_BASE_URL, BASE_URL, API_URL, GOOGLE_MAP_API_KEY } from "../constants/contant";
+import { IMAGE_BASE_URL, BASE_URL, API_URL } from "../constants/contant";
 import { toast } from "react-toastify";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
-import { fetchAddressesAsync } from "../features/addressSlice";
 import moment from "moment/moment";
 import { fetchCartsAsync } from "../features/cartSlice";
 import { walletAmountDeduction } from "../features/authSlice";
+import { updateProductStock } from "../features/productSlice";
+import DeliveryAddress from "../components/DeliveryAddress";
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user, user_id, isLoggedIn } = useSelector((state) => state.auth);
     const cart_items = useSelector((state) => state.cart.cart);
-    const addresses = useSelector(state => state.addresses.addresses);
     const [subTotal, setSubTotal] = useState(0);
     const [total, setTotal] = useState(0);
     const [flexRadioDefault, setFlexRadioDefault] = useState("");
     const [finalTotal, setFinalTotal] = useState(total);
-    const [toggle, setToggle] = useState(false);
     const [address, setAddress] = useState("");
     const [wallet, setWallet] = useState(false);
-    const autocompleteInputRef = useRef(null);
-    const setFieldValueRef = useRef(null);
-    const [mapSrc, setMapSrc] = useState("");
-    function convertDateFormat(dateString) {
-        return moment(dateString, "MM-DD-YYYY").format("DD-MM-YYYY");
-    }
     const product = cart_items?.map((cart_item) => {
         return {
             id: cart_item._id,
@@ -38,7 +29,7 @@ const Checkout = () => {
             price: cart_item.price,
             unitValue: cart_item.unit_value,
             unit: cart_item.unit,
-            subscription_type: cart_item.subscription_type,
+            subscription_type: cart_item.subscribed_type,
             start_date: cart_item.start_date,
             selQty: cart_item.selQty,
             regularPrice: cart_item.regularPrice,
@@ -64,8 +55,8 @@ const Checkout = () => {
                         shippingaddress: address,
                         user: user,
                         amount: total,
-                        deliveryDate: moment(convertDateFormat(product[0].start_date)).format("Do MMM YY"),
-                        deliveryType: product[0].subscribed_type,
+                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryType: product[0].subscription_type,
                         paymentOption: "Wallet",
                         walletDeductedAmount: "Full"
                     }
@@ -77,12 +68,15 @@ const Checkout = () => {
                     const { baseResponse, response } = result;
                     if (baseResponse.status == 1) {
                         const data = {
-                            amount:total
+                            amount: total
                         }
-                        dispatch(walletAmountDeduction({user_id,data}));
+                        dispatch(walletAmountDeduction({ user_id, data }));
+                        product.forEach((item)=>{
+                            dispatch(updateProductStock({productId:item.id,qty:item.selQty}));
+                        })
                         toast.success("Order Created Successfully");
                         setTimeout(() => {
-                            navigate("/")
+                            navigate("/order-success")
                         }, 1000);
                     } else {
                         toast.error(baseResponse.message);
@@ -105,8 +99,8 @@ const Checkout = () => {
                         user: user,
                         amount: finalTotal,
                         deductedWalletAmount: deducted_amount,
-                        deliveryDate: moment(convertDateFormat(product[0].start_date)).format("Do MMM YY"),
-                        deliveryType: product[0].subscribed_type,
+                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: deducted_amount,
                     }
@@ -118,12 +112,15 @@ const Checkout = () => {
                     const { baseResponse, response } = result;
                     if (baseResponse.status == 1) {
                         const data = {
-                            amount:deducted_amount
+                            amount: deducted_amount
                         }
-                        dispatch(walletAmountDeduction({user_id,data}));
+                        dispatch(walletAmountDeduction({ user_id, data }));
+                        product.forEach((item)=>{
+                            dispatch(updateProductStock({productId:item.id,qty:item.selQty}));
+                        })
                         toast.success("Order Created Successfully");
                         setTimeout(() => {
-                            navigate("/")
+                            navigate("/order-success")
                         }, 1000)
                     } else {
                         toast.error(baseResponse.message);
@@ -146,8 +143,8 @@ const Checkout = () => {
                         user: user,
                         amount: finalTotal,
                         deductedWalletAmount: deducted_amount,
-                        deliveryDate: moment(convertDateFormat(product[0].start_date)).format("Do MMM YY"),
-                        deliveryType: product[0].subscribed_type,
+                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: deducted_amount,
                     }
@@ -169,6 +166,9 @@ const Checkout = () => {
                 }
             }
         } else {
+            if (!flexRadioDefault) {
+                return toast.error("Please select payment type");
+            }
             if (flexRadioDefault == "Cash on delivery") {
                 try {
                     const data = {
@@ -178,8 +178,8 @@ const Checkout = () => {
                         shippingaddress: address,
                         user: user,
                         amount: finalTotal,
-                        deliveryDate: moment(convertDateFormat(product[0].start_date)).format("Do MMM YY"),
-                        deliveryType: product[0].subscribed_type,
+                        deliveryDate:moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: 0,
                     }
@@ -191,8 +191,11 @@ const Checkout = () => {
                     const { baseResponse, response } = result;
                     if (baseResponse.status == 1) {
                         toast.success("Order Created Successfully");
+                        product.forEach((item)=>{
+                            dispatch(updateProductStock({productId:item.id,qty:item.selQty}));
+                        })
                         setTimeout(() => {
-                            navigate("/")
+                            navigate("/order-success")
                         }, 1000)
                     } else {
                         toast.error(baseResponse.message);
@@ -211,8 +214,8 @@ const Checkout = () => {
                         user: user,
                         amount: finalTotal,
                         deductedWalletAmount: 0,
-                        deliveryDate: moment(convertDateFormat(product[0].start_date)).format("Do MMM YY"),
-                        deliveryType: product[0].subscribed_type,
+                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: 0,
                     }
@@ -257,12 +260,6 @@ const Checkout = () => {
     }, [flexRadioDefault, total]);
 
     useEffect(() => {
-        if (user_id) {
-            dispatch(fetchAddressesAsync(user_id));
-        }
-    }, [dispatch, user_id]);
-
-    useEffect(() => {
         if (isLoggedIn) {
             dispatch(fetchCartsAsync(user_id));
         }
@@ -280,242 +277,13 @@ const Checkout = () => {
         calculateTotal();
     }, [cart_items]);
 
-    useEffect(() => {
-        const loadScript = (url, callback) => {
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = url;
-            script.onload = callback;
-            document.head.appendChild(script);
-        };
-
-        const handleScriptLoad = () => {
-            const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
-                types: ["geocode"],
-                componentRestrictions: { country: "in" },
-            });
-
-            autocomplete.setFields(["address_component", "formatted_address", "geometry"]);
-
-            autocomplete.addListener("place_changed", () => {
-                const place = autocomplete.getPlace();
-                let formattedAddress = place.formatted_address || '';
-                let lat = place.geometry?.location?.lat();
-                let lng = place.geometry?.location?.lng();
-                if (lat && lng) {
-                    const mapUrl = `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAP_API_KEY}&center=${lat},${lng}&zoom=14`;
-                    setMapSrc(mapUrl);
-                }
-                if (setFieldValueRef.current) {
-                    setFieldValueRef.current("location", formattedAddress);
-                    // Also set the input value directly if needed
-                    if (autocompleteInputRef.current) {
-                        autocompleteInputRef.current.value = formattedAddress;
-                    }
-                }
-            });
-        };
-        if (!window.google) {
-            loadScript(`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API_KEY}&libraries=places`, handleScriptLoad);
-        } else {
-            handleScriptLoad();
-        }
-    }, [toggle]);
-
 
     return (
         <>
             <div className="container-fluid checkout-section py-5">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-6 col-md-6 col-12">
-                            <div className="col-12">
-                                <div className="address_checkout rounded-2">
-                                    <div className="d-flex align-items-center justify-content-between p-3" style={{ borderBottom: "1px solid #000" }}>
-                                        <div>
-                                            <h5 className="fw-semibold m-0">Address Delivery</h5>
-                                        </div>
-
-                                        <div className="check_img">
-                                            <img src="/images/address-checkout.png" alt="" className="img-fluid"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="p-3">
-                                        {
-                                            addresses?.map((item, index) => (
-                                                <div className="d-flex align-items-center mb-1" key={index}>
-                                                    <input
-                                                        className="form-check-input ms-2"
-                                                        type="radio"
-                                                        name="address"
-                                                        id={`flexRadioDefault${index}`}
-                                                        value={index}
-                                                        onChange={(e) => {
-                                                            const selectedAddress = addresses[parseInt(e.target.value)];
-                                                            setAddress(selectedAddress);
-                                                        }}
-                                                    />
-                                                    <label
-                                                        className="form-check-label ps-2"
-                                                        htmlFor={`flexRadioDefault${index}`}
-                                                    >
-                                                        <div>
-                                                            <h6 className="mb-1 fw-semibold">{user?.name}</h6>
-                                                            <p>
-                                                                {item?.location}
-                                                                <a href="#" className="ps-1"><i className="fa-regular fa-pen-to-square text-danger"></i></a>
-                                                            </p>
-                                                            <p className="">Mobile: {user?.contact}</p>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-12 mt-3">
-                                <button className="rounded-pill bg-white px-3 py-2 text-success fw-semibold" style={{ border: '2px solid rgb(48 154 32)' }} onClick={() => setToggle(!toggle)}>+ Add new Address</button>
-                            </div>
-                            {
-                                toggle && <div className="col-12 mt-3 main-form rounded-1 p-3">
-                                    {
-                                        mapSrc && <div className="w-100">
-                                            <iframe
-                                                src={mapSrc}
-                                                width="100%"
-                                                height="150"
-                                                style={{ border: '0' }}
-                                                allowFullScreen=""
-                                                loading="lazy"
-                                                referrerPolicy="no-referrer-when-downgrade"
-                                            ></iframe>
-                                        </div>
-                                    }
-                                    <div className="p-md-5 p-sm-3 p-3">
-                                        <div className="col-12 pb-1">
-                                            <h4 className='fw-semibold'>Add New Address</h4>
-                                        </div>
-                                        <Formik
-                                            initialValues={{
-                                                location: "",
-                                                street: "",
-                                                address: "",
-                                                landmark: "",
-                                                alternatephone: "",
-                                            }}
-                                            validationSchema={Yup.object({
-                                                location: Yup.string().required("Location is required"),
-                                                street: Yup.string().required("House/Flat Number is required"),
-                                                address: Yup.string().required("Society/Colony Name is required"),
-                                                landmark: Yup.string().required("Landmark is required"),
-                                                alternatephone: Yup.string()
-                                                    .matches(/^[0-9]{10}$/, "Alternate Contact No. must be exactly 10 digits")
-                                                    .required("Alternate Contact No. is required"),
-                                            })}
-                                            onSubmit={async (values, { resetForm }) => {
-                                                try {
-                                                    const res = await axios.post(
-                                                        `${BASE_URL}${API_URL.ADD_ADDRESS}${user_id}`,
-                                                        values
-                                                    );
-                                                    const result = res.data;
-                                                    const { baseResponse, response } = result;
-                                                    if (baseResponse.status == 1) {
-                                                        toast.success("Address added successfully");
-                                                        dispatch(fetchAddressesAsync(user_id));
-                                                        setMapSrc("");
-                                                        resetForm();
-                                                    } else {
-                                                        toast.error(baseResponse.message);
-                                                    }
-                                                } catch (error) {
-                                                    toast.error("Something went wrong");
-                                                }
-                                            }}
-                                        >
-                                            {({ setFieldValue }) => {
-                                                setFieldValueRef.current = setFieldValue;
-                                                return <Form>
-                                                    <div className="row gy-3">
-                                                        <div className="col-12">
-                                                            <div className="user-address-from position-relative">
-                                                                <Field
-                                                                    type="text"
-                                                                    name="location"
-                                                                    className="form-control rounded-1"
-                                                                    innerRef={autocompleteInputRef}
-                                                                    placeholder="Search location..."
-                                                                    onChange={(e) => {
-                                                                        setFieldValue("location", e.target.value);
-                                                                    }}
-                                                                />
-                                                                <i className="fa fa-map-marker position-absolute" />
-                                                                <ErrorMessage name="location" component="div" className="text-danger" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="user-address-from position-relative">
-                                                                <Field
-                                                                    type="text"
-                                                                    name="street"
-                                                                    className="form-control rounded-1"
-                                                                    placeholder="House Number/Flat Number"
-                                                                />
-                                                                <i className="fa fa-map-marker position-absolute" />
-                                                                <ErrorMessage name="street" component="div" className="text-danger" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="user-address-from position-relative">
-                                                                <Field
-                                                                    type="text"
-                                                                    name="address"
-                                                                    className="form-control rounded-1"
-                                                                    placeholder="Society Name/Colony Name"
-                                                                />
-                                                                <i className="fa fa-map-marker position-absolute" />
-                                                                <ErrorMessage name="address" component="div" className="text-danger" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="user-address-from position-relative">
-                                                                <Field
-                                                                    type="text"
-                                                                    name="landmark"
-                                                                    className="form-control rounded-1"
-                                                                    placeholder="landmark"
-                                                                />
-                                                                <i className="fa fa-map-marker position-absolute" />
-                                                                <ErrorMessage name="landmark" component="div" className="text-danger" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="user-address-from position-relative">
-                                                                <Field
-                                                                    type="text"
-                                                                    name="alternatephone"
-                                                                    className="form-control rounded-1"
-                                                                    placeholder="Alternate Contact No."
-                                                                />
-                                                                <i className="fa fa-phone position-absolute" />
-                                                                <ErrorMessage name="alternatephone" component="div" className="text-danger" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="submit-btn mt-3">
-                                                        <button type="submit" className="prim_color_bg text-white btn-effect-1">
-                                                            Save
-                                                        </button>
-                                                    </div>
-                                                </Form>
-                                            }}
-                                        </Formik>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                        <DeliveryAddress setAddress={setAddress}/>
                         <div className="col-lg-6 col-md-6 col-12 mt-lg-0 mt-md-0 mt-4">
                             {
                                 cart_items?.length > 0 ? (
@@ -633,6 +401,11 @@ const Checkout = () => {
                                         <p class="me-2 fs-6 prim_color d-flex align-items-center"><span class="currency-symbol prim_color pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span> <span class="currency-value prim_color">{user.walletBalance}</span></p>
                                     </div>
                                 </div>
+                                {user.walletBalance == 0  && (
+                                    <div className="mt-2 text-danger">
+                                        Insufficient wallet balance.
+                                    </div>
+                                )}
                             </div>
                             <div className="col-12 mt-3">
                                 <h5 className="fw-semibold">Payment</h5>

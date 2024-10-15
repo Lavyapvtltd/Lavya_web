@@ -15,6 +15,7 @@ import orderReducer from '../features/orderSlice';
 import monthlyBillReducer  from '../features/monthlyBillSlice';
 import contentReducer from '../features/contentSlice';
 import addressReducer from '../features/addressSlice';
+import locationReducer from "../features/locationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     orders:orderReducer,
     monthlybill:monthlyBillReducer,
     contents:contentReducer,
-    addresses:addressReducer
+    addresses:addressReducer,
+    locations:locationReducer
   },
 });

@@ -15,8 +15,18 @@ body {
     font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
-    transition: all 500ms ease;
+    animation: fadeIn 1.5s ease-in-out;
 }
+
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 
 img {
     transition: all 500ms ease;
@@ -146,7 +156,7 @@ input:focus {
     width: 100%;
 }
 
-.cancelation_sub:hover{
+.cancelation_sub:hover {
     color: #fff;
 }
 
@@ -155,17 +165,12 @@ input:focus {
     color: #fff;
 }
 .custom-date-input {
-    color: white; 
-  }
+    color: white;
+}
 
-  .custom-date-input::-webkit-calendar-picker-indicator {
-    filter: invert(1); 
-  }
-
-
-
-
-
+.custom-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
 
 .text_clip_head {
     display: -webkit-box;
@@ -262,7 +267,7 @@ input.cart-plus-minus-box {
     border-radius: 0;
 }
 
-.breadcrumb{
+.breadcrumb {
     background: #ececec;
 }
 
@@ -405,7 +410,7 @@ input.cart-plus-minus-box {
 .header_side_bar .user_list li {
     padding: 5px 10px;
 }
-.header_side_bar .user_list .acc_brd{
+.header_side_bar .user_list .acc_brd {
     border-bottom: 1px solid #e0e0e0;
 }
 
@@ -483,13 +488,13 @@ input.cart-plus-minus-box {
 .mobile_menu .nav_list li {
     padding: 7px 0;
 }
-.mobile_menu .nav_list li{
+.mobile_menu .nav_list li {
     position: relative;
 }
-.mobile_menu .nav_list li::before{
+.mobile_menu .nav_list li::before {
     position: absolute;
     content: "\f28d";
-    font-family: 'FONTAWESOME';
+    font-family: "FONTAWESOME";
     left: -27px;
     top: 7px;
     font-size: 18px;
@@ -1161,33 +1166,64 @@ input[type="range"]:focus {
     border-radius: 4px;
 }
 
-.vacation_form input{
+.vacation_form input {
     border-color: var(--primary-color) !important;
 }
-.vacation_form .vacation_list ul{
+.vacation_form .vacation_list ul {
     background: rgb(255 255 255);
     box-shadow: 0 0 3px #000;
 }
 
-.order_history_sec .quantity{
+.order_history_sec .quantity {
     background: #0080004f;
     padding: 8px 12px;
     border-radius: 7px;
 }
-.conditions_sec ul li{
-   list-style: circle;
+.conditions_sec ul li {
+    list-style: circle;
 }
-.conditions_sec ul li a{
+.conditions_sec ul li a {
     font-size: 15px;
 }
-.billing_list table tr{
-    border:none;
+.billing_list table tr {
+    border: none;
 }
-.billing_list table th{
-    border:none;
+.billing_list table th {
+    border: none;
 }
-.billing_list table td{
-    border:none;
+.billing_list table td {
+    border: none;
+}
+
+.order_success .success_box .btn-ordr:hover {
+    color: #fff;
+}
+
+.wallet_icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background: #000;
+    color: #fff;
+    font-size: 11px;
+}
+
+.score_rupee{
+    top: -51px;
+    left: -30px;
+    padding: 3px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 0 3px #444444;
+    background: #c90a0a;
+    font-size: 12px;
 }
 
 /* responsive css */
@@ -1214,69 +1250,73 @@ input[type="range"]:focus {
         overflow: hidden;
     }
 
-    .banner_sec .banner-item img{
+    .banner_sec .banner-item img {
         min-height: 100% !important;
         aspect-ratio: auto !important;
         height: 100px !important;
         object-fit: cover;
     }
-    .foot_banner .banner-item img{
+    .foot_banner .banner-item img {
         height: 100% !important;
         aspect-ratio: auto !important;
     }
-    .product_box .card-body h6{
+    .product_box .card-body h6 {
         font-size: 12px;
     }
-    .product_box .card-body p{
+    .product_box .card-body p {
         font-size: 10px;
     }
-    .product_box .bedg{
+    .product_box .bedg {
         font-size: 8px;
     }
-    .product_box .card-body .product-ratting ul li a{
+    .product_box .card-body .product-ratting ul li a {
         font-size: 13px;
     }
-    .testimonial-section .testimonial-box .testimonial-name{
+    .testimonial-section .testimonial-box .testimonial-name {
         font-size: 13px;
     }
-    .testimonial-section .testimonial-box p{
+    .testimonial-section .testimonial-box p {
         font-size: 12px;
     }
-    .testimonial-section .testimonial-box svg{
+    .testimonial-section .testimonial-box svg {
         height: 20px;
         width: 20px;
     }
     .product_box .card {
         height: 100%;
     }
-    .product_detail .product_detail_img_bx{
-      flex-direction: column-reverse;
+    .product_detail .product_detail_img_bx {
+        flex-direction: column-reverse;
     }
-    .product_detail_tabs .nav-pills .nav-link{
+    .product_detail_tabs .nav-pills .nav-link {
         font-size: 16px !important;
     }
-    .product_detail .label_detail{
+    .product_detail .label_detail {
         font-size: 10px;
     }
-    .cart-section .table-rows td{
+    .cart-section .table-rows td {
         white-space: nowrap;
     }
     .about-section .about-content .about-heading {
         font-size: 30px;
     }
 
-    .copyRight_box p{
-         font-size: 12px !important;
-    }
-    .copyRight_box ul li a{
+    .copyRight_box p {
         font-size: 12px !important;
-   }
-   .footer_upper .footer-title{
-    font-size: 17px;
-   }
-   .otp_row {
-    height: 100%;
-}
+    }
+    .copyRight_box ul li a {
+        font-size: 12px !important;
+    }
+    .footer_upper .footer-title {
+        font-size: 17px;
+    }
+    .otp_row {
+        height: 100%;
+    }
+    .whatsapp-logo {
+        width: 30px !important;
+        height: 30px !important;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {

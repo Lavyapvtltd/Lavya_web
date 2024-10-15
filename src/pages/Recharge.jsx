@@ -31,7 +31,7 @@ const Recharge = () => {
             if (baseResponse.status == 1) {
                 toast.success("Order Subscribed Successfully");
                 setTimeout(() => {
-                    navigate("/")
+                    navigate("/order-success")
                 }, 1000)
             } else {
                 toast.error(baseResponse.message);

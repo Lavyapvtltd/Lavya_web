@@ -98,9 +98,9 @@ const Header = () => {
               <div className="top-bar-right d-md-flex d-none align-items-center justify-content-md-end justify-content-center">
                 <div className="social-media_links">
                   <ul className="d-flex align-items-center p-0 m-0">
-                    <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                    <li><NavLink to="https://www.facebook.com/profile.php?id=61564893940430&mibextid=ZbWKwL" title="Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></NavLink></li>
+                    <li><NavLink to="https://www.instagram.com/lavyaorganic?igsh=enNsaWVmOTlzMmlk" title="Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></NavLink></li>
+                    <li><NavLink to="https://youtube.com/@lavyaorganic?si=b4NzYkazmtnOnLEt" title="Youtube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></NavLink></li>
                   </ul>
                 </div>
               </div>
@@ -151,7 +151,7 @@ const Header = () => {
                         </ul>
                       </li> */}
                       <li>
-                        <NavLink to="/Product-list">All Products</NavLink>
+                        <NavLink to="/product-list">All Products</NavLink>
                       </li>
                       <li>
                         <NavLink to="/contact">Contact</NavLink>
@@ -253,7 +253,7 @@ const Header = () => {
                   </ul>
                 </li> */}
                 <li data-bs-dismiss="offcanvas">
-                  <NavLink to="/Product-list">All Products</NavLink>
+                  <NavLink to="/product-list">All Products</NavLink>
                 </li>
                 <li data-bs-dismiss="offcanvas">
                   <NavLink to="/contact">Contact</NavLink>

@@ -1,7 +1,21 @@
 import React from 'react'
+import { toast } from 'react-toastify';
 import { NavLink } from 'react-router-dom'
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { API_URL, BASE_URL } from '../constants/contant';
+import axios from "axios";
 
 const Contact = () => {
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    phone: Yup.string()
+      .matches(/^[0-9]+$/, 'Phone number is not valid')
+      .min(10, 'Phone number should be at least 10 digits')
+      .required('Phone number is required'),
+    message: Yup.string().required('Message is required'),
+  });
   return (
     <>
       <div className="container-fluid breadcrumb py-2">
@@ -41,8 +55,8 @@ const Contact = () => {
                       <img src="/images/mail.png" className="img-fluid" style={{ height: '56px' }} alt="" />
                     </div>
                     <h6 className="my-2 fw-semibold">Email Address</h6>
-                    <p className="mb-1">info@webmail.com</p>
-                    <p className="mb-0">jobs@webexample.com</p>
+                    <p className="mb-1 text_clip_para_1">info@mylavya.com</p>
+                    {/* <p className="mb-0">jobs@webexample.com</p> */}
                   </div>
                 </div>
                 <div className="col-md-4 col-12">
@@ -50,9 +64,9 @@ const Contact = () => {
                     <div>
                       <img src="/images/call.png" className="img-fluid" style={{ height: '56px' }} alt="" />
                     </div>
-                    <h6 className="my-2 fw-semibold">Email Address</h6>
-                    <p className="mb-1">info@webmail.com</p>
-                    <p className="mb-0">jobs@webexample.com</p>
+                    <h6 className="my-2 fw-semibold">Contact Number</h6>
+                    <p className="mb-1">+91 7665153666</p>
+                    {/* <p className="mb-0">jobs@webexample.com</p> */}
                   </div>
                 </div>
                 <div className="col-md-4 col-12">
@@ -60,9 +74,9 @@ const Contact = () => {
                     <div>
                       <img src="/images/location.png" className="img-fluid" style={{ height: '56px' }} alt="" />
                     </div>
-                    <h6 className="my-2 fw-semibold">Email Address</h6>
-                    <p className="mb-1">info@webmail.com</p>
-                    <p className="mb-0">jobs@webexample.com</p>
+                    <h6 className="my-2 fw-semibold">Address</h6>
+                    <p className="mb-1 text_clip_para_1">Lavya Organic and Technology Village Tinkiruri Teh MUNDAWAR District Alwar Rajasthan</p>
+                    {/* <p className="mb-0">jobs@webexample.com</p> */}
                   </div>
                 </div>
               </div>
@@ -79,41 +93,99 @@ const Contact = () => {
             <div className="col-12">
               <div className="contact-form-details rounded-2 p-md-5 p-3">
                 <h4 className="fw-semibold mb-3">Get A Quote</h4>
+                <Formik
+                  initialValues={{
+                    name: '',
+                    email: '',
+                    phone: '',
+                    message: '',
+                    saveInfo: false,
+                  }}
+                  validationSchema={validationSchema}
+                  onSubmit={async (values,{resetForm}) => {
+                    try {
+                      const res = await axios.post(
+                        `${BASE_URL}${API_URL.CONTACT_FORM}`,
+                        values
+                      );
+                      const result = res.data;
+                      const { baseResponse, response } = result;
+                      if (baseResponse.status == 1) {
+                        toast.success("Form submit successfully");
+                        resetForm();
+                      }
+                      else {
+                        toast.error(baseResponse.message);
+                      }
+                    } catch (error) {
+                      toast.error("Something went wrong");
+                    }
+                  }}
+                >
+                  {({ handleSubmit }) => (
+                    <Form onSubmit={handleSubmit}>
+                      <div className="row">
+                        <div className="col-lg-6 col-md-6 col-12 mb-4">
+                          <Field
+                            type="text"
+                            name="name"
+                            placeholder="Enter your name"
+                            className="input-name p-3 w-100 position-relative"
+                          />
+                          <ErrorMessage name="name" component="div" className="text-danger" />
+                        </div>
 
-                <form action="#">
-                  <div className="row">
-                    <div className="col-lg-6 col-md-6 col-12 mb-4">
-                      <input type="text" placeholder="Enter your name" className=" input-name p-3 w-100 position-relative" />
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12 mb-4">
-                      <input type="text" placeholder="Enter email address" className=" input-name p-3 w-100 position-relative" />
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12 mb-4">
-                      <select className="form-select p-3 rounded-2" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </select>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12 mb-4">
-                      <input type="text" placeholder="Enter phone number" className=" input-name p-3 w-100 position-relative" />
-                    </div>
-                    <div className="form-group">
-                      <textarea className="form-control rounded-2" placeholder="Enter Message" rows="5" id="comment"></textarea>
-                    </div>
+                        <div className="col-lg-6 col-md-6 col-12 mb-4">
+                          <Field
+                            type="text"
+                            name="email"
+                            placeholder="Enter email address"
+                            className="input-name p-3 w-100 position-relative"
+                          />
+                          <ErrorMessage name="email" component="div" className="text-danger" />
+                        </div>
 
-                    <div className="form-check my-4 d-flex">
-                      <input className="form-check-input mt-0 me-2" type="checkbox" value="" id="flexCheckDefault" />
-                      <label className="form-check-label" for="flexCheckDefault">
-                        Save my name, email, and website in this browser for the next time I comment.
-                      </label>
-                    </div>
-                    <div className='mt-3 text-md-start text-center'>
-                      <button className="prim_color_bg text-white btn-effect-1">Get An Free Service</button>
-                    </div>
-                  </div>
-                </form>
+                        <div className="col-lg-12 col-md-12 col-12 mb-4">
+                          <Field
+                            type="text"
+                            name="phone"
+                            placeholder="Enter phone number"
+                            className="input-name p-3 w-100 position-relative"
+                          />
+                          <ErrorMessage name="phone" component="div" className="text-danger" />
+                        </div>
+
+                        <div className="form-group">
+                          <Field
+                            as="textarea"
+                            name="message"
+                            placeholder="Enter Message"
+                            className="form-control rounded-2"
+                            rows="5"
+                          />
+                          <ErrorMessage name="message" component="div" className="text-danger" />
+                        </div>
+
+                        <div className="form-check my-4 d-flex">
+                          <Field
+                            type="checkbox"
+                            name="saveInfo"
+                            className="form-check-input mt-0 me-2"
+                          />
+                          <label className="form-check-label" htmlFor="saveInfo">
+                            Save my name, email, and website in this browser for the next time I comment.
+                          </label>
+                        </div>
+
+                        <div className="mt-3 text-md-start text-center">
+                          <button type="submit" className="prim_color_bg text-white btn-effect-1">
+                            Get A Free Service
+                          </button>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
             </div>
           </div>

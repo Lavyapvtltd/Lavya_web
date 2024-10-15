@@ -31,7 +31,7 @@ const GoToTop = () => {
           style={{
             width: "40px",
             height: "40px",
-            bottom: "50px",
+            bottom: "100px",
             right: "28px",
             zIndex: "999",
             display: "flex",

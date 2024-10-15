@@ -21,6 +21,7 @@ export const ROUTES_CONST = {
     BILLING_DETAILS: '/billing-details',
     SUBSCRIPTION_PRODUCTS:'/subscription-products',
     ORDERS: '/order-history',
+    ORDER_SUCCESS: '/order-success',
     TERMS_CONDITIONS: '/term-conditions',
     TRANSACTION_HISTORY: "/transaction-history",
     PRODUCT_LIST: '/product-list',
@@ -55,12 +56,15 @@ export const API_URL = {
     GET_ALL_ORDERS: '/subscription/get-order-by-user/',
     CREATE_SUBSCRIPTION_ORDER:'/order/order-subscribed',
     GET_ALL_SUBSCIPTION_ORDERS:'/subscription/get-subscription-by-user/',
+    UPDATE_PRODUCT_STOCK:'/stock/update-after-order-qty',
     GET_MONTHLY_BILL: '/monthly-bill/get-monthly-bill-by-id/',
     GET_ALL_CONTENT: '/content/get-all-content',
     ADD_ADDRESS:'/subscription/save-new-address/',
     GET_ALL_ADDRESSESS: '/subscription/get-current-user-address/',
     WALLET_AMOUNT_DEDUCTION:'/login/update-wallet-by-id/',
-    SUBSCRIBE_USER:"/user-subscribe/user-subscribe"
+    SUBSCRIBE_USER:"/user-subscribe/user-subscribe",
+    CONTACT_FORM:"/contact-form/contact-form",
+    GET_ALL_LOCATIONS:"/location/get-all-serving-locations"
 }
 
 export const GOOGLE_MAP_API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";
