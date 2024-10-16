@@ -150,7 +150,7 @@ const SubscriptionCheckout = () => {
                                                             <p className="text-secondary ps-1">(4.0)</p>
                                                         </div>
                                                         <div className="text-secondary fw-semibold">
-                                                            {`${subscription_cart_item.unit_value} ${subscription_cart_item.unit}`} x {subscription_cart_item.selQty}
+                                                            {`${subscription_cart_item.unitValue} ${subscription_cart_item.unit}`} x {subscription_cart_item.selQty}
                                                         </div>
                                                         <h6 className="price_txt prim_color fw-semibold">
                                                             Rs {subscription_cart_item.price}

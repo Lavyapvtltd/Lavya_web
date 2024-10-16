@@ -29,6 +29,7 @@ import Checkout from './pages/Checkout.jsx';
 import SubscriptionCheckout from './pages/SubscriptionCheckout.jsx';
 import SubscriptionProducts from './pages/SubscriptionProducts.jsx';
 import OrderSuccess from './pages/OrderSuccess.jsx';
+import RechargeSuccess from './pages/RechargeSuccess.jsx';
 
 const router = createBrowserRouter([
   {
@@ -156,6 +157,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Orders />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: `${ROUTES_CONST.RECHARGE_SUCCESS}`,
+        element: (
+          <ProtectedRoute>
+            <RechargeSuccess />
           </ProtectedRoute>
         ),
       },

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -14,11 +14,13 @@ const DeliveryAddress = ({ setAddress }) => {
     const { user, user_id } = useSelector((state) => state.auth);
     const addresses = useSelector(state => state.addresses.addresses);
     const locations = useSelector(state => state.locations.locations);
-    const [placeSelected, setPlaceSelected] = useState(false); 
+    const [placeSelected, setPlaceSelected] = useState(false);
     const loc = locations.map((item) => {
         return item.locationName.split(',')[0]
-    })
+    });
     const [toggle, setToggle] = useState(false);
+    const [editingAddress, setEditingAddress] = useState(null);
+    console.log(editingAddress, "Ery")
     const autocompleteInputRef = useRef(null);
     const setFieldValueRef = useRef(null);
     const [mapSrc, setMapSrc] = useState("");
@@ -31,7 +33,7 @@ const DeliveryAddress = ({ setAddress }) => {
 
     useEffect(() => {
         dispatch(fetchLocationsAsync());
-    }, [])
+    }, []);
 
     useEffect(() => {
         const loadScript = (url, callback) => {
@@ -50,7 +52,7 @@ const DeliveryAddress = ({ setAddress }) => {
 
             autocomplete.setFields(["address_component", "formatted_address", "geometry"]);
 
-            autocomplete.addListener("place_changed", () => {
+            autocomplete?.addListener("place_changed", () => {
                 const place = autocomplete.getPlace();
                 let formattedAddress = place.formatted_address || '';
                 let lat = place.geometry?.location?.lat();
@@ -60,7 +62,7 @@ const DeliveryAddress = ({ setAddress }) => {
                 if (place.address_components) {
                     for (const component of place.address_components) {
                         if (component.types.includes('locality')) {
-                            city = component.long_name; 
+                            city = component.long_name;
                             break;
                         }
                     }
@@ -79,7 +81,6 @@ const DeliveryAddress = ({ setAddress }) => {
                 }
                 if (setFieldValueRef.current) {
                     setFieldValueRef.current("location", formattedAddress);
-                    // Also set the input value directly if needed
                     if (autocompleteInputRef.current) {
                         autocompleteInputRef.current.value = formattedAddress;
                     }
@@ -89,15 +90,22 @@ const DeliveryAddress = ({ setAddress }) => {
                 if (!placeSelected) {
                     setFieldValueRef.current("location", "");
                 }
-                setPlaceSelected(false); 
+                setPlaceSelected(false);
             });
         };
+
         if (!window.google) {
             loadScript(`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API_KEY}&libraries=places`, handleScriptLoad);
         } else {
             handleScriptLoad();
         }
     }, [toggle]);
+
+    const handleEditAddress = (address) => {
+        setToggle(true);
+        setEditingAddress(address);
+        setMapSrc("");
+    };
 
     return (
         <>
@@ -108,10 +116,8 @@ const DeliveryAddress = ({ setAddress }) => {
                             <div>
                                 <h5 className="fw-semibold m-0">Address Delivery</h5>
                             </div>
-
                             <div className="check_img">
-                                <img src="/images/address-checkout.png" alt="" className="img-fluid"
-                                />
+                                <img src="/images/address-checkout.png" alt="" className="img-fluid" />
                             </div>
                         </div>
                         <div className="p-3">
@@ -137,9 +143,9 @@ const DeliveryAddress = ({ setAddress }) => {
                                                 <h6 className="mb-1 fw-semibold">{user?.name}</h6>
                                                 <p>
                                                     {item?.location}
-                                                    <a href="#" className="ps-1"><i className="fa-regular fa-pen-to-square text-danger"></i></a>
+                                                    <button className="ps-1 border-0" style={{background:'none'}} onClick={() => handleEditAddress(item)}><i className="fa-regular fa-pen-to-square text-danger"></i></button>
                                                 </p>
-                                                <p className="">Mobile: {user?.contact}</p>
+                                                <p className="">Mobile: {item?.alternatephone}</p>
                                             </div>
                                         </label>
                                     </div>
@@ -168,15 +174,16 @@ const DeliveryAddress = ({ setAddress }) => {
                         }
                         <div className="p-md-5 p-sm-3 p-3">
                             <div className="col-12 pb-1">
-                                <h4 className='fw-semibold'>Add New Address</h4>
+                                <h4 className='fw-semibold'>{editingAddress ? 'Edit Address' : 'Add New Address'}</h4>
                             </div>
                             <Formik
+                                enableReinitialize
                                 initialValues={{
-                                    location: "",
-                                    street: "",
-                                    address: "",
-                                    landmark: "",
-                                    alternatephone: "",
+                                    location: editingAddress?.location || "",
+                                    street: editingAddress?.street || "",
+                                    address: editingAddress?.address || "",
+                                    landmark: editingAddress?.landmark || "",
+                                    alternatephone: editingAddress?.alternatephone || "",
                                 }}
                                 validationSchema={Yup.object({
                                     location: Yup.string().required("Location is required"),
@@ -188,23 +195,46 @@ const DeliveryAddress = ({ setAddress }) => {
                                         .required("Alternate Contact No. is required"),
                                 })}
                                 onSubmit={async (values, { resetForm }) => {
-                                    try {
-                                        const res = await axios.post(
-                                            `${BASE_URL}${API_URL.ADD_ADDRESS}${user_id}`,
-                                            values
-                                        );
-                                        const result = res.data;
-                                        const { baseResponse, response } = result;
-                                        if (baseResponse.status == 1) {
-                                            toast.success("Address added successfully");
-                                            dispatch(fetchAddressesAsync(user_id));
-                                            setMapSrc("");
-                                            resetForm();
-                                        } else {
-                                            toast.error(baseResponse.message);
+                                    if (editingAddress) {
+                                        try {
+                                            const res = await axios.post(
+                                                `${BASE_URL}${API_URL.EDIT_ADDRESS}${editingAddress._id}`,
+                                                values
+                                            );
+                                            const result = res.data;
+                                            const { baseResponse, response } = result;
+                                            if (baseResponse.status == 1) {
+                                                toast.success("Address edit successfully");
+                                                dispatch(fetchAddressesAsync(user_id));
+                                                setMapSrc("");
+                                                setEditingAddress("");
+                                                setToggle(false);
+                                                resetForm();
+                                            } else {
+                                                toast.error(baseResponse.message);
+                                            }
+                                        } catch (error) {
+                                            toast.error("Something went wrong");
                                         }
-                                    } catch (error) {
-                                        toast.error("Something went wrong");
+                                    } else {
+                                        try {
+                                            const res = await axios.post(
+                                                `${BASE_URL}${API_URL.ADD_ADDRESS}${user_id}`,
+                                                values
+                                            );
+                                            const result = res.data;
+                                            const { baseResponse, response } = result;
+                                            if (baseResponse.status == 1) {
+                                                toast.success("Address added successfully");
+                                                dispatch(fetchAddressesAsync(user_id));
+                                                setMapSrc("");
+                                                resetForm();
+                                            } else {
+                                                toast.error(baseResponse.message);
+                                            }
+                                        } catch (error) {
+                                            toast.error("Something went wrong");
+                                        }
                                     }
                                 }}
                             >
@@ -224,63 +254,53 @@ const DeliveryAddress = ({ setAddress }) => {
                                                             setFieldValue("location", e.target.value);
                                                         }}
                                                     />
-                                                    <i className="fa fa-map-marker position-absolute" />
+                                                    <i className="fa fa-map-marker position-absolute"></i>
                                                     <ErrorMessage name="location" component="div" className="text-danger" />
                                                 </div>
                                             </div>
                                             <div className="col-12">
-                                                <div className="user-address-from position-relative">
-                                                    <Field
-                                                        type="text"
-                                                        name="street"
-                                                        className="form-control rounded-1"
-                                                        placeholder="House Number/Flat Number"
-                                                    />
-                                                    <i className="fa fa-map-marker position-absolute" />
-                                                    <ErrorMessage name="street" component="div" className="text-danger" />
-                                                </div>
+                                                <Field
+                                                    type="text"
+                                                    name="street"
+                                                    className="form-control rounded-1"
+                                                    placeholder="House/Flat Number"
+                                                />
+                                                <ErrorMessage name="street" component="div" className="text-danger" />
                                             </div>
                                             <div className="col-12">
-                                                <div className="user-address-from position-relative">
-                                                    <Field
-                                                        type="text"
-                                                        name="address"
-                                                        className="form-control rounded-1"
-                                                        placeholder="Society Name/Colony Name"
-                                                    />
-                                                    <i className="fa fa-map-marker position-absolute" />
-                                                    <ErrorMessage name="address" component="div" className="text-danger" />
-                                                </div>
+                                                <Field
+                                                    type="text"
+                                                    name="address"
+                                                    className="form-control rounded-1"
+                                                    placeholder="Society/Colony Name"
+                                                />
+                                                <ErrorMessage name="address" component="div" className="text-danger" />
                                             </div>
                                             <div className="col-12">
-                                                <div className="user-address-from position-relative">
-                                                    <Field
-                                                        type="text"
-                                                        name="landmark"
-                                                        className="form-control rounded-1"
-                                                        placeholder="landmark"
-                                                    />
-                                                    <i className="fa fa-map-marker position-absolute" />
-                                                    <ErrorMessage name="landmark" component="div" className="text-danger" />
-                                                </div>
+                                                <Field
+                                                    type="text"
+                                                    name="landmark"
+                                                    className="form-control rounded-1"
+                                                    placeholder="Landmark"
+                                                />
+                                                <ErrorMessage name="landmark" component="div" className="text-danger" />
                                             </div>
                                             <div className="col-12">
-                                                <div className="user-address-from position-relative">
-                                                    <Field
-                                                        type="text"
-                                                        name="alternatephone"
-                                                        className="form-control rounded-1"
-                                                        placeholder="Alternate Contact No."
-                                                    />
-                                                    <i className="fa fa-phone position-absolute" />
-                                                    <ErrorMessage name="alternatephone" component="div" className="text-danger" />
+                                                <Field
+                                                    type="text"
+                                                    name="alternatephone"
+                                                    className="form-control rounded-1"
+                                                    placeholder="Alternate Contact No."
+                                                />
+                                                <ErrorMessage name="alternatephone" component="div" className="text-danger" />
+                                            </div>
+                                            <div className="col-12">
+                                                <div className="submit-btn mt-3">
+                                                    <button type="submit" className="prim_color_bg text-white btn-effect-1">
+                                                        {editingAddress ? "Update Address" : "Add Address"}
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="submit-btn mt-3">
-                                            <button type="submit" className="prim_color_bg text-white btn-effect-1">
-                                                Save
-                                            </button>
                                         </div>
                                     </Form>
                                 }}
@@ -290,7 +310,8 @@ const DeliveryAddress = ({ setAddress }) => {
                 }
             </div>
         </>
-    )
-}
+    );
+};
 
-export default DeliveryAddress
+export default DeliveryAddress;
+

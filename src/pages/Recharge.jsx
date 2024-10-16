@@ -20,21 +20,25 @@ const Recharge = () => {
 
     console.log(selectedRecharge)
     const handlePay = async () => {
-        if (data && paymentOption == "payViaCash") {
-            const via_cash_data = { ...data, paymentOption: "payViaCash", amountToCollect: data.amount, recharge_amount_via_cash: data.amount, viaCash: false }
-            const res = await axios.post(
-                `${BASE_URL}${API_URL.CREATE_SUBSCRIPTION_ORDER}`,
-                via_cash_data
-            );
-            const result = res.data;
-            const { baseResponse, response } = result;
-            if (baseResponse.status == 1) {
-                toast.success("Order Subscribed Successfully");
-                setTimeout(() => {
-                    navigate("/order-success")
-                }, 1000)
-            } else {
-                toast.error(baseResponse.message);
+        if (data) {
+            if(paymentOption == "payViaCash"){
+                const via_cash_data = { ...data, paymentOption: "payViaCash", amountToCollect: data.amount, recharge_amount_via_cash: data.amount, viaCash: false }
+                const res = await axios.post(
+                    `${BASE_URL}${API_URL.CREATE_SUBSCRIPTION_ORDER}`,
+                    via_cash_data
+                );
+                const result = res.data;
+                const { baseResponse, response } = result;
+                if (baseResponse.status == 1) {
+                    toast.success("Order Subscribed Successfully");
+                    setTimeout(() => {
+                        navigate("/order-success")
+                    }, 1000)
+                } else {
+                    toast.error(baseResponse.message);
+                }
+            }else{
+                
             }
         }
         else {

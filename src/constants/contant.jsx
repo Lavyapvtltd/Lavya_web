@@ -3,8 +3,8 @@ export const BASE_URL = "https://api.lavyacompany.com/api/v1";
 export const IMAGE_BASE_URL = "https://api.lavyacompany.com/resources/";
 
 // LOCAL;
-// export const BASE_URL = "http://192.168.1.13:9291/api/v1";
-// export const IMAGE_BASE_URL = "http://192.168.1.13:9291/resources/";
+// export const BASE_URL = "http://192.168.1.5:9291/api/v1";
+// export const IMAGE_BASE_URL = "http://192.168.1.5:9291/resources/";
 
 export const ROUTES_CONST = {
     INDEX: '/',
@@ -22,6 +22,7 @@ export const ROUTES_CONST = {
     SUBSCRIPTION_PRODUCTS:'/subscription-products',
     ORDERS: '/order-history',
     ORDER_SUCCESS: '/order-success',
+    RECHARGE_SUCCESS:'/recharge-success',
     TERMS_CONDITIONS: '/term-conditions',
     TRANSACTION_HISTORY: "/transaction-history",
     PRODUCT_LIST: '/product-list',
@@ -52,6 +53,9 @@ export const API_URL = {
     GET_ALL_RECHARGES: '/recharge/get-all-offer',
     WALLET_RECHARGE:'/login/recharge-wallet/',
     CREATE_NEW_ORDER: '/order/create-new-order',
+    GET_PAYMENT_ID_BY_ORDER_ID:'/login/payment-id-by-order/',
+    UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID:'/order/update-order-and-payment-status/',
+    UPDATE_WALLET_AMOUNT:'/login/update-wallet-by-id/',
     CANCEL_ORDER:'/order/update-order-by-id/',
     GET_ALL_ORDERS: '/subscription/get-order-by-user/',
     CREATE_SUBSCRIPTION_ORDER:'/order/order-subscribed',
@@ -61,7 +65,7 @@ export const API_URL = {
     GET_ALL_CONTENT: '/content/get-all-content',
     ADD_ADDRESS:'/subscription/save-new-address/',
     GET_ALL_ADDRESSESS: '/subscription/get-current-user-address/',
-    WALLET_AMOUNT_DEDUCTION:'/login/update-wallet-by-id/',
+    EDIT_ADDRESS:'/subscription/edit-user-address/',
     SUBSCRIBE_USER:"/user-subscribe/user-subscribe",
     CONTACT_FORM:"/contact-form/contact-form",
     GET_ALL_LOCATIONS:"/location/get-all-serving-locations"

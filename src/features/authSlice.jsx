@@ -12,7 +12,14 @@ export const fetchUserAsync = createAsyncThunk(
 export const walletAmountDeduction = createAsyncThunk(
   'auth/walletamountdecuction',
   async ({user_id,data}) => {
-    const response = await axios.put(`${BASE_URL}${API_URL.WALLET_AMOUNT_DEDUCTION}${user_id}`,data);
+    const response = await axios.put(`${BASE_URL}${API_URL.UPDATE_WALLET_AMOUNT}${user_id}`,data);
+    return response.data.response;
+  }
+);
+export const walletAmountAddition = createAsyncThunk(
+  'auth/walletamountaddition',
+  async ({user_id,data}) => {
+    const response = await axios.patch(`${BASE_URL}${API_URL.UPDATE_WALLET_AMOUNT}${user_id}`,data);
     return response.data.response;
   }
 );
@@ -65,6 +72,21 @@ const authSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(walletAmountDeduction.fulfilled, (state, action) => {
+        state.status = 'idle';
+        if (action.payload.name) {
+          const objectModify = { ...action.payload, verfiyStatus: true };
+          state.user = objectModify
+          localStorage.setItem('user', JSON.stringify(objectModify));
+        } else {
+          const objectModify = { ...action.payload, verfiyStatus: false };
+          state.user = objectModify
+          localStorage.setItem('user', JSON.stringify(objectModify));
+        }
+      })
+      .addCase(walletAmountAddition.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(walletAmountAddition.fulfilled, (state, action) => {
         state.status = 'idle';
         if (action.payload.name) {
           const objectModify = { ...action.payload, verfiyStatus: true };

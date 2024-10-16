@@ -1,7 +1,32 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { NavLink,useSearchParams  } from 'react-router-dom'
+import { API_URL, BASE_URL } from '../constants/contant';
+import axios from "axios";
+import { toast } from 'react-toastify';
+
 
 const OrderSuccess = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const orderId = searchParams.get('order_id');
+    // const getPaymentIdByOrderId = async(order_id)=>{
+    //     try{
+    //         const res = await axios.get(
+    //             `${BASE_URL}${API_URL.GET_PAYMENT_ID_BY_ORDER_ID}${order_id}`,
+    //         );
+    //         const result = res.data;
+    //         const { status, orderDetails } = result;
+    //         if (status == "ok") {
+    //            console.log(orderDetails,"Dftyhrtuyh");
+    //         }
+    //     }catch(error){
+    //         toast.error("Something went wrong");
+    //     }
+    // }
+    // useEffect(()=>{
+    //     if(orderId){
+    //         getPaymentIdByOrderId(orderId);
+    //     }
+    // },[orderId])
     return (
         <>
             <div className="container-fluid order_success py-5">
