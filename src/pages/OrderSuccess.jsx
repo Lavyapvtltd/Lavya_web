@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { NavLink,useSearchParams  } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { NavLink, useSearchParams } from 'react-router-dom'
 import { API_URL, BASE_URL } from '../constants/contant';
 import axios from "axios";
 import { toast } from 'react-toastify';
@@ -7,26 +7,68 @@ import { toast } from 'react-toastify';
 
 const OrderSuccess = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [orderData, setOrderData] = useState("");
     const orderId = searchParams.get('order_id');
-    // const getPaymentIdByOrderId = async(order_id)=>{
-    //     try{
-    //         const res = await axios.get(
-    //             `${BASE_URL}${API_URL.GET_PAYMENT_ID_BY_ORDER_ID}${order_id}`,
-    //         );
-    //         const result = res.data;
-    //         const { status, orderDetails } = result;
-    //         if (status == "ok") {
-    //            console.log(orderDetails,"Dftyhrtuyh");
-    //         }
-    //     }catch(error){
-    //         toast.error("Something went wrong");
-    //     }
-    // }
-    // useEffect(()=>{
-    //     if(orderId){
-    //         getPaymentIdByOrderId(orderId);
-    //     }
-    // },[orderId])
+    const order_no = searchParams.get('order_no');
+
+    const updateOrderStatusAndPaymentStatus = async (order_id) => {
+        try {
+            const data = {
+                status: "ORDERED",
+                paymentStatus: "PAIDONLINE"
+            }
+            const res = await axios.patch(
+                `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${order_id}`,
+                data
+            );
+            const result = res.data;
+            const { baseResponse, response } = result;
+            if (baseResponse.status == "1"){
+                return response;
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    }
+
+    const getPaymentIdByOrderId = async (order_id) => {
+        try {
+            const res = await axios.get(
+                `${BASE_URL}${API_URL.GET_PAYMENT_ID_BY_ORDER_ID}${order_id}`,
+            );
+            const result = res.data;
+            const { status, orderDetails } = result;
+            if (status == "OK") {
+                
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    }
+    useEffect(() => {
+        if (orderData && orderId) {
+            getPaymentIdByOrderId(orderId);
+        }
+    }, [orderId, orderData])
+    const getOrderData = async (order_no) => {
+        try {
+            const res = await axios.get(
+                `${BASE_URL}${API_URL.GET_ORDER_BY_ID}${order_no}`,
+            );
+            const result = res.data;
+            const { baseResponse, response } = result;
+            if (baseResponse.status == "1") {
+                setOrderData(response);
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    }
+    useEffect(() => {
+        if (order_no) {
+            getOrderData(order_no);
+        }
+    }, [order_no])
     return (
         <>
             <div className="container-fluid order_success py-5">

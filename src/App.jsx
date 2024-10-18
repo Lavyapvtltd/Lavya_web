@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import GoToTop from './components/GoToTop';
 import WhatsAppChat from './components/WhatsappChat';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   const location = useLocation();
@@ -12,6 +13,7 @@ const App = () => {
 
   return (
     <div>
+      <ScrollToTop />
       <WhatsAppChat/>
       <GoToTop />
       <Header />

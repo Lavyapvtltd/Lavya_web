@@ -19,7 +19,7 @@ const ProductList = () => {
   const product_status = useSelector((state) => state.products.status);
   const category_status = useSelector((state) => state.categories.status);
   const [minValue, setMinValue] = useState(1);
-  const [maxValue, setMaxValue] = useState(2000);
+  const [maxValue, setMaxValue] = useState(10000);
 
   const handleMinChange = (event) => {
     const value = Math.min(Number(event.target.value), maxValue - 10);
@@ -141,7 +141,7 @@ const ProductList = () => {
                       </ul>
                     </div>
                   </div>
-                  <div className="filter-section p-4 mt-3 rounded-1">
+                  {/* <div className="filter-section p-4 mt-3 rounded-1">
                     <h6 className="pb-4 fw-semibold">Filter By Price</h6>
                     <div className="d-flex align-items-center justify-content-between mb-3">
                       <p className="mb-0">Your Range:</p>
@@ -166,7 +166,7 @@ const ProductList = () => {
                         id="upper"
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

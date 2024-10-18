@@ -6,8 +6,9 @@ import productReducer from '../features/productSlice';
 import categoryReducer from '../features/categorySlice';
 import productDetailReducer from '../features/productDetailSlice';
 import bannerReducer from '../features/bannerSlice';
+import sliderReducer from '../features/sliderSlice';
 import cartReducer from '../features/cartSlice';
-import testimonialReducer from '../features/testimonialSlice';
+import testimonialReducer from '../features/testimonialSlice';  
 import transactionReducer from '../features/transactionSlice';
 import subscriptionCartReducer from '../features/subscriptionCartSlice';
 import vacationReducer from '../features/vacationSlice';
@@ -24,6 +25,7 @@ export const store = configureStore({
     products:productReducer,
     categories:categoryReducer,
     productdetail:productDetailReducer,
+    sliders:sliderReducer,
     banners:bannerReducer,
     cart:cartReducer,
     subscription_cart:subscriptionCartReducer,

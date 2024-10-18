@@ -463,12 +463,12 @@ const ProductDetail = () => {
                                     <li class="nav-item me-md-5 me-3" role="presentation">
                                         <button class="nav-link active fs-5" id="pills-description-tab" data-bs-toggle="pill" data-bs-target="#pills-description" type="button" role="tab" aria-controls="pills-description" aria-selected="true">Description</button>
                                     </li>
-                                    <li class="nav-item me-md-5 me-3" role="presentation">
+                                    {/* <li class="nav-item me-md-5 me-3" role="presentation">
                                         <button class="nav-link fs-5" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="false">Information</button>
                                     </li>
                                     <li class="nav-item me-md-5 me-3" role="presentation">
                                         <button class="nav-link fs-5" id="pills-reviews-tab" data-bs-toggle="pill" data-bs-target="#pills-reviews" type="button" role="tab" aria-controls="pills-reviews" aria-selected="false">Reviews</button>
-                                    </li>
+                                    </li> */}
                                 </ul>
                                 <div class="tab-content mt-4" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab" tabindex="0">
@@ -478,7 +478,7 @@ const ProductDetail = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab" tabindex="0">
+                                    {/* <div class="tab-pane fade" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab" tabindex="0">
                                         <div className="col-12">
                                             <div className="table-responsive">
                                                 <table class="table table-striped">
@@ -615,7 +615,7 @@ const ProductDetail = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

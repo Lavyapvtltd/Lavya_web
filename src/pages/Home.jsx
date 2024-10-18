@@ -14,8 +14,11 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import Category from '../components/Category';
 import Spinner from '../components/Spinner';
-import Banner from '../components/Banner';
+import Slider from '../components/Slider';
 import Testimonial from '../components/Testimonial';
+import { fetchSlidersAsync } from '../features/sliderSlice';
+import { fetchBannersAsync } from '../features/bannerSlice';
+import { IMAGE_BASE_URL } from '../constants/contant';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -34,19 +37,23 @@ const Home = () => {
   const category_status = useSelector((state) => state.categories.status);
   const testimonials = useSelector((state) => state.testimonials.testimonials);
   const testimonial_status = useSelector((state) => state.testimonials.status);
+  const banners = useSelector((state) => state.banners.banners);
+  const topBanners = banners.slice(0, 4);
+  const remainingBanners = banners.slice(4);
   const handleProductClick = (productId) => {
     navigate(`/product-list/${productId}`);
   };
   const handleCategoryClick = (categoryId) => {
     navigate('/product-list', { state: { categoryId: categoryId } });
   };
-  const handleBannerClick = ()=>{
+  const handleBannerClick = () => {
     navigate("/product-list")
   }
   useEffect(() => {
     dispatch(fetchProductsAsync());
     dispatch(fetchCategoriesAsync());
     dispatch(fetchTestimonialsAsync());
+    dispatch(fetchBannersAsync());
     if (isLoggedIn) {
       dispatch(fetchUserAsync(user_id));
       dispatch(fetchCartsAsync(user_id));
@@ -55,7 +62,7 @@ const Home = () => {
   }, [])
   return (
     <>
-      <Banner />
+      <Slider />
       <div className="container-fluid product_sliders categories_box py-5">
         <div className="container">
           <div className="row">
@@ -122,32 +129,17 @@ const Home = () => {
       <div className="container-fluid banner_sec py-5">
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-6">
+            <div className="col-12">
               <div className="row">
-                <div className="col-lg-12" onClick={handleBannerClick}>
-                  <div className="banner-item mb-4 img_hover rounded-2">
-                      <img src="/images/advertisement/khand.jpg" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                  </div>
-                </div>
-                <div className="col-lg-12" onClick={handleBannerClick}>
-                  <div className="banner-item img_hover rounded-2">
-                      <img src="/images/advertisement/flour.jpg" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-6">
-              <div className="row">
-                <div className="col-lg-12" onClick={handleBannerClick}>
-                  <div className="banner-item mb-4 img_hover rounded-2">
-                      <img src="/images/advertisement/oil.jpg" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                  </div>
-                </div>
-                <div className="col-lg-12" onClick={handleBannerClick}>
-                  <div className="banner-item img_hover rounded-2">
-                      <img src="/images/advertisement/dairy_four.png" style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                  </div>
-                </div>
+                {
+                  topBanners?.map((item, index) => (
+                    <div className="col-lg-6 col-md-6 col-6" key={index} onClick={handleBannerClick}>
+                      <div className="banner-item mb-4 img_hover rounded-2">
+                        <img src={`${IMAGE_BASE_URL}${item.image}`} style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
+                      </div>
+                    </div>
+                  ))
+                }
               </div>
             </div>
           </div>
@@ -275,27 +267,17 @@ const Home = () => {
       <div className="container-fluid foot_banner py-md-5">
         <div className="container">
           <div className="row">
-            <div className="col-lg-4" onClick={handleBannerClick}>
-              <div className="banner-item mb-4 img_hover rounded-2">
-                <a href="#">
-                  <img src="/images/advertisement/khand.jpg" style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-4" onClick={handleBannerClick}>
-              <div className="banner-item mb-4 img_hover rounded-2">
-                <a href="#">
-                  <img src="/images/advertisement/dairy_four.png" style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-4" onClick={handleBannerClick}>
-              <div className="banner-item mb-4 img_hover rounded-2">
-                <a href="#">
-                  <img src="/images/advertisement/dairy_three.png" style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                </a>
-              </div>
-            </div>
+            {
+              remainingBanners.map((item, index) => (
+                <div className="col-lg-4" key={index} onClick={handleBannerClick}>
+                  <div className="banner-item mb-4 img_hover rounded-2">
+                    <a href="">
+                      <img src={`${IMAGE_BASE_URL}${item.image}`}style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
+                    </a>
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>

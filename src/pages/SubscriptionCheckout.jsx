@@ -8,11 +8,15 @@ import moment from "moment/moment";
 import { fetchSubscriptionCartAsync } from "../features/subscriptionCartSlice";
 import { updateProductStock } from "../features/productSlice";
 import DeliveryAddress from "../components/DeliveryAddress";
+import { walletAmountDeduction } from "../features/authSlice";
 const SubscriptionCheckout = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useDispatch();
+    const [subTotal, setSubTotal] = useState(0);
+    const [total, setTotal] = useState(0);
     const { user, user_id } = useSelector((state) => state.auth);
+    const [loading, setLoading] = useState(false);
     const subscription_cart_items = useSelector((state) => state.subscription_cart.subscription_cart);
     const product = subscription_cart_items?.map((cart_item) => {
         return {
@@ -42,14 +46,14 @@ const SubscriptionCheckout = () => {
         if (!address) {
             return toast.error("Please select address");
         }
-        if (user.walletBalance == 0) {
+        if (user.walletBalance < total) {
             const data = {
                 status: "SUBSCRIBED",
                 orderPlace: "",
                 product: [subscription_cart_item],
                 shippingaddress: address,
                 user: user,
-                amount: subscription_cart_item.price,
+                amount: total,
                 orderId: "",
                 deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                 deliveryType: subscription_cart_item.subscription_type
@@ -58,13 +62,14 @@ const SubscriptionCheckout = () => {
         }
         else {
             try {
+                setLoading(true);
                 const data = {
                     status: "SUBSCRIBED",
                     orderPlace: "",
                     product: [subscription_cart_item],
                     shippingaddress: address,
                     user: user,
-                    amount: subscription_cart_item.price,
+                    amount: total,
                     orderId: "",
                     deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                     deliveryType: subscription_cart_item.subscription_type,
@@ -78,14 +83,21 @@ const SubscriptionCheckout = () => {
                 const { baseResponse, response } = result;
                 if (baseResponse.status == 1) {
                     toast.success("Order Subscribed Successfully");
+                    const data = {
+                        amount: total
+                    }
+                    dispatch(walletAmountDeduction({ user_id, data }));
                     dispatch(updateProductStock({ productId: subscription_cart_item.id, qty: subscription_cart_item.selQty }));
+                    setLoading(false);
                     setTimeout(() => {
                         navigate("/")
                     }, 1000)
                 } else {
+                    setLoading(false);
                     toast.error(baseResponse.message);
                 }
             } catch (error) {
+                setLoading(false);
                 toast.error("Something went wrong");
             }
         }
@@ -96,6 +108,15 @@ const SubscriptionCheckout = () => {
             dispatch(fetchSubscriptionCartAsync(user_id));
         }
     }, [dispatch, user_id]);
+    const calculateTotal = () => {
+        const tot = subscription_cart_item.price * subscription_cart_item.selQty;
+        setSubTotal(tot);
+        setTotal(tot);
+    };
+
+    useEffect(() => {
+        calculateTotal();
+    }, [subscription_cart_item]);
     return (
         <>
             <div className="container-fluid checkout-section py-5">
@@ -162,7 +183,7 @@ const SubscriptionCheckout = () => {
                                                         <tbody>
                                                             <tr>
                                                                 <td>Subtotal</td>
-                                                                <td>Rs {subscription_cart_item.price}</td>
+                                                                <td>Rs {subTotal}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Delivery Charges</td>
@@ -177,7 +198,7 @@ const SubscriptionCheckout = () => {
                                                                     <strong>Order Total</strong>
                                                                 </td>
                                                                 <td>
-                                                                    <strong>Rs {subscription_cart_item.price}</strong>
+                                                                    <strong>Rs {total}</strong>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -212,9 +233,13 @@ const SubscriptionCheckout = () => {
                                 </p>
                                 <div className="submit-btn mt-3">
                                     <button
-                                        className="prim_color_bg text-white btn-effect-1"
+                                        disabled={loading}
+                                        className="prim_color_bg text-white btn-effect-1 d-flex align-items-center justify-content-center"
                                         onClick={handleOrderPlace}
                                     >
+                                        {loading && <div className="spinner-border me-2" style={{borderWidth:'3px',height:'1rem',width:'1rem'}} role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>}
                                         Subscribed Order
                                     </button>
                                 </div>

@@ -6,7 +6,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import axios from "axios";
-import { BASE_URL,API_URL } from '../constants/contant';
+import { BASE_URL, API_URL } from '../constants/contant';
+import Spinner from '../components/Spinner';
 
 // Yup validation schema
 const VacationSchema = Yup.object().shape({
@@ -21,7 +22,7 @@ const VacationSchema = Yup.object().shape({
 const Vacation = () => {
     const dispatch = useDispatch();
     const user_id = useSelector(state => state.auth.user_id);
-    const vacations = useSelector(state => state.vacations.vacations);
+    const { vacations, status } = useSelector(state => state.vacations);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -33,7 +34,7 @@ const Vacation = () => {
         dispatch(fetchVacationsAsync(user_id));
     }, [dispatch, user_id]);
 
-    const handleEndVacation = async(vacation_id)=>{
+    const handleEndVacation = async (vacation_id) => {
         try {
             const res = await axios.delete(`${BASE_URL}${API_URL.DELETE_VACATION}${vacation_id}`);
             const result = res.data;
@@ -42,22 +43,22 @@ const Vacation = () => {
                 toast.success('Vacation delete successfully');
                 dispatch(fetchVacationsAsync(user_id));
             }
-          } catch (error) {
-           toast.error("Something went wrong");
-          }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     }
 
-    const handleSubmit = async(values,{ resetForm }) => {
+    const handleSubmit = async (values, { resetForm }) => {
         try {
             const res = await axios.post(`${BASE_URL}${API_URL.ADD_VACATIONS}${user_id}`, values);
             const result = res.data;
             const { baseResponse, response } = result;
-            if (baseResponse.status==1) {
+            if (baseResponse.status == 1) {
                 dispatch(setVacations(response));
                 resetForm();
                 toast.success("Vacation added successfully");
             } else {
-              toast.error(baseResponse.message);
+                toast.error(baseResponse.message);
             }
         } catch (error) {
             toast.error("Something went wrong")
@@ -81,11 +82,11 @@ const Vacation = () => {
                                         <Form>
                                             <div className="row">
                                                 <div className="col-lg-12 col-md-12 col-12 mb-4">
-                                                    <Field type="date" name="start_date" className="p-3 w-100 position-relative" style={{width:"100% !important",minWidth:"100% !important"}} min={new Date(Date.now()).toISOString().split('T')[0]}/>
+                                                    <Field type="date" name="start_date" className="p-3 w-100 position-relative" style={{ width: "100% !important", minWidth: "100% !important" }} min={new Date(Date.now()).toISOString().split('T')[0]} />
                                                     <ErrorMessage name="start_date" component="div" className="text-danger" />
                                                 </div>
                                                 <div className="col-lg-12 col-md-12 col-12 mb-4">
-                                                    <Field type="date" name="end_date" className="p-3 w-100 position-relative" style={{width:"100% !important",minWidth:"100% !important"}} min={new Date(Date.now()).toISOString().split('T')[0]} />
+                                                    <Field type="date" name="end_date" className="p-3 w-100 position-relative" style={{ width: "100% !important", minWidth: "100% !important" }} min={new Date(Date.now()).toISOString().split('T')[0]} />
                                                     <ErrorMessage name="end_date" component="div" className="text-danger" />
                                                 </div>
                                             </div>
@@ -101,43 +102,49 @@ const Vacation = () => {
                         </div>
                         <div className="col-lg-6 col-md-8 col-12">
                             <div className="vacation_list">
-                                {vacations?.length > 0 ? (
-                                    vacations?.map((vacation, index) => (
-                                        <ul key={index} className="py-3 px-4 m-0 d-flex align-items-center rounded-2 justify-content-between mb-2">
-                                            <li>
-                                                <div>
-                                                    <h6 className='prim_color'>Start Date</h6>
-                                                    <p>{formatDate(vacation.start_date)}</p>
+                                {
+                                    status === "loading" ? (
+                                        <Spinner />
+                                    ) : (
+                                        vacations?.length > 0 ? (
+                                            vacations?.map((vacation, index) => (
+                                                <ul key={index} className="py-3 px-4 m-0 d-flex align-items-center rounded-2 justify-content-between mb-2">
+                                                    <li>
+                                                        <div>
+                                                            <h6 className='prim_color'>Start Date</h6>
+                                                            <p>{formatDate(vacation.start_date)}</p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            <h6 className='prim_color'>End Date</h6>
+                                                            <p>{formatDate(vacation.end_date)}</p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <button type='button' className='border-0 shadow-none' style={{ background: 'none', color: "red" }} onClick={() => { handleEndVacation(vacation._id) }}>End Vacation</button>
+                                                    </li>
+                                                </ul>
+                                            ))
+                                        ) : (
+                                            <div className="row justify-content-center">
+                                                <div className="col-lg-6 col-md-8 col-12">
+                                                    <img src="/images/vacation.png" alt="No Vacation Found" className="img-fluid w-100" style={{ height: '400px', objectFit: 'contain' }} />
+                                                    <div className="col-12 text-center mt-2">
+                                                        <h3 className='fw-semibold'>No Vacation Found</h3>
+                                                    </div>
+                                                    <div className="col-12">
+                                                        <div className="submit-btn mt-3 text-center">
+                                                            <NavLink to="/" className="prim_color_bg text-white btn-effect-1">
+                                                                Back to Home
+                                                            </NavLink>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </li>
-                                            <li>
-                                                <div>
-                                                    <h6 className='prim_color'>End Date</h6>
-                                                    <p>{formatDate(vacation.end_date)}</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <button type='button' className='border-0 shadow-none' style={{ background: 'none', color: "red" }} onClick={()=>{handleEndVacation(vacation._id)}}>End Vacation</button>
-                                            </li>
-                                        </ul>
-                                    ))
-                                ) : (
-                                    <div className="row justify-content-center">
-                                        <div className="col-lg-6 col-md-8 col-12">
-                                            <img src="/images/vacation.png" alt="No Vacation Found" className="img-fluid w-100" style={{ height: '400px', objectFit: 'contain' }} />
-                                            <div className="col-12 text-center mt-2">
-                                                <h3 className='fw-semibold'>No Vacation Found</h3>
                                             </div>
-                                            <div className="col-12">
-                                                <div className="submit-btn mt-3 text-center">
-                                                    <NavLink to="/" className="prim_color_bg text-white btn-effect-1">
-                                                        Back to Home
-                                                    </NavLink>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                                        )
+                                    )
+                                }
                             </div>
                         </div>
                     </div>

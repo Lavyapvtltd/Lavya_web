@@ -187,7 +187,7 @@ const Header = () => {
                               <li className='acc_brd'><NavLink to="/order-history">Order History</NavLink></li>
                               <li className='acc_brd'><NavLink to="/transaction-history">Transaction History</NavLink></li>
                               <li className='acc_brd'><NavLink to="/billing-details">Monthly Bill</NavLink></li>
-                              <li className='acc_brd'><NavLink to="/term-conditions">Terms & conditions</NavLink></li>
+                              <li className='acc_brd'><NavLink to="/term-conditions?type=2">Terms & conditions</NavLink></li>
                               <li><a href="" onClick={handleLogout}>Logout</a></li>
                             </ul>
                           ) : (

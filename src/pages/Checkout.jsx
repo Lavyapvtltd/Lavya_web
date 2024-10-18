@@ -9,6 +9,7 @@ import { fetchCartsAsync } from "../features/cartSlice";
 import { walletAmountDeduction } from "../features/authSlice";
 import { updateProductStock } from "../features/productSlice";
 import DeliveryAddress from "../components/DeliveryAddress";
+
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const Checkout = () => {
     const [finalTotal, setFinalTotal] = useState(total);
     const [address, setAddress] = useState("");
     const [wallet, setWallet] = useState(false);
+    const [loading, setLoading] = useState(false);
     const product = cart_items?.map((cart_item) => {
         return {
             id: cart_item._id,
@@ -55,11 +57,12 @@ const Checkout = () => {
                         shippingaddress: address,
                         user: user,
                         amount: total,
-                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: "Wallet",
                         walletDeductedAmount: "Full"
                     }
+                    setLoading(true);
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
                         data
@@ -71,17 +74,20 @@ const Checkout = () => {
                             amount: total
                         }
                         dispatch(walletAmountDeduction({ user_id, data }));
-                        product.forEach((item)=>{
-                            dispatch(updateProductStock({productId:item.id,qty:item.selQty}));
+                        product.forEach((item) => {
+                            dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                         })
                         toast.success("Order Created Successfully");
+                        setLoading(false);
                         setTimeout(() => {
                             navigate("/order-success")
                         }, 1000);
                     } else {
+                        setLoading(false);
                         toast.error(baseResponse.message);
                     }
                 } catch (error) {
+                    setLoading(false);
                     toast.error("Something went wrong");
                 }
             }
@@ -91,6 +97,7 @@ const Checkout = () => {
                 }
                 const deducted_amount = total - finalTotal;
                 try {
+                    setLoading(true);
                     const data = {
                         status: "ORDERED",
                         orderPlace: "",
@@ -99,7 +106,7 @@ const Checkout = () => {
                         user: user,
                         amount: finalTotal,
                         deductedWalletAmount: deducted_amount,
-                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: deducted_amount,
@@ -115,17 +122,20 @@ const Checkout = () => {
                             amount: deducted_amount
                         }
                         dispatch(walletAmountDeduction({ user_id, data }));
-                        product.forEach((item)=>{
-                            dispatch(updateProductStock({productId:item.id,qty:item.selQty}));
+                        product.forEach((item) => {
+                            dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                         })
                         toast.success("Order Created Successfully");
+                        setLoading(false);
                         setTimeout(() => {
                             navigate("/order-success")
                         }, 1000)
                     } else {
+                        setLoading(false);
                         toast.error(baseResponse.message);
                     }
                 } catch (error) {
+                    setLoading(false);
                     toast.error("Something went wrong");
                 }
             }
@@ -143,7 +153,7 @@ const Checkout = () => {
                         user: user,
                         amount: finalTotal,
                         deductedWalletAmount: deducted_amount,
-                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: deducted_amount,
@@ -178,11 +188,12 @@ const Checkout = () => {
                         shippingaddress: address,
                         user: user,
                         amount: finalTotal,
-                        deliveryDate:moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: 0,
                     }
+                    setLoading(true);
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
                         data
@@ -191,16 +202,19 @@ const Checkout = () => {
                     const { baseResponse, response } = result;
                     if (baseResponse.status == 1) {
                         toast.success("Order Created Successfully");
-                        product.forEach((item)=>{
-                            dispatch(updateProductStock({productId:item.id,qty:item.selQty}));
+                        product.forEach((item) => {
+                            dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                         })
+                        setLoading(false);
                         setTimeout(() => {
                             navigate("/order-success")
                         }, 1000)
                     } else {
+                        setLoading(false);
                         toast.error(baseResponse.message);
                     }
                 } catch (error) {
+                    setLoading(false);
                     toast.error("Something went wrong");
                 }
             }
@@ -214,7 +228,7 @@ const Checkout = () => {
                         user: user,
                         amount: finalTotal,
                         deductedWalletAmount: 0,
-                        deliveryDate: moment(product[0].start_date,'DD-MM-YYYY').format("Do MMM YY"),
+                        deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: 0,
@@ -283,7 +297,7 @@ const Checkout = () => {
             <div className="container-fluid checkout-section py-5">
                 <div className="container">
                     <div className="row">
-                        <DeliveryAddress setAddress={setAddress}/>
+                        <DeliveryAddress setAddress={setAddress} />
                         <div className="col-lg-6 col-md-6 col-12 mt-lg-0 mt-md-0 mt-4">
                             {
                                 cart_items?.length > 0 ? (
@@ -401,7 +415,7 @@ const Checkout = () => {
                                         <p class="me-2 fs-6 prim_color d-flex align-items-center"><span class="currency-symbol prim_color pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span> <span class="currency-value prim_color">{user.walletBalance}</span></p>
                                     </div>
                                 </div>
-                                {user.walletBalance == 0  && (
+                                {user.walletBalance == 0 && (
                                     <div className="mt-2 text-danger">
                                         Insufficient wallet balance.
                                     </div>
@@ -458,10 +472,12 @@ const Checkout = () => {
                                 </p>
                                 <div className="submit-btn mt-3">
                                     <button
-                                        className="prim_color_bg text-white btn-effect-1"
+                                        className="prim_color_bg text-white btn-effect-1 d-flex align-items-center justify-content-center"
                                         onClick={handleOrderPlace}
                                     >
-                                        Order Place
+                                         {loading && <div className="spinner-border me-2" style={{borderWidth:'3px',height:'1rem',width:'1rem'}} role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>}Order Place
                                     </button>
                                 </div>
                             </div>

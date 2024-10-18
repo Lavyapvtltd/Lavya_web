@@ -39,7 +39,15 @@ const Contact = () => {
       <div className="container-fluid px-0 py-3">
         <div className="col-12">
           <div className="w-100">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16946.52956521223!2d76.61337156756933!3d27.53268690527922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39729b517cdc9839%3A0xa586c6902a59e9aa!2sD%20Mart!5e0!3m2!1sen!2sin!4v1726296470995!5m2!1sen!2sin" width="100%" height="450" style={{ border: '0' }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8388.374161581665!2d76.58953341070104!3d27.875052146351873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3972aefffc23bc7d%3A0x9287d4fb1afed0d5!2sTinkirudi%2C%20Rajasthan%20301403!5e0!3m2!1sen!2sin!4v1729139608025!5m2!1sen!2sin"
+              width="100%" 
+              height="450px"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </div>
@@ -102,7 +110,7 @@ const Contact = () => {
                     saveInfo: false,
                   }}
                   validationSchema={validationSchema}
-                  onSubmit={async (values,{resetForm}) => {
+                  onSubmit={async (values, { resetForm }) => {
                     try {
                       const res = await axios.post(
                         `${BASE_URL}${API_URL.CONTACT_FORM}`,

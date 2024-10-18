@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContentsAsync } from '../features/contentSlice';
+import { useSearchParams } from 'react-router-dom';
 
 const TermsCondition = () => {
+    const [searchParams] = useSearchParams();
+    const type = searchParams.get('type'); 
     const dispatch = useDispatch();
     const contents = useSelector((state) => state.contents.contents);
 
@@ -19,18 +22,18 @@ const TermsCondition = () => {
                             <div className="accordion-item" key={index}>
                                 <h2 className="accordion-header">
                                     <button
-                                        className="accordion-button collapsed"
+                                        className={`accordion-button ${parseInt(type) === index + 1 ? '' : 'collapsed'}`}
                                         type="button"
                                         data-bs-toggle="collapse"
                                         data-bs-target={`#flush-collapse${index}`}
-                                        aria-expanded="false"
+                                        aria-expanded={parseInt(type) === index + 1 ? 'true' : 'false'}
                                         aria-controls={`flush-collapse${index}`}>
                                         {content.title}
                                     </button>
                                 </h2>
                                 <div
                                     id={`flush-collapse${index}`}
-                                    className="accordion-collapse collapse"
+                                    className={`accordion-collapse collapse ${parseInt(type) === index + 1 ? 'show' : ''}`}
                                     data-bs-parent="#accordionFlushExample">
                                     <div className="accordion-body">
                                         <p dangerouslySetInnerHTML={{ __html: content.content }}></p>

@@ -103,9 +103,8 @@ const Footer = () => {
                   <div className="footer-menu pt-2">
                     <ul className="p-0 m-0">
                       <li><NavLink to="/order-history">Order tracking</NavLink></li>
-                      <li><NavLink to="/login">Login</NavLink></li>
                       <li><NavLink to="/profile">My account</NavLink></li>
-                      <li><NavLink to="/term-conditions">Terms &amp; Conditions</NavLink></li>
+                      <li><NavLink to="/term-conditions?type=2">Terms &amp; Conditions</NavLink></li>
                       <li><NavLink to="">Promotional Offers</NavLink></li>
                     </ul>
                   </div>
@@ -138,7 +137,6 @@ const Footer = () => {
                       </li>
                     </ul>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -156,17 +154,15 @@ const Footer = () => {
               <div className="col-md-6 col-12 align-self-center d-flex justify-content-md-end justify-content-center">
                 <div className="services_btm">
                   <ul className="p-0 m-0 d-flex align-items-center">
-                    <li className="text-white me-3"><NavLink to="/term-conditions">Terms &amp; Conditions</NavLink></li>
-                    <li className="text-white me-3"><NavLink to="/term-conditions">Claim</NavLink></li>
-                    <li className="text-white"><NavLink to="/term-conditions">Privacy &amp; Policy</NavLink></li>
+                    <li className="text-white me-3"><NavLink to="/term-conditions?type=1">Privacy &amp; Policy</NavLink></li>
+                    <li className="text-white me-3"><NavLink to="/term-conditions?type=2">Terms &amp; Conditions</NavLink></li>
+                    <li className="text-white"><NavLink to="/term-conditions?type=4">Shipping Policy</NavLink></li>
                   </ul>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
-
       </footer>
     </>
   )
