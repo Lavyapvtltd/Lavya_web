@@ -11,6 +11,63 @@
     background: var(--primary-color);
 }
 
+.cursor {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+    animation: cursorAnim .5s infinite alternate;
+    pointer-events: none;
+}
+
+.cursor::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border: 8px solid gray;
+    border-radius: 50%;
+    opacity: .5;
+    top: -8px;
+    left: -8px;
+    animation: cursorAnim2 .5s infinite alternate;
+}
+
+@keyframes cursorAnim {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.7);
+    }
+}
+
+@keyframes cursorAnim2 {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.4);
+    }
+}
+
+@keyframes cursorAnim3 {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(3);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+
+
 body {
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -18,15 +75,14 @@ body {
     animation: fadeIn 1.5s ease-in-out;
 }
 
-  
-  @keyframes fadeIn {
+@keyframes fadeIn {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
     100% {
-      opacity: 1;
+        opacity: 1;
     }
-  }
+}
 
 img {
     transition: all 500ms ease;
@@ -1199,7 +1255,7 @@ input[type="range"]:focus {
     color: #fff;
 }
 
-.wallet_icon{
+.wallet_icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1212,7 +1268,7 @@ input[type="range"]:focus {
     font-size: 11px;
 }
 
-.score_rupee{
+.score_rupee {
     top: -51px;
     left: -30px;
     padding: 3px 12px;
@@ -1226,9 +1282,25 @@ input[type="range"]:focus {
     font-size: 12px;
 }
 
+.category_left_icon {
+    font-size: 26px;
+    font-weight: 100;
+    color: rgb(128, 181, 0);
+    box-shadow: rgb(148, 148, 148) 0px 0px 4px;
+    border-radius: 4px;
+    padding: 10px;
+    height: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+}
 /* responsive css */
 
-@media (min-width: 280px) and (max-width: 376px) {
+@media (max-width: 280px) {
+    .product_search_input input {
+        width: 100%;
+    }
 }
 @media (max-width: 500px) {
 }
@@ -1316,6 +1388,9 @@ input[type="range"]:focus {
     .whatsapp-logo {
         width: 30px !important;
         height: 30px !important;
+    }
+    .product_search_input input {
+        width: 100%;
     }
 }
 

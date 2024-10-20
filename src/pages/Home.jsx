@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom"
-import { fetchUserAsync } from '../features/authSlice';
 import { fetchProductsAsync } from '../features/productSlice';
 import { fetchCategoriesAsync } from '../features/categorySlice';
 import { fetchTestimonialsAsync } from '../features/testimonialSlice';
@@ -16,7 +15,6 @@ import Category from '../components/Category';
 import Spinner from '../components/Spinner';
 import Slider from '../components/Slider';
 import Testimonial from '../components/Testimonial';
-import { fetchSlidersAsync } from '../features/sliderSlice';
 import { fetchBannersAsync } from '../features/bannerSlice';
 import { IMAGE_BASE_URL } from '../constants/contant';
 
@@ -55,7 +53,6 @@ const Home = () => {
     dispatch(fetchTestimonialsAsync());
     dispatch(fetchBannersAsync());
     if (isLoggedIn) {
-      dispatch(fetchUserAsync(user_id));
       dispatch(fetchCartsAsync(user_id));
       dispatch(fetchSubscriptionCartAsync(user_id))
     }

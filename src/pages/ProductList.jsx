@@ -84,9 +84,16 @@ const ProductList = () => {
           </div>
         </div>
         <div className="container">
-          <div className="row mb-3">
-            <div className="col-lg-12 col-md-12 col-12">
-              <div className="input-group justify-content-md-end justify-content-center" style={{flexWrap:'nowrap'}}>
+          <div className="row mb-3 align-items-center">
+            <div className="col-lg-2 col-md-2 col-3">
+              <div className='d-lg-none d-md-none'>
+                <button className="border-0 category_left_icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategory" aria-controls="offcanvasCategory">
+                  <i class="fa-solid fa-list fa-fade"></i>
+                </button>
+              </div>
+            </div>
+            <div className="col-lg-12 col-md-12 col-9">
+              <div className="product_search_input input-group justify-content-md-end justify-content-center" style={{ flexWrap: 'nowrap' }}>
                 <input
                   type="text"
                   className="rounded-0"
@@ -103,7 +110,7 @@ const ProductList = () => {
           </div>
           <div className="row">
             <div className="col-lg-3 col-md-4 col-12">
-              <div className="col-12 position-sticky" style={{ top: '20px' }}>
+              <div className="col-12 position-sticky d-lg-block d-md-block d-none" style={{ top: '20px' }}>
                 <div className="product_left_list">
                   <div className="product-categories p-4 rounded-1">
                     <div>
@@ -183,7 +190,7 @@ const ProductList = () => {
                   ))
                 ) : (
                   <div>
-                     <img src="/images/no-product-found.png" alt="" className='w-100 img-fluid' />
+                    <img src="/images/no-product-found.png" alt="" className='w-100 img-fluid' />
                   </div>
                 )}
               </div>
@@ -201,6 +208,52 @@ const ProductList = () => {
                   </div>
                 </div> */}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mob_product_category d-lg-none d-md-none">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCategory" aria-labelledby="offcanvasRightLabel">
+          <div class="offcanvas-header border-bottom">
+            <h5>
+              Product Categories
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul className="pt-4 ps-0">
+              {category_status === "loading" ? (
+                <Spinner />
+              ) : (
+                <>
+                  <li
+                    className="mb-3"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleCategoryClick(null)}
+                    data-bs-dismiss="offcanvas"
+                  >
+                    <div className="d-flex justify-content-between align-items-center text-decoration-none text-dark">
+                      <div className="mb-0 fw-semibold">All</div>
+                      <i className="fa fa-arrow-right arrow-icon"></i>
+                    </div>
+                  </li>
+                  {categories?.map((category, index) => (
+                    <li
+                      className="mb-3"
+                      style={{ cursor: "pointer" }}
+                      key={index}
+                      onClick={() => handleCategoryClick(category._id)}
+                      data-bs-dismiss="offcanvas"
+                    >
+                      <div className="d-flex justify-content-between align-items-center text-decoration-none text-dark">
+                        <div className="mb-0 fw-semibold">{category.subCategoryName}</div>
+                        <i className="fa fa-arrow-right arrow-icon"></i>
+                      </div>
+                    </li>
+                  ))}
+                </>
+              )}
+            </ul>
           </div>
         </div>
       </div>

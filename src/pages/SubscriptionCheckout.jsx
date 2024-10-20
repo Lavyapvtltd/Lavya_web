@@ -8,7 +8,7 @@ import moment from "moment/moment";
 import { fetchSubscriptionCartAsync } from "../features/subscriptionCartSlice";
 import { updateProductStock } from "../features/productSlice";
 import DeliveryAddress from "../components/DeliveryAddress";
-import { walletAmountDeduction } from "../features/authSlice";
+import { fetchUserAsync, walletAmountDeduction } from "../features/authSlice";
 const SubscriptionCheckout = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -82,15 +82,15 @@ const SubscriptionCheckout = () => {
                 const result = res.data;
                 const { baseResponse, response } = result;
                 if (baseResponse.status == 1) {
+                    setLoading(false);
                     toast.success("Order Subscribed Successfully");
                     const data = {
                         amount: total
                     }
                     dispatch(walletAmountDeduction({ user_id, data }));
                     dispatch(updateProductStock({ productId: subscription_cart_item.id, qty: subscription_cart_item.selQty }));
-                    setLoading(false);
                     setTimeout(() => {
-                        navigate("/")
+                        navigate(`/order-success?order_no=${response.order_no}`)
                     }, 1000)
                 } else {
                     setLoading(false);
@@ -105,6 +105,7 @@ const SubscriptionCheckout = () => {
 
     useEffect(() => {
         if (user_id) {
+            dispatch(fetchUserAsync(user_id));
             dispatch(fetchSubscriptionCartAsync(user_id));
         }
     }, [dispatch, user_id]);
@@ -126,87 +127,108 @@ const SubscriptionCheckout = () => {
                         <div className="col-lg-6 col-md-6 col-12">
                             {
                                 subscription_cart_item ? (
-                                    <div className="col-12">
-                                        <div className="card_total_box p-5">
-                                            <div className="d-flex justify-content-between">
-                                                <h5 className="fw-semibold">Your order</h5>
-                                                <p className="fw-semibold text-secondary">Subtotal</p>
-                                            </div>
-                                            <div className="order_place_check py-2">
-                                                <div className="d-flex align-items-center border rounded-1 p-3">
-                                                    <div className="col-lg-3 col-md-3 col-4 border rounded-1 p-1 overflow-hidden img_hover position-relative">
-                                                        <img
-                                                            src={`${IMAGE_BASE_URL}${subscription_cart_item.icon}`}
-                                                            className="img-fluid"
-                                                            alt={subscription_cart_item.name}
-                                                        />
-                                                    </div>
-                                                    <div className="ps-3">
-                                                        <h6 className="text_clip_head fw-semibold mb-1">
-                                                            {subscription_cart_item.name}
-                                                        </h6>
-                                                        <div className="product-ratting d-flex align-items-center">
-                                                            <ul className="d-flex align-items-center p-0 m-0">
-                                                                <li className="me-1">
-                                                                    <a href="#" tabIndex={0}>
-                                                                        <i className="fa fa-star" />
-                                                                    </a>
-                                                                </li>
-                                                                <li className="me-1">
-                                                                    <a href="#" tabIndex={0}>
-                                                                        <i className="fa fa-star" />
-                                                                    </a>
-                                                                </li>
-                                                                <li className="me-1">
-                                                                    <a href="#" tabIndex={0}>
-                                                                        <i className="fa fa-star" />
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#" tabIndex={0}>
-                                                                        <i className="fa fa-star-half" />
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                            <p className="text-secondary ps-1">(4.0)</p>
-                                                        </div>
-                                                        <div className="text-secondary fw-semibold">
-                                                            {`${subscription_cart_item.unitValue} ${subscription_cart_item.unit}`} x {subscription_cart_item.selQty}
-                                                        </div>
-                                                        <h6 className="price_txt prim_color fw-semibold">
-                                                            Rs {subscription_cart_item.price}
-                                                        </h6>
-                                                    </div>
+                                    <>
+                                        <div className="col-12">
+                                            <div className="card_total_box p-5">
+                                                <div className="d-flex justify-content-between">
+                                                    <h5 className="fw-semibold">Your order</h5>
+                                                    <p className="fw-semibold text-secondary">Subtotal</p>
                                                 </div>
-                                                <div className="table-responsive">
-                                                    <table className="table mt-2">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Subtotal</td>
-                                                                <td>Rs {subTotal}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Delivery Charges</td>
-                                                                <td>Rs 00.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Packaging Charges</td>
-                                                                <td>Rs 00.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <strong>Order Total</strong>
-                                                                </td>
-                                                                <td>
-                                                                    <strong>Rs {total}</strong>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                <div className="order_place_check py-2">
+                                                    <div className="d-flex align-items-center border rounded-1 p-3">
+                                                        <div className="col-lg-3 col-md-3 col-4 border rounded-1 p-1 overflow-hidden img_hover position-relative">
+                                                            <img
+                                                                src={`${IMAGE_BASE_URL}${subscription_cart_item.icon}`}
+                                                                className="img-fluid"
+                                                                alt={subscription_cart_item.name}
+                                                            />
+                                                        </div>
+                                                        <div className="ps-3">
+                                                            <h6 className="text_clip_head fw-semibold mb-1">
+                                                                {subscription_cart_item.name}
+                                                            </h6>
+                                                            <div className="product-ratting d-flex align-items-center">
+                                                                <ul className="d-flex align-items-center p-0 m-0">
+                                                                    <li className="me-1">
+                                                                        <a href="#" tabIndex={0}>
+                                                                            <i className="fa fa-star" />
+                                                                        </a>
+                                                                    </li>
+                                                                    <li className="me-1">
+                                                                        <a href="#" tabIndex={0}>
+                                                                            <i className="fa fa-star" />
+                                                                        </a>
+                                                                    </li>
+                                                                    <li className="me-1">
+                                                                        <a href="#" tabIndex={0}>
+                                                                            <i className="fa fa-star" />
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#" tabIndex={0}>
+                                                                            <i className="fa fa-star-half" />
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                                <p className="text-secondary ps-1">(4.0)</p>
+                                                            </div>
+                                                            <div className="text-secondary fw-semibold">
+                                                                {`${subscription_cart_item.unitValue} ${subscription_cart_item.unit}`} x {subscription_cart_item.selQty}
+                                                            </div>
+                                                            <h6 className="price_txt prim_color fw-semibold">
+                                                                Rs {subscription_cart_item.price}
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                    <div className="table-responsive">
+                                                        <table className="table mt-2">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Subtotal</td>
+                                                                    <td>Rs {subTotal}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Delivery Charges</td>
+                                                                    <td>Rs 00.00</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Packaging Charges</td>
+                                                                    <td>Rs 00.00</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <strong>Order Total</strong>
+                                                                    </td>
+                                                                    <td>
+                                                                        <strong>Rs {total}</strong>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div className="col-12 mt-5">
+                                            <div className="d-flex align-items-center justify-content-between">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked={true}/>
+                                                    <label className="form-check-label ms-2 fw-semibold" for="flexCheckChecked">
+                                                        Wallet Balance
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <p class="me-2 fs-6 prim_color d-flex align-items-center"><span class="currency-symbol prim_color pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span> <span class="currency-value prim_color">{user.walletBalance}</span></p>
+                                                </div>
+                                            </div>
+                                            {user.walletBalance < subTotal && (
+                                                <div className="mt-2 text-danger">
+                                                    Insufficient wallet balance.
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
+
                                 ) : (
                                     <div className="row justify-content-center">
                                         <div className="col-lg-6 col-md-8 col-12">

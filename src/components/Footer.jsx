@@ -127,12 +127,12 @@ const Footer = () => {
                       </li>
                       <li className="mb-2">
                         <div className="footer-address-info">
-                          <p className="fs-6"><a href="tel:+0123-456789"><i className="fa fa-phone me-2" aria-hidden="true"></i> +91 7665153666</a></p>
+                          <p className="fs-6"><a href="tel:+917665153666"><i className="fa fa-phone me-2" aria-hidden="true"></i> +91 7665153666</a></p>
                         </div>
                       </li>
                       <li className="mb-2">
                         <div class="footer-address-info">
-                          <p className="fs-6"><a href="mailto:example@example.com"><i className="fa fa-envelope-o me-2" aria-hidden="true"></i>info@mylavya.com</a></p>
+                          <p className="fs-6"><a href="mailto:info@mylavya.com"><i className="fa fa-envelope-o me-2" aria-hidden="true"></i>info@mylavya.com</a></p>
                         </div>
                       </li>
                     </ul>
@@ -142,7 +142,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
         <div className="container-fluid copyRight_box prim_color_bg py-4">
           <div className="container">
             <div className="row">

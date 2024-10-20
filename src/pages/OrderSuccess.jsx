@@ -1,74 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
-import { API_URL, BASE_URL } from '../constants/contant';
-import axios from "axios";
-import { toast } from 'react-toastify';
 
 
 const OrderSuccess = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [orderData, setOrderData] = useState("");
-    const orderId = searchParams.get('order_id');
     const order_no = searchParams.get('order_no');
-
-    const updateOrderStatusAndPaymentStatus = async (order_id) => {
-        try {
-            const data = {
-                status: "ORDERED",
-                paymentStatus: "PAIDONLINE"
-            }
-            const res = await axios.patch(
-                `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${order_id}`,
-                data
-            );
-            const result = res.data;
-            const { baseResponse, response } = result;
-            if (baseResponse.status == "1"){
-                return response;
-            }
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
-    }
-
-    const getPaymentIdByOrderId = async (order_id) => {
-        try {
-            const res = await axios.get(
-                `${BASE_URL}${API_URL.GET_PAYMENT_ID_BY_ORDER_ID}${order_id}`,
-            );
-            const result = res.data;
-            const { status, orderDetails } = result;
-            if (status == "OK") {
-                
-            }
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
-    }
-    useEffect(() => {
-        if (orderData && orderId) {
-            getPaymentIdByOrderId(orderId);
-        }
-    }, [orderId, orderData])
-    const getOrderData = async (order_no) => {
-        try {
-            const res = await axios.get(
-                `${BASE_URL}${API_URL.GET_ORDER_BY_ID}${order_no}`,
-            );
-            const result = res.data;
-            const { baseResponse, response } = result;
-            if (baseResponse.status == "1") {
-                setOrderData(response);
-            }
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
-    }
-    useEffect(() => {
-        if (order_no) {
-            getOrderData(order_no);
-        }
-    }, [order_no])
     return (
         <>
             <div className="container-fluid order_success py-5">
@@ -79,8 +15,8 @@ const OrderSuccess = () => {
                                 <div>
                                     <img src="/images/check-mark.png" className='w-25' alt="" />
                                 </div>
-                                <h4 className='prim_color fw-semibold'>Thankyou for ordering</h4>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, sunt nesciunt minus fugiat, corrupti odit velit necessitatibus rem modi explicabo quo praesentium vel commodi cum magnam temporibus error illum magni.</p>
+                                <h4 className='prim_color fw-semibold'>Order placed, thank you!</h4>
+                                <p>Your order no is {order_no}</p>
                                 <div className='mt-3'>
                                     <NavLink to="/order-history" className="btn-ordr bg-white border-2 btn-effect-1 me-md-3 mb-lg-0 mb-md-0 mb-3  prim_color">View Order</NavLink>
                                     <NavLink to="/" className="prim_color_bg text-white btn-effect-1" >Continue Shopping</NavLink>

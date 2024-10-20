@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { API_URL, BASE_URL } from '../constants/contant';
 import { toast } from 'react-toastify';
-import { setUser } from '../features/authSlice';
+import { fetchUserAsync, setUser } from '../features/authSlice';
 import axios from 'axios';
 
 
 const AccountDetails = () => {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
+    const {user,user_id} = useSelector((state) => state.auth);
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .required('Name is required'),
@@ -21,6 +21,12 @@ const AccountDetails = () => {
             .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
             .required('Phone number is required'),
     });
+
+    useEffect(()=>{
+        if(user_id){
+            dispatch(fetchUserAsync(user_id));
+        }
+    },[])
 
     return (
         <>

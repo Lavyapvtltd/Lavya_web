@@ -3,8 +3,8 @@ export const BASE_URL = "https://api.lavyacompany.com/api/v1";
 export const IMAGE_BASE_URL = "https://api.lavyacompany.com/resources/";
 
 // LOCAL;
-// export const BASE_URL = "http://192.168.1.5:9291/api/v1";
-// export const IMAGE_BASE_URL = "http://192.168.1.5:9291/resources/";
+// export const BASE_URL = "http://192.168.1.13:9291/api/v1";
+// export const IMAGE_BASE_URL = "http://192.168.1.13:9291/resources/";
 
 export const ROUTES_CONST = {
     INDEX: '/',
@@ -74,3 +74,6 @@ export const API_URL = {
 }
 
 export const GOOGLE_MAP_API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";
+
+export const RAZORPAY_KEY_ID = "rzp_live_I7EaGKo1y6SDua";
+export const RAZORPAY_KEY_SECRET = "ngjUy3OotzoIAA8nA0DkNOSV";

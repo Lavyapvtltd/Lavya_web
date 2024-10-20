@@ -284,7 +284,8 @@ const ProductDetail = () => {
                                         <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
                                     </ul>
                                 </div>
-                                <div className='start_date pt-1 pb-3'>
+                                {
+                                    productdetail.subscription_active && <div className='start_date pt-1 pb-3'>
                                     <p className='fw-semibold fs-6 text-dark mb-2'>Start Date:</p>
                                     <input
                                         type='date'
@@ -294,6 +295,7 @@ const ProductDetail = () => {
                                         min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
                                     />
                                 </div>
+                                }
                                 <div className="choose_Subs mt-2">
                                     <p className='fw-semibold fs-6 text-dark'>Subscription Type</p>
 

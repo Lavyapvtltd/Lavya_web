@@ -4,62 +4,180 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from "sweetalert2";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { API_URL, BASE_URL } from '../constants/contant';
+import { API_URL, BASE_URL, RAZORPAY_KEY_ID } from '../constants/contant';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { walletAmountAddition } from '../features/authSlice';
 const Recharge = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { data } = location.state || {};
-    console.log(data);
     const dispatch = useDispatch();
     const recharges = useSelector(state => state.recharges.recharges);
-    const { user_id } = useSelector((state) => state.auth);
+    const { user_id, user } = useSelector((state) => state.auth);
     const [amount, setAmount] = useState(500);
     const [selectedRecharge, setSelectedRecharge] = useState("");
     const [paymentOption, setPaymentOption] = useState("setup autopay");
+    const [loading, setLoading] = useState(false);
 
-    console.log(selectedRecharge)
     const handlePay = async () => {
         if (data) {
-            if(paymentOption == "payViaCash"){
-                const via_cash_data = { ...data, paymentOption: "payViaCash", amountToCollect: data.amount, recharge_amount_via_cash: data.amount, viaCash: false }
-                const res = await axios.post(
-                    `${BASE_URL}${API_URL.CREATE_SUBSCRIPTION_ORDER}`,
-                    via_cash_data
-                );
-                const result = res.data;
-                const { baseResponse, response } = result;
-                if (baseResponse.status == 1) {
-                    toast.success("Order Subscribed Successfully");
-                    setTimeout(() => {
-                        navigate("/order-success")
-                    }, 1000)
-                } else {
-                    toast.error(baseResponse.message);
+            if (paymentOption == "payViaCash") {
+                try {
+                    setLoading(true);
+                    const via_cash_data = { ...data, paymentOption: "payViaCash", amountToCollect: data.amount, recharge_amount_via_cash: data.amount, viaCash: false }
+                    const res = await axios.post(
+                        `${BASE_URL}${API_URL.CREATE_SUBSCRIPTION_ORDER}`,
+                        via_cash_data
+                    );
+                    const result = res.data;
+                    const { baseResponse, response } = result;
+                    if (baseResponse.status == 1) {
+                        setLoading(false);
+                        toast.success("Order Subscribed Successfully");
+                        setTimeout(() => {
+                            navigate(`/order-success?order_no=${response.order_no}`)
+                        }, 1000)
+                    } else {
+                        setLoading(false);
+                        toast.error(baseResponse.message);
+                    }
+                } catch (error) {
+                    setLoading(false);
+                    toast.error("Something went wrong");
                 }
-            }else{
-                
+            } else {
+                try {
+                    setLoading(true);
+                    const data = {
+                        amount: amount,
+                        currency: "INR",
+                        notes: "Recharge Wallet",
+                        type: "web"
+                    }
+                    const res = await axios.post(
+                        `${BASE_URL}${API_URL.WALLET_RECHARGE}${user_id}`,
+                        data
+                    );
+                    const result = res.data;
+                    const { baseResponse, order } = result;
+                    console.log(order, "RTH")
+                    if (baseResponse.status == 1) {
+                        setLoading(false);
+                        const options = {
+                            key: RAZORPAY_KEY_ID,
+                            amount: order.amount,
+                            currency: order.currency,
+                            name: 'Lavya Organic Foods',
+                            description: '',
+                            order_id: order.id,
+                            handler: async function (response) {
+                                try {
+                                    let payment = 0;
+                                    if (amount == selectedRecharge?.value) {
+                                        payment = Number(amount) + Number(selectedRecharge.cashback)
+                                    } else {
+                                        payment = Number(amount)
+                                    }
+                                    const data = {
+                                        amount: payment
+                                    }
+                                    dispatch(walletAmountAddition({ user_id, data }));
+                                    navigate(`/recharge-success?id=${order.id}`)
+                                } catch (error) {
+                                    toast.error("Something went wrong");
+                                }
+                            },
+                            prefill: {
+                                name: user.name,
+                                email: user.email,
+                                contact: user.phone
+                            },
+                            notes: {
+                                address: "Lavya Organic Foods Corporate Office"
+                            },
+                            theme: {
+                                color: "#3399cc"
+                            },
+                            modal: {
+                                ondismiss: async function () {
+                                    toast.error("Transaction cancelled")
+                                }
+                            }
+                        };
+                        console.log(options)
+                        const rzp = new window.Razorpay(options);
+                        rzp.open();
+                    }
+                } catch (error) {
+                    setLoading(false);
+                    toast.error("Something went wrong");
+                }
             }
         }
         else {
             try {
+                setLoading(true);
                 const data = {
                     amount: amount,
                     currency: "INR",
                     notes: "Recharge Wallet",
+                    type: "web"
                 }
                 const res = await axios.post(
                     `${BASE_URL}${API_URL.WALLET_RECHARGE}${user_id}`,
                     data
                 );
                 const result = res.data;
-                const { orderDetails, checkout } = result;
-                if (orderDetails) {
-                    const newTab = window.open();
-                    newTab.document.write(checkout);
-                    newTab.document.close();
+                const { baseResponse, order } = result;
+                if (baseResponse.status == 1) {
+                    setLoading(false);
+                    const options = {
+                        key: RAZORPAY_KEY_ID,
+                        amount: order.amount,
+                        currency: order.currency,
+                        name: 'Lavya Organic Foods',
+                        description: '',
+                        order_id: order.id,
+                        handler: async function (response) {
+                            try {
+                                let payment = 0;
+                                if (amount == selectedRecharge?.value) {
+                                    payment = Number(amount) + Number(selectedRecharge.cashback)
+                                } else {
+                                    payment = Number(amount)
+                                }
+                                const data = {
+                                    amount: payment
+                                }
+                                dispatch(walletAmountAddition({ user_id, data }));
+                                navigate(`/recharge-success?id=${order.id}`)
+                            } catch (error) {
+                                toast.error("Something went wrong");
+                            }
+                        },
+                        prefill: {
+                            name: user.name,
+                            email: user.email,
+                            contact: user.phone
+                        },
+                        notes: {
+                            address: "Lavya Organic Foods Corporate Office"
+                        },
+                        theme: {
+                            color: "#3399cc"
+                        },
+                        modal: {
+                            ondismiss: async function () {
+                                toast.error("Transaction cancelled")
+                            }
+                        }
+                    };
+                    console.log(options)
+                    const rzp = new window.Razorpay(options);
+                    rzp.open();
                 }
             } catch (error) {
+                setLoading(false);
                 toast.error("Something went wrong");
             }
         }
@@ -127,6 +245,7 @@ const Recharge = () => {
                                                                 className="form-control rounded-1"
                                                                 id="exampleFormControlInput1"
                                                                 value={amount}
+                                                                onChange={(e) => setAmount(e.target.value)}
                                                             />
                                                         </div>
                                                         <div className="amount_list">
@@ -178,9 +297,12 @@ const Recharge = () => {
                                                         <div className="amount_list">
                                                             <ul className='p-0 m-0'>
                                                                 {
-                                                                    recharges?.map((recharge) => (
-                                                                        <li className='d-inline-block me-2'>
-                                                                            <button type='button' className='bg-white fw-semibold' onClick={() => handleRechargeClick(recharge)}>{recharge?.value}</button>
+                                                                    recharges?.map((recharge, index) => (
+                                                                        <li className='d-inline-block me-2' key={index}>
+                                                                            <button type='button' className='bg-white fw-semibold' onClick={() => {
+                                                                                document.getElementById(`priceCheck${index}`).checked = true;
+                                                                                handleRechargeClick(recharge)
+                                                                            }}>{recharge?.value}</button>
                                                                         </li>
                                                                     ))
                                                                 }
@@ -249,7 +371,11 @@ const Recharge = () => {
                                     </div>
                                 </div>
                                 <div className='.col-12 mt-2 text-center'>
-                                    <button type='button' className='prim_color_bg text-white btn-effect-1' onClick={handlePay}>Pay ₹ {amount}</button>
+                                    <button type='button' disabled={loading} className='prim_color_bg text-white btn-effect-1' onClick={handlePay}>
+                                        {loading && <div className="spinner-border me-2" style={{ borderWidth: '3px', height: '1rem', width: '1rem' }} role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>}Pay ₹ {amount}
+                                    </button>
                                 </div>
                             </div>
                         </div>
