@@ -6,8 +6,10 @@ import { toast } from 'react-toastify';
 import axios from "axios";
 import moment from 'moment';
 import Spinner from '../components/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 const Orders = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const user_id = useSelector(state => state.auth.user_id);
     const { orders, status } = useSelector(state => state.orders);
@@ -89,7 +91,7 @@ const Orders = () => {
                                                                         <div className='w-100 d-flex justify-content-between'>
                                                                             <p className="mt-1 fw-semibold d-flex align-items-center">Price: <span className='px-1'><i class="fa fa-inr" aria-hidden="true"></i> {product.price}</span></p>
                                                                             {
-                                                                                order.status != "CANCELLEDBYCUSTOMER" &&
+                                                                               (order.status != "CANCELLEDBYCUSTOMER" && order.status != "DELIVERED") &&
                                                                                 <>
                                                                                     <div className='mt-1'>
                                                                                         <button className="prim_color_bg py-2 px-3 text-white btn-effect-1" style={{ fontSize: "14px" }} data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" onClick={() => { setSelectedOrder(order) }}>Cancel</button>
@@ -197,6 +199,9 @@ const Orders = () => {
                                                                                         </div>
                                                                                     </div>
                                                                                 </>
+                                                                            }
+                                                                            {
+                                                                                order.status == "DELIVERED" &&  <button className="prim_color_bg py-2 px-3 text-white btn-effect-1" style={{ fontSize: "14px" }} onClick={()=>{navigate(`/product-list/${product.id}?order_id=${order._id}`)}} >Rating</button>
                                                                             }
                                                                         </div>
                                                                         <p class="d-flex align-items-center text-secondary">You are saving  <span class="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(product.regularPrice - product.price).toFixed(2)}</p>

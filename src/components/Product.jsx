@@ -4,7 +4,7 @@ import { IMAGE_BASE_URL } from '../constants/contant'
 const Product = ({ product }) => {
     return (
         <>
-                <a href="#">
+            <a href="#">
                 <div className="product_box mb-4">
                     <div className="card overflow-hidden">
                         <div className="card_img overflow-hidden img_hover position-relative">
@@ -35,15 +35,34 @@ const Product = ({ product }) => {
                                 !(product.stock > 0) && <p className='pb-1 text-danger'>Currently not available</p>
                             }
                             <p className='text-dark fw-semibold pb-1'>{product.unit_value} {product.unit}</p>
-
-                            <div class="product-ratting">
-                                <ul className="d-flex align-items-cente p-0 m-0">
-                                    <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                    <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                    <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                    <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
-                                </ul>
-                            </div>
+                            {
+                                product.rating > 0 ? (
+                                    <div className="product-ratting">
+                                        <ul className="d-flex align-items-center p-0 m-0">
+                                            {
+                                                [...Array(Math.floor(product.rating))].map((_, i) => (
+                                                    <li className="me-1" key={i}>
+                                                        <a href="#" tabIndex="0">
+                                                            <i className="fa fa-star"></i>
+                                                        </a>
+                                                    </li>
+                                                ))
+                                            }
+                                            {
+                                                product.rating % 1 !== 0 && (
+                                                    <li className="me-1">
+                                                        <a href="#" tabIndex="0">
+                                                            <i className="fa fa-star-half"></i>
+                                                        </a>
+                                                    </li>
+                                                )
+                                            }
+                                        </ul>
+                                    </div>
+                                ) : (
+                                    <p>Rating not found</p>
+                                )
+                            }
                             <div className="d-flex align-items-center">
                                 <p className="me-2 prim_color d-flex align-items-center">
                                     <span className="currency-symbol prim_color pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value prim_color">{product.price}</span>
@@ -61,7 +80,7 @@ const Product = ({ product }) => {
                         </div>
                     </div>
                 </div>
-                </a>
+            </a>
         </>
     )
 }

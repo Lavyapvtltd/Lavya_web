@@ -70,7 +70,9 @@ export const API_URL = {
     EDIT_ADDRESS:'/subscription/edit-user-address/',
     SUBSCRIBE_USER:"/user-subscribe/user-subscribe",
     CONTACT_FORM:"/contact-form/contact-form",
-    GET_ALL_LOCATIONS:"/location/get-all-serving-locations"
+    GET_ALL_LOCATIONS:"/location/get-all-serving-locations",
+    ADD_RATING:'/rating/add-rating/',
+    GET_ALL_RATING:'/rating/get-all-rating/'
 }
 
 export const GOOGLE_MAP_API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";

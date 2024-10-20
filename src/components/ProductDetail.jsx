@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductDetailAsync } from '../features/productDetailSlice';
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ProductImages from './ProductImages';
 import Spinner from './Spinner';
 import { AddProduct, IncProduct, DecProduct } from '../features/cartSlice';
@@ -13,9 +13,12 @@ import Loading from './Loading';
 import { fetchSubsciptionOrdersAsync } from '../features/orderSlice';
 import { API_URL, BASE_URL } from '../constants/contant';
 import axios from "axios";
+import RatingReview from './RatingReview';
 
 
 const ProductDetail = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const order_id = searchParams.get('order_id');
     const navigate = useNavigate();
     const [nextDay, setNextDay] = useState('');
     const [toggle, setToggle] = useState(false);
@@ -27,7 +30,6 @@ const ProductDetail = () => {
     const cart_status = useSelector((state) => state.cart.status);
     const subscription_cart_status = useSelector((state) => state.subscription_cart.status);
     const [selectedSubscription, setSelectedSubscription] = useState("");
-    console.log(selectedSubscription,"dsfvdfb")
     const cart_items = useSelector((state) => state.cart.cart);
     const subscription_cart_items = useSelector((state) => state.subscription_cart.subscription_cart)
     const subscription_orders = useSelector(state => state.orders.subscription_orders);
@@ -276,25 +278,45 @@ const ProductDetail = () => {
                                     </div>
                                     <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(productdetail.regularPrice - productdetail.price).toFixed(2)}</p>
                                 </div>
-                                <div class="product-ratting py-1">
-                                    <ul className="d-flex align-items-cente p-0 m-0">
-                                        <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                        <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                        <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                        <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
-                                    </ul>
-                                </div>
+                                {
+                                    productdetail.rating > 0 ? (
+                                        <div className="product-ratting  py-1">
+                                            <ul className="d-flex align-items-center p-0 m-0">
+                                                {
+                                                    [...Array(Math.floor(productdetail.rating))].map((_, i) => (
+                                                        <li className="me-1" key={i}>
+                                                            <a href="#" tabIndex="0">
+                                                                <i className="fa fa-star"></i>
+                                                            </a>
+                                                        </li>
+                                                    ))
+                                                }
+                                                {
+                                                    productdetail.rating % 1 !== 0 && (
+                                                        <li className="me-1">
+                                                            <a href="#" tabIndex="0">
+                                                                <i className="fa fa-star-half"></i>
+                                                            </a>
+                                                        </li>
+                                                    )
+                                                }
+                                            </ul>
+                                        </div>
+                                    ) : (
+                                        <p>Rating not found</p>
+                                    )
+                                }
                                 {
                                     productdetail.subscription_active && <div className='start_date pt-1 pb-3'>
-                                    <p className='fw-semibold fs-6 text-dark mb-2'>Start Date:</p>
-                                    <input
-                                        type='date'
-                                        className='custom-date-input bg-dark py-2 px-3 text-white rounded-1'
-                                        value={nextDay}
-                                        onChange={handleDateChange}
-                                        min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
-                                    />
-                                </div>
+                                        <p className='fw-semibold fs-6 text-dark mb-2'>Start Date:</p>
+                                        <input
+                                            type='date'
+                                            className='custom-date-input bg-dark py-2 px-3 text-white rounded-1'
+                                            value={nextDay}
+                                            onChange={handleDateChange}
+                                            min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                                        />
+                                    </div>
                                 }
                                 <div className="choose_Subs mt-2">
                                     <p className='fw-semibold fs-6 text-dark'>Subscription Type</p>
@@ -345,7 +367,7 @@ const ProductDetail = () => {
                                     {
                                         productdetail.subscription_active && existsSubscriptionProduct ? (
                                             <>
-                                                <button className="ms-2 cancelation_sub prim_color bg-white btn-effect-1" style={{border:"2px solid green"}} data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Cancel Subscription</button>
+                                                <button className="ms-2 cancelation_sub prim_color bg-white btn-effect-1" style={{ border: "2px solid green" }} data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Cancel Subscription</button>
                                                 <div
                                                     className="offcanvas offcanvas-bottom"
                                                     tabIndex={-1}
@@ -461,19 +483,47 @@ const ProductDetail = () => {
                         </div>
                         <div className="row mt-5">
                             <div className="col-12 product_detail_tabs">
-                                <ul class="nav nav-pills mb-3 p-0" id="pills-tab" role="tablist">
-                                    <li class="nav-item me-md-5 me-3" role="presentation">
-                                        <button class="nav-link active fs-5" id="pills-description-tab" data-bs-toggle="pill" data-bs-target="#pills-description" type="button" role="tab" aria-controls="pills-description" aria-selected="true">Description</button>
+                                <ul className="nav nav-pills mb-3 p-0" id="pills-tab" role="tablist">
+                                    <li className="nav-item me-md-5 me-3" role="presentation">
+                                        <button
+                                            className={`nav-link fs-5 ${!order_id ? 'active' : ''}`}
+                                            id="pills-description-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#pills-description"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="pills-description"
+                                            aria-selected={!order_id ? 'true' : 'false'}
+                                        >
+                                            Description
+                                        </button>
                                     </li>
                                     {/* <li class="nav-item me-md-5 me-3" role="presentation">
-                                        <button class="nav-link fs-5" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="false">Information</button>
-                                    </li>
-                                    <li class="nav-item me-md-5 me-3" role="presentation">
-                                        <button class="nav-link fs-5" id="pills-reviews-tab" data-bs-toggle="pill" data-bs-target="#pills-reviews" type="button" role="tab" aria-controls="pills-reviews" aria-selected="false">Reviews</button>
+                                        <button className="nav-link fs-5" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="false">Information</button>
                                     </li> */}
+                                    <li className="nav-item me-md-5 me-3" role="presentation">
+                                        <button
+                                            className={`nav-link fs-5 ${order_id ? 'active' : ''}`}
+                                            id="pills-reviews-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#pills-reviews"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="pills-reviews"
+                                            aria-selected={order_id ? 'true' : 'false'}
+                                        >
+                                            Reviews
+                                        </button>
+                                    </li>
                                 </ul>
-                                <div class="tab-content mt-4" id="pills-tabContent">
-                                    <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab" tabindex="0">
+                                <div className="tab-content mt-4" id="pills-tabContent">
+                                    <div
+                                        className={`tab-pane fade ${!order_id ? 'show active' : ''}`}
+                                        id="pills-description"
+                                        role="tabpanel"
+                                        aria-labelledby="pills-description-tab"
+                                        tabIndex="0"
+                                    >
                                         <div className="col-12">
                                             <div className="desc_content">
                                                 <p className="fs-6 py-1" dangerouslySetInnerHTML={{ __html: productdetail.description }}></p>
@@ -507,120 +557,20 @@ const ProductDetail = () => {
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab" tabindex="0">
-                                        <div className="col-12">
-                                            <div className="reviews_box">
-                                                <div className="head_rewis pb-4">
-                                                    <h6 className="fw-semibold">Customer reviews</h6>
-                                                    <div class="product-ratting">
-                                                        <div className='d-flex align-items-center'>
-                                                            <ul className="d-flex align-items-cente p-0 m-0">
-                                                                <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
-                                                            </ul>
-                                                            <span className='ms-1 prim_color'>(95 reviews)</span>
-                                                        </div>
-                                                        <p className='text-secondary'>8 global ratings</p>
-                                                    </div>
-                                                </div>
-                                                <div className="client_reviews pt-4">
-                                                    <div className="row gy-5">
-                                                        <div className="col-lg-6">
-                                                            <div className="client_sec d-flex align-items-center pb-4 border-bottom">
-                                                                <div className='col-3 client_img overflow-hidden'>
-                                                                    <a href="#">
-                                                                        <img src="/images/about.jpg" alt="" className="img-fluid" />
-                                                                    </a>
-                                                                </div>
-                                                                <div className="client_content ms-3">
-                                                                    <a href="#" className='fw-semibood'><h6 className='mb-1'>Abhishek Sharma</h6></a>
-                                                                    <div class="product-ratting">
-                                                                        <ul className="d-flex align-items-cente p-0 m-0">
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <p className='text_clip_para'>Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-                                                                </div>
-                                                            </div>
-                                                            <div className="client_sec d-flex align-items-center pt-4">
-                                                                <div className='col-3 client_img overflow-hidden'>
-                                                                    <a href="#">
-                                                                        <img src="/images/about.jpg" alt="" className="img-fluid" />
-                                                                    </a>
-                                                                </div>
-                                                                <div className="client_content ms-3">
-                                                                    <div className='d-md-flex align-items-center justify-content-between'>
-                                                                        <a href="#" className='fw-semibood'><h6 className='mb-1'>Abhishek Sharma</h6></a>
-                                                                        <div className='my-md-0 my-3'><span className='border px-3 py-2 rounded-pill date_review'>12 sep 2024</span></div>
-                                                                    </div>
-                                                                    <div class="product-ratting">
-                                                                        <ul className="d-flex align-items-cente p-0 m-0">
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <p className='text_clip_para'>Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-6">
-                                                            <div className="review_form">
-                                                                <div className="review-details rounded-2 p-5">
-                                                                    <h4 className="fw-bold mb-2">Add Your Review</h4>
-                                                                    <div class="product-ratting d-flex align-items-center">
-                                                                        <p className='text-dark me-2'>Your rating:</p>
-                                                                        <ul className="d-flex align-items-cente p-0 m-0">
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li className="me-1"><a href="#" tabindex="0"><i class="fa fa-star"></i></a></li>
-                                                                            <li><a href="#" tabindex="0"><i class="fa fa-star-half"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <form className='mt-4' action="#">
-                                                                        <div className="row">
-                                                                            <div className="col-12">
-                                                                                <div className="form-group mb-4">
-                                                                                    <textarea className="form-control border-0 rounded-2" placeholder="Type Something here.." rows="5" id="comment"></textarea>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-12 mb-4">
-                                                                                <input type="text" placeholder="Enter your name" className=" input-name border-0 p-3 w-100 position-relative" />
-                                                                            </div>
-                                                                            <div className="col-12 mb-4">
-                                                                                <input type="text" placeholder="Enter email address" className="border-0 input-name p-3 w-100 position-relative" />
-                                                                            </div>
-
-
-                                                                            <div className="form-check my-4 d-flex align-items-center">
-                                                                                <input className="form-check-input mt-0 me-2" type="checkbox" value="" id="flexCheckDefault" />
-                                                                                <label className="form-check-label" style={{ fontSize: '14px' }} for="flexCheckDefault">
-                                                                                    Save my name, email, and website in this browser for the next time I comment.
-                                                                                </label>
-                                                                            </div>
-                                                                            <div>
-                                                                                <button className="prim_color_bg text-white btn-effect-1">Submit</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div> */}
+                                    <div
+                                        className={`tab-pane fade ${order_id ? 'show active' : ''}`}
+                                        id="pills-reviews"
+                                        role="tabpanel"
+                                        aria-labelledby="pills-reviews-tab"
+                                        tabIndex="0"
+                                    >
+                                        <RatingReview product_id={productdetail._id} order_id={order_id}/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             }
