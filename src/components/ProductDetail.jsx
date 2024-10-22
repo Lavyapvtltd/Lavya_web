@@ -175,12 +175,6 @@ const ProductDetail = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchProductDetailAsync(id));
-        dispatch(fetchSubsciptionOrdersAsync(user_id));
-        setNextDay(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
-    }, []);
-
-    useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart_items));
         localStorage.setItem("subscription_cart", JSON.stringify(subscription_cart_items));
     }, [cart_items, subscription_cart_items]);
@@ -190,6 +184,14 @@ const ProductDetail = () => {
             setSelectedSubscription(productdetail.subscription_type[0].split(",")[0]);
         }
     }, [productdetail]);
+
+    useEffect(() => {
+        if(user_id){
+            dispatch(fetchSubsciptionOrdersAsync(user_id));
+        }
+        dispatch(fetchProductDetailAsync(id));
+        setNextDay(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
+    }, [id]);
 
     useEffect(() => {
         if (productdetail.subscription_active) {
@@ -278,34 +280,48 @@ const ProductDetail = () => {
                                     </div>
                                     <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(productdetail.regularPrice - productdetail.price).toFixed(2)}</p>
                                 </div>
-                                {
-                                    productdetail.rating > 0 ? (
-                                        <div className="product-ratting  py-1">
-                                            <ul className="d-flex align-items-center p-0 m-0">
-                                                {
-                                                    [...Array(Math.floor(productdetail.rating))].map((_, i) => (
+                                <div className="product-ratting py-1">
+                                    <ul className="d-flex align-items-center p-0 m-0">
+                                        {/* If the rating is greater than 0, display filled stars and half stars */}
+                                        {
+                                            productdetail.rating > 0 ? (
+                                                <>
+                                                    {[...Array(Math.floor(productdetail.rating))].map((_, i) => (
                                                         <li className="me-1" key={i}>
                                                             <a href="#" tabIndex="0">
                                                                 <i className="fa fa-star"></i>
                                                             </a>
                                                         </li>
-                                                    ))
-                                                }
-                                                {
-                                                    productdetail.rating % 1 !== 0 && (
+                                                    ))}
+                                                    {productdetail.rating % 1 !== 0 && (
                                                         <li className="me-1">
                                                             <a href="#" tabIndex="0">
                                                                 <i className="fa fa-star-half"></i>
                                                             </a>
                                                         </li>
-                                                    )
-                                                }
-                                            </ul>
-                                        </div>
-                                    ) : (
-                                        <p>Rating not found</p>
-                                    )
-                                }
+                                                    )}
+                                                    {/* Display empty stars to complete 5 stars */}
+                                                    {[...Array(5 - Math.ceil(productdetail.rating))].map((_, i) => (
+                                                        <li className="me-1" key={i + Math.floor(productdetail.rating)}>
+                                                            <a href="#" tabIndex="0">
+                                                                <i className="fa fa-star-o"></i>
+                                                            </a>
+                                                        </li>
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                /* If no rating, display 5 blank stars */
+                                                [...Array(5)].map((_, i) => (
+                                                    <li className="me-1" key={i}>
+                                                        <a href="#" tabIndex="0">
+                                                            <i className="fa fa-star-o"></i>
+                                                        </a>
+                                                    </li>
+                                                ))
+                                            )
+                                        }
+                                    </ul>
+                                </div>
                                 {
                                     productdetail.subscription_active && <div className='start_date pt-1 pb-3'>
                                         <p className='fw-semibold fs-6 text-dark mb-2'>Start Date:</p>
@@ -565,7 +581,7 @@ const ProductDetail = () => {
                                         aria-labelledby="pills-reviews-tab"
                                         tabIndex="0"
                                     >
-                                        <RatingReview product_id={productdetail._id} order_id={order_id}/>
+                                        <RatingReview product_id={productdetail._id} order_id={order_id} />
                                     </div>
                                 </div>
                             </div>

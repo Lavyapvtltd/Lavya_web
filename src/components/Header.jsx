@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
+import SearchComponent from './SearchComponent';
 
 const Header = () => {
   const [address, setAddress] = useState("");
@@ -163,9 +164,7 @@ const Header = () => {
                   <div className="header_side_bar">
                     <ul className="side_list d-flex align-items-center justify-content-end p-0 m-0">
                       <li className="link_bx me-3">
-                        <div className="nav_list_link">
-                          <i class="fa fa-search" aria-hidden="true"></i>
-                        </div>
+                        <SearchComponent/>
                       </li>
                       <li className="link_bx me-3">
                         <NavLink className="nav_list_link" to="/cart">

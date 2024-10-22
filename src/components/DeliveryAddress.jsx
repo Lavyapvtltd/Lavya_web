@@ -20,7 +20,6 @@ const DeliveryAddress = ({ setAddress }) => {
     });
     const [toggle, setToggle] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null);
-    console.log(editingAddress, "Ery")
     const autocompleteInputRef = useRef(null);
     const setFieldValueRef = useRef(null);
     const [mapSrc, setMapSrc] = useState("");
@@ -68,13 +67,13 @@ const DeliveryAddress = ({ setAddress }) => {
                     }
                 }
 
-                if (!loc.includes(city)) {
-                    setFieldValueRef.current("location", "");
-                    const locationNames = locations.map(item => item.locationName).join('<br>');
-                    return Swal.fire({
-                        html: `Sorry, we are not available in your area yet.<br>Available locations:<br>${locationNames}`,
-                    });
-                }
+                // if (!loc.includes(city)) {
+                //     setFieldValueRef.current("location", "");
+                //     const locationNames = locations.map(item => item.locationName).join('<br>');
+                //     return Swal.fire({
+                //         html: `Sorry, we are not available in your area yet.<br>Available locations:<br>${locationNames}`,
+                //     });
+                // }
                 if (lat && lng) {
                     const mapUrl = `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAP_API_KEY}&center=${lat},${lng}&zoom=14`;
                     setMapSrc(mapUrl);
@@ -86,12 +85,12 @@ const DeliveryAddress = ({ setAddress }) => {
                     }
                 }
             });
-            autocompleteInputRef?.current?.addEventListener('blur', () => {
-                if (!placeSelected) {
-                    setFieldValueRef.current("location", "");
-                }
-                setPlaceSelected(false);
-            });
+            // autocompleteInputRef?.current?.addEventListener('blur', () => {
+            //     if (!placeSelected) {
+            //         setFieldValueRef.current("location", "");
+            //     }
+            //     setPlaceSelected(false);
+            // });
         };
 
         if (!window.google) {

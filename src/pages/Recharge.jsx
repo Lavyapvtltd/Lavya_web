@@ -190,15 +190,18 @@ const Recharge = () => {
         handleAmountClick(Number(value));
         setSelectedRecharge(recharge);
         Swal.fire({
-            text: `For a recharge of ₹ ${value},you will receive ₹ ${Number(value) + Number(cashback)}.
-            if you do not spend this amount within the validity period,so your cashback amount it will be automatically deducted `,
+            html: `For a recharge of ₹ ${value}, you will receive ₹ ${Number(value) + Number(cashback)}.<br>
+            If you do not spend this amount within the validity period, your cashback amount will be automatically deducted.<br><br>
+            ₹ ${value} के रिचार्ज के लिए, आपको ₹ ${Number(value) + Number(cashback)} प्राप्त होगा।<br>
+            यदि आप वैधता अवधि के भीतर यह राशि खर्च नहीं करते हैं, तो आपकी कैशबैक राशि स्वचालित रूप से काट ली जाएगी।`,
         })
+        
     }
     const handlePayViaCash = () => {
         if (data) {
             Swal.fire({
-                text: "Note:-Youn have to pay selected amount to our delivery partner.Then only your wallet balance will be updated",
-            })
+                html: "Note: You have to pay the selected amount to our delivery partner.<br>Then only your wallet balance will be updated.<br><br>आपको हमारे डिलीवरी पार्टनर को चयनित राशि का भुगतान करना होगा।<br>तभी आपका वॉलेट बैलेंस अपडेट किया जाएगा।",
+            })            
         } else {
             Swal.fire({
                 title: "Alert",

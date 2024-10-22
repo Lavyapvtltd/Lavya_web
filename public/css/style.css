@@ -1295,6 +1295,12 @@ input[type="range"]:focus {
     align-items: center;
     width: 45px;
 }
+
+.desc_content ul{
+    padding: 0;
+    font-size: 14px;
+}
+
 /* responsive css */
 
 @media (max-width: 280px) {

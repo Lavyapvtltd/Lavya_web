@@ -29,7 +29,7 @@ const RatingReview = ({ product_id, order_id }) => {
         description: Yup.string().required('Description is required'),
     });
 
-    const onSubmit = async (values,{ resetForm }) => {
+    const onSubmit = async (values, { resetForm }) => {
         values.user_id = user_id;
         values.order_id = order_id;
         try {
@@ -56,7 +56,7 @@ const RatingReview = ({ product_id, order_id }) => {
     };
     useEffect(() => {
         dispatch(fetchRatingAsync(product_id));
-    }, [])
+    }, [product_id])
     return (
         <>
             <div className="col-12">
@@ -65,28 +65,47 @@ const RatingReview = ({ product_id, order_id }) => {
                         <h6 className="fw-semibold">Customer reviews</h6>
                         <div className="product-ratting">
                             <ul className="d-flex align-items-center p-0 m-0">
+                                {/* If the rating is greater than 0, display filled stars and half stars */}
                                 {
-                                    [...Array(Math.floor(avg_rating))].map((_, i) => (
-                                        <li className="me-1" key={i}>
-                                            <a href="#" tabIndex="0">
-                                                <i className="fa fa-star"></i>
-                                            </a>
-                                        </li>
-                                    ))
-                                }
-                                {
-                                    avg_rating % 1 !== 0 && (
-                                        <li className="me-1">
-                                            <a href="#" tabIndex="0">
-                                                <i className="fa fa-star-half"></i>
-                                            </a>
-                                        </li>
+                                    avg_rating > 0 ? (
+                                        <>
+                                            {[...Array(Math.floor(avg_rating))].map((_, i) => (
+                                                <li className="me-1" key={i}>
+                                                    <a href="#" tabIndex="0">
+                                                        <i className="fa fa-star"></i>
+                                                    </a>
+                                                </li>
+                                            ))}
+                                            {avg_rating % 1 !== 0 && (
+                                                <li className="me-1">
+                                                    <a href="#" tabIndex="0">
+                                                        <i className="fa fa-star-half"></i>
+                                                    </a>
+                                                </li>
+                                            )}
+                                            {/* Display empty stars to complete 5 stars */}
+                                            {[...Array(5 - Math.ceil(avg_rating))].map((_, i) => (
+                                                <li className="me-1" key={i + Math.floor(avg_rating)}>
+                                                    <a href="#" tabIndex="0">
+                                                        <i className="fa fa-star-o"></i>
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </>
+                                    ) : (
+                                        /* If no rating, display 5 blank stars */
+                                        [...Array(5)].map((_, i) => (
+                                            <li className="me-1" key={i}>
+                                                <a href="#" tabIndex="0">
+                                                    <i className="fa fa-star-o"></i>
+                                                </a>
+                                            </li>
+                                        ))
                                     )
                                 }
                                 <span className='ms-1 prim_color'>({avg_rating} reviews)</span>
                             </ul>
                         </div>
-
                     </div>
                     <div className="client_reviews pt-4">
                         <div className="row gy-5">
@@ -110,24 +129,45 @@ const RatingReview = ({ product_id, order_id }) => {
                                                         </div>
                                                         <div className="product-ratting">
                                                             <ul className="d-flex align-items-center p-0 m-0">
+                                                                {/* If the rating is greater than 0, display filled stars and half stars */}
                                                                 {
-                                                                    [...Array(Math.floor(item.rating))].map((_, i) => (
-                                                                        <li className="me-1" key={i}>
-                                                                            <a href="#" tabIndex="0">
-                                                                                <i className="fa fa-star"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                    ))
-                                                                }
-                                                                {
-                                                                    item.rating % 1 !== 0 && (
-                                                                        <li className="me-1">
-                                                                            <a href="#" tabIndex="0">
-                                                                                <i className="fa fa-star-half"></i>
-                                                                            </a>
-                                                                        </li>
+                                                                    item.rating > 0 ? (
+                                                                        <>
+                                                                            {[...Array(Math.floor(item.rating))].map((_, i) => (
+                                                                                <li className="me-1" key={i}>
+                                                                                    <a href="#" tabIndex="0">
+                                                                                        <i className="fa fa-star"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            ))}
+                                                                            {item.rating % 1 !== 0 && (
+                                                                                <li className="me-1">
+                                                                                    <a href="#" tabIndex="0">
+                                                                                        <i className="fa fa-star-half"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            )}
+                                                                            {/* Display empty stars to complete 5 stars */}
+                                                                            {[...Array(5 - Math.ceil(item.rating))].map((_, i) => (
+                                                                                <li className="me-1" key={i + Math.floor(item.rating)}>
+                                                                                    <a href="#" tabIndex="0">
+                                                                                        <i className="fa fa-star-o"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            ))}
+                                                                        </>
+                                                                    ) : (
+                                                                        /* If no rating, display 5 blank stars */
+                                                                        [...Array(5)].map((_, i) => (
+                                                                            <li className="me-1" key={i}>
+                                                                                <a href="#" tabIndex="0">
+                                                                                    <i className="fa fa-star-o"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        ))
                                                                     )
                                                                 }
+                                                                <span className='ms-1 prim_color'>({avg_rating} reviews)</span>
                                                             </ul>
                                                         </div>
                                                         <p className='text_clip_para'>{item.description}</p>
@@ -136,7 +176,7 @@ const RatingReview = ({ product_id, order_id }) => {
                                             ))
                                         ) : (
                                             <div>
-                                                <p>Rating & Review not found</p>
+                                                <img src="/images/review.png" alt="" className='w-100 img-fluid' />
                                             </div>
                                         )
                                     )
