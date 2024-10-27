@@ -16,6 +16,9 @@ const Cart = () => {
     const user_id = useSelector((state) => state.auth.user_id);
     const [subTotal, setSubTotal] = useState(0);
     const [total, setTotal] = useState(0);
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
+    const [packagingCharge, setPackagingCharge] = useState(0);
+    const freeDeliveryAmount = 1199;
     const handleIncrement = (product) => {
         if (isLoggedIn) {
             const producttocart = {
@@ -61,7 +64,11 @@ const Cart = () => {
             tot += item.price * item.selQty;
         });
         setSubTotal(tot);
-        setTotal(tot);
+        if (tot < freeDeliveryAmount) {
+            setDeliveryCharge(50);
+        }
+        const pay = tot + deliveryCharge + packagingCharge;
+        setTotal(pay);
     };
 
     useEffect(() => {
@@ -147,6 +154,11 @@ const Cart = () => {
                                     <div className="col-lg-4 col-12 pt-lg-0 pt-md-5 pt-5">
                                         <div className="cart_totals shadow rounded-1 p-4">
                                             <h4 className="ps-2 fw-semibold">Cart Totals</h4>
+                                            {freeDeliveryAmount > subTotal && (
+                                                <div className="m-2" style={{color:"#309a20"}}>
+                                                    Add {freeDeliveryAmount - subTotal} For Free Delivery
+                                                </div>
+                                            )}
                                             <table className="table mb-0">
                                                 <tbody>
                                                     <tr>
@@ -155,11 +167,11 @@ const Cart = () => {
                                                     </tr>
                                                     <tr>
                                                         <td>Delivery Charges</td>
-                                                        <td>Rs 00.00</td>
+                                                        <td>Rs {deliveryCharge}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Packaging Charges</td>
-                                                        <td>Rs 00.00</td>
+                                                        <td>Rs {packagingCharge}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Order Total</strong></td>

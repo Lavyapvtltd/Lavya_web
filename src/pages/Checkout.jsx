@@ -13,6 +13,7 @@ import DeliveryAddress from "../components/DeliveryAddress";
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const freeDeliveryAmount = 1199;
     const { user, user_id, isLoggedIn } = useSelector((state) => state.auth);
     const cart_items = useSelector((state) => state.cart.cart);
     const [subTotal, setSubTotal] = useState(0);
@@ -21,6 +22,8 @@ const Checkout = () => {
     const [finalTotal, setFinalTotal] = useState(total);
     const [address, setAddress] = useState("");
     const [wallet, setWallet] = useState(false);
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
+    const [packagingCharge, setPackagingCharge] = useState(0);
     const [loading, setLoading] = useState(false);
     const product = cart_items?.map((cart_item) => {
         return {
@@ -61,7 +64,7 @@ const Checkout = () => {
                         deliveryType: product[0].subscription_type,
                         paymentOption: "Wallet",
                         walletDeductedAmount: "Full",
-                        type:"web"
+                        type: "web"
                     }
                     setLoading(true);
                     const res = await axios.post(
@@ -111,7 +114,7 @@ const Checkout = () => {
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: deducted_amount,
-                        type:"web"
+                        type: "web"
                     }
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
@@ -160,14 +163,14 @@ const Checkout = () => {
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: deducted_amount,
-                        type:"web"
+                        type: "web"
                     }
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
                         data
                     );
                     const result = res.data;
-                    const { baseResponse, order,savedorder } = result;
+                    const { baseResponse, order, savedorder } = result;
                     if (baseResponse.status == 1) {
                         setLoading(false);
                         const options = {
@@ -186,7 +189,7 @@ const Checkout = () => {
                                     );
                                     const result = res.data;
                                     const { baseResponse, response } = result;
-                                    if (baseResponse.status == "1"){
+                                    if (baseResponse.status == "1") {
                                         const data = {
                                             amount: savedorder.walletDeductedAmount
                                         }
@@ -221,7 +224,7 @@ const Checkout = () => {
                                         );
                                         const result = res.data;
                                         const { baseResponse, response } = result;
-                                        if (baseResponse.status == "1"){
+                                        if (baseResponse.status == "1") {
                                             toast.error("Order cancelled")
                                         }
                                     } catch (error) {
@@ -258,7 +261,7 @@ const Checkout = () => {
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: 0,
-                        type:"web"
+                        type: "web"
                     }
                     setLoading(true);
                     const res = await axios.post(
@@ -300,14 +303,14 @@ const Checkout = () => {
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
                         walletDeductedAmount: 0,
-                        type:"web"
+                        type: "web"
                     }
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
                         data
                     );
                     const result = res.data;
-                    const { baseResponse,order,savedorder} = result;
+                    const { baseResponse, order, savedorder } = result;
                     if (baseResponse.status == 1) {
                         setLoading(false);
                         const options = {
@@ -326,7 +329,7 @@ const Checkout = () => {
                                     );
                                     const result = res.data;
                                     const { baseResponse, response } = result;
-                                    if (baseResponse.status == "1"){
+                                    if (baseResponse.status == "1") {
                                         product.forEach((item) => {
                                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                                         })
@@ -357,7 +360,7 @@ const Checkout = () => {
                                         );
                                         const result = res.data;
                                         const { baseResponse, response } = result;
-                                        if (baseResponse.status == "1"){
+                                        if (baseResponse.status == "1") {
                                             toast.error("Order cancelled")
                                         }
                                     } catch (error) {
@@ -412,7 +415,11 @@ const Checkout = () => {
             tot += item.price * item.selQty;
         });
         setSubTotal(tot);
-        setTotal(tot);
+        if (tot < freeDeliveryAmount) {
+            setDeliveryCharge(50);
+        }
+        const pay = tot + deliveryCharge + packagingCharge;
+        setTotal(pay);
     };
 
     useEffect(() => {
@@ -492,11 +499,11 @@ const Checkout = () => {
                                                             </tr>
                                                             <tr>
                                                                 <td>Delivery Charges</td>
-                                                                <td>Rs 00.00</td>
+                                                                <td>Rs {deliveryCharge}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Packaging Charges</td>
-                                                                <td>Rs 00.00</td>
+                                                                <td>Rs {packagingCharge}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
@@ -603,7 +610,7 @@ const Checkout = () => {
                                         className="prim_color_bg text-white btn-effect-1 d-flex align-items-center justify-content-center"
                                         onClick={handleOrderPlace}
                                     >
-                                         {loading && <div className="spinner-border me-2" style={{borderWidth:'3px',height:'1rem',width:'1rem'}} role="status">
+                                        {loading && <div className="spinner-border me-2" style={{ borderWidth: '3px', height: '1rem', width: '1rem' }} role="status">
                                             <span className="visually-hidden">Loading...</span>
                                         </div>}Order Place
                                     </button>

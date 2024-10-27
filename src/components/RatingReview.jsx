@@ -116,15 +116,17 @@ const RatingReview = ({ product_id, order_id }) => {
                                     ) : (
                                         ratings?.length > 0 ? (
                                             ratings?.map((item, index) => (
-                                                <div className="client_sec d-flex align-items-center pt-4" key={index}>
+                                                <div className="client_sec d-flex align-items-center pt-3" key={index}>
                                                     <div className='col-3 client_img overflow-hidden'>
                                                         <a href="">
                                                             <img src="/images/dummy-image.jpg" alt="" className="img-fluid" />
                                                         </a>
                                                     </div>
-                                                    <div className="client_content ms-3">
+                                                    <div className="client_content ms-3 w-100">
                                                         <div className='d-md-flex align-items-center justify-content-between'>
+                                                            <div>
                                                             <a href="#" className='fw-semibood'><h6 className='mb-1'>{item?.user?.name}</h6></a>
+                                                            </div>
                                                             <div className='my-md-0 my-3'><span className='border px-3 py-2 rounded-pill date_review'>{moment(item.createdAt).format("Do MMM YY")}</span></div>
                                                         </div>
                                                         <div className="product-ratting">
@@ -184,16 +186,16 @@ const RatingReview = ({ product_id, order_id }) => {
                             </div>
                             {
                                 order_id && <div className="col-lg-6">
-                                    <div className="review_form">
+                                <div className="review_form">
                                         <div className="review-details rounded-2 p-5">
-                                            <h4 className="fw-bold mb-2">Add Your Review</h4>
+                                            <h5 className="fw-semibold mb-2">Add Your Review</h5>
                                             <Formik
                                                 initialValues={initialValues}
                                                 validationSchema={validationSchema}
                                                 onSubmit={onSubmit}
                                             >
                                                 {({ values, setFieldValue }) => (
-                                                    <Form className="mt-4">
+                                                    <Form className="mt-3">
                                                         <div className="product-ratting d-flex align-items-center">
                                                             <p className="text-dark me-2">Your rating:</p>
                                                             <ul className="d-flex align-items-center p-0 m-0">
@@ -214,7 +216,7 @@ const RatingReview = ({ product_id, order_id }) => {
                                                             <ErrorMessage name="rating" component="div" className="text-danger" />
                                                         </div>
 
-                                                        <div className="row">
+                                                        <div className="row mt-2">
                                                             <div className="col-12">
                                                                 <div className="form-group mb-4">
                                                                     <Field

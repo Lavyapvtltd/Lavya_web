@@ -24,7 +24,7 @@ const Recharge = () => {
             if (paymentOption == "payViaCash") {
                 try {
                     setLoading(true);
-                    const via_cash_data = { ...data, paymentOption: "payViaCash", amountToCollect: data.amount, recharge_amount_via_cash: data.amount, viaCash: false }
+                    const via_cash_data = { ...data, paymentOption: "payViaCash", amountToCollect: data.amount, recharge_amount_via_cash: amount, viaCash: false }
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_SUBSCRIPTION_ORDER}`,
                         via_cash_data
@@ -60,7 +60,6 @@ const Recharge = () => {
                     );
                     const result = res.data;
                     const { baseResponse, order } = result;
-                    console.log(order, "RTH")
                     if (baseResponse.status == 1) {
                         setLoading(false);
                         const options = {
@@ -195,13 +194,13 @@ const Recharge = () => {
             ₹ ${value} के रिचार्ज के लिए, आपको ₹ ${Number(value) + Number(cashback)} प्राप्त होगा।<br>
             यदि आप वैधता अवधि के भीतर यह राशि खर्च नहीं करते हैं, तो आपकी कैशबैक राशि स्वचालित रूप से काट ली जाएगी।`,
         })
-        
+
     }
     const handlePayViaCash = () => {
         if (data) {
             Swal.fire({
                 html: "Note: You have to pay the selected amount to our delivery partner.<br>Then only your wallet balance will be updated.<br><br>आपको हमारे डिलीवरी पार्टनर को चयनित राशि का भुगतान करना होगा।<br>तभी आपका वॉलेट बैलेंस अपडेट किया जाएगा।",
-            })            
+            })
         } else {
             Swal.fire({
                 title: "Alert",
@@ -225,7 +224,9 @@ const Recharge = () => {
                     <div className="row justify-content-center">
                         <div className="col-lg-7 col-md-9 col-12">
                             <div className="row wallet_sec gy-lg-0 gy-md-3 gy-3">
-                                <div className="col-lg-12 col-md-12 col-12 mb-3">
+                                <div className="col-lg-12 col-md-12 col-12 mb-3" onClick={() => {
+                                    document.getElementById(`walletRadio1`).checked = true;
+                                }}>
                                     <div className="wallet_box rounded-2">
                                         <div className="accordion" id="accordionExample">
                                             <div className="accordion-item">
@@ -273,7 +274,9 @@ const Recharge = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-12 col-md-12 col-12 mb-3">
+                                <div className="col-lg-12 col-md-12 col-12 mb-3" onClick={() => {
+                                    document.getElementById(`walletRadio2`).checked = true;
+                                }}>
                                     <div className="wallet_box rounded-2">
                                         <div className="accordion" id="accordionExample">
                                             <div className="accordion-item">
@@ -351,12 +354,21 @@ const Recharge = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-12 col-md-12 col-12 mb-3">
+                                <div className="col-lg-12 col-md-12 col-12 mb-3" onClick={() => {
+                                    if (data && typeof data === 'object') {
+                                        document.getElementById(`walletRadio3`).checked = true;
+                                    }
+                                }}>
                                     <div className="wallet_box rounded-2">
                                         <div className="accordion" id="accordionExample">
                                             <div className="accordion-item">
                                                 <h2 className="accordion-header" id="headingThree">
-                                                    <button className="accordion-button bg-none" onClick={() => handlePayViaCash()} type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                                    <button className="accordion-button bg-none" onClick={() => handlePayViaCash()} type="button"
+                                                        data-bs-toggle={data && typeof data === 'object' ? "collapse" : ""}
+                                                        data-bs-target="#collapseThree"
+                                                        aria-expanded="true"
+                                                        aria-controls="collapseThree"
+                                                    >
                                                         <input class="form-check-input" type="radio" name="paymentoption" id="walletRadio3" value="payViaCash" onChange={(e) => {
                                                             if (e.target.checked) {
                                                                 setPaymentOption(e.target.value);
@@ -365,10 +377,35 @@ const Recharge = () => {
                                                         <label class="form-check-label d-flex ms-2" for="walletRadio3">Pay Via Cash</label>
                                                     </button>
                                                 </h2>
-                                                {/* <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                              <div className="accordion-body">
-                              </div>
-                            </div> */}
+                                                <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                    <div className="accordion-body">
+                                                        <div className="mb-3">
+                                                            <input
+                                                                type="text"
+                                                                className="form-control rounded-1"
+                                                                id="exampleFormControlInput1"
+                                                                value={amount}
+                                                                onChange={(e) => setAmount(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="amount_list">
+                                                            <ul className='p-0 m-0'>
+                                                                <li className='d-inline-block me-2'>
+                                                                    <button type='button' className='bg-white fw-semibold' onClick={() => handleAmountClick(1000)}>1000</button>
+                                                                </li>
+                                                                <li className='d-inline-block me-2'>
+                                                                    <button type='button' className='bg-white fw-semibold' onClick={() => handleAmountClick(3000)}>3000</button>
+                                                                </li>
+                                                                <li className='d-inline-block me-2'>
+                                                                    <button type='button' className='bg-white fw-semibold' onClick={() => handleAmountClick(5000)}>5000</button>
+                                                                </li>
+                                                                <li className='d-inline-block me-2'>
+                                                                    <button type='button' className='bg-white fw-semibold' onClick={() => handleAmountClick(10000)}>10000</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

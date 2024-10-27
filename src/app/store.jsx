@@ -19,6 +19,7 @@ import contentReducer from '../features/contentSlice';
 import addressReducer from '../features/addressSlice';
 import locationReducer from "../features/locationSlice";
 import ratingReducer from '../features/ratingSlice';
+import firstTimeRechargeReducer from '../features/firstTimeRechargeSlice';
 
 export const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ export const store = configureStore({
     contents:contentReducer,
     addresses:addressReducer,
     locations:locationReducer,
-    ratings:ratingReducer
+    ratings:ratingReducer,
+    firsttimerecharges:firstTimeRechargeReducer
   },
 });

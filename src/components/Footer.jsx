@@ -66,7 +66,7 @@ const Footer = () => {
         <div className="container-fluid footer_upper py-5">
           <div className="container">
             <div className="row">
-              <div className="col-xl-4 col-md-6 col-sm-6 col-12">
+              <div className="col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="footer-widget footer-about-widget">
                   <div className="footer-logo mb-2">
                     <div className="site-logo">
@@ -84,9 +84,9 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-2 col-md-6 col-sm-6 col-6">
+              <div className="col-lg-2 col-md-6 col-sm-6 col-6">
                 <div className="footer-widget footer-menu-widget clearfix">
-                  <h4 className="footer-title fw-semibold">Company</h4>
+                  <h5 className="footer-title fw-semibold">Company</h5>
                   <div className="footer-menu pt-2">
                     <ul className="p-0 m-0">
                       <li><NavLink to="/">Home</NavLink></li>
@@ -97,9 +97,9 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-2 col-md-6 col-sm-6 col-6">
+              <div className="col-lg-2 col-md-6 col-sm-6 col-6">
                 <div className="footer-widget footer-menu-widget clearfix">
-                  <h4 className="footer-title fw-semibold">Services</h4>
+                  <h5 className="footer-title fw-semibold">Services</h5>
                   <div className="footer-menu pt-2">
                     <ul className="p-0 m-0">
                       <li><NavLink to="/order-history">Order tracking</NavLink></li>
@@ -110,9 +110,9 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
-              <div class="col-xl-4 col-md-6 col-sm-12 col-12">
+              <div class="col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="footer-widget footer-newsletter-widget">
-                  <h4 class="footer-title mb-3 fw-semibold">We Accept</h4>
+                  <h5 class="footer-title mb-3 fw-semibold">We Accept</h5>
                   <div className="paying_app">
                     <div className="shadow-lg">
                       <img src="/images/payment-4.png" className="w-100 img-fluid" alt="Payment Image" />
@@ -145,7 +145,7 @@ const Footer = () => {
         <div className="container-fluid copyRight_box prim_color_bg py-4">
           <div className="container">
             <div className="row">
-              <div className="col-md-6 col-12">
+              <div className="col-md-5 col-12">
                 <div className="copyright_txt clearfix text-md-start text-center">
                   <p className="fs-6 text-white">All Rights Reserved @ Company <span class="current-year">{new Date().getFullYear()}</span></p>
                 </div>

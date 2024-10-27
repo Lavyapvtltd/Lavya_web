@@ -72,7 +72,8 @@ export const API_URL = {
     CONTACT_FORM:"/contact-form/contact-form",
     GET_ALL_LOCATIONS:"/location/get-all-serving-locations",
     ADD_RATING:'/rating/add-rating/',
-    GET_ALL_RATING:'/rating/get-all-rating/'
+    GET_ALL_RATING:'/rating/get-all-rating/',
+    GET_ALL_FIRST_TIME_RECHARGE:'/first-time-recharge/get-all-first-time-offer'
 }
 
 export const GOOGLE_MAP_API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";

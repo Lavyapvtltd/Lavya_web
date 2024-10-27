@@ -1301,6 +1301,17 @@ input[type="range"]:focus {
     font-size: 14px;
 }
 
+.recharge_offer_sec .recharge_box{
+    background: #fff;
+    box-shadow: 0 0 3px #a0a0a0;
+    border-radius: 5px;
+    padding: 17px;
+    border-bottom: 5px solid #309a20;
+}
+.recharge_offer_sec  .recharge_btn:hover{
+    color: #fff !important;
+}
+
 /* responsive css */
 
 @media (max-width: 280px) {

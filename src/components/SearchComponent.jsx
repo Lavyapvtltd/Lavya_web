@@ -143,7 +143,6 @@ const SearchComponent = () => {
         {/* Display filtered products */}
         {filteredProducts.length > 0 && (
           <div className="search-results position-absolute">
-            <h5 className='fw-semibold'>Search Results:</h5>
             <ul>
               {filteredProducts.map((product) => (
                 <li key={product._id} onClick={() => handleProductClick(product._id)}>

@@ -4,6 +4,7 @@ import { IMAGE_BASE_URL } from '../constants/contant'
 const Product = ({ product }) => {
     return (
         <>
+        <a href="">
             <div className="product_box mb-4">
                 <div className="card overflow-hidden">
                     <div className="card_img overflow-hidden img_hover position-relative">
@@ -94,6 +95,7 @@ const Product = ({ product }) => {
                     </div>
                 </div>
             </div>
+            </a>
         </>
     )
 }
