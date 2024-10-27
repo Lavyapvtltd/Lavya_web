@@ -86,11 +86,49 @@ const ProductDetail = () => {
                     }
                 }
                 dispatch(addToSubscriptionCart({ product_id: product._id, user_id, producttosubscriptioncart }));
-                toast.success("Item added to cart");
+                toast.success(
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ flex: 1 }}>Item added to subscription cart</span>
+                      <button
+                        onClick={() => navigate(`/subscription-checkout/${product._id}`)}
+                        style={{
+                          padding: '5px 10px',
+                          backgroundColor: 'black',
+                          color: 'white',
+                          fontSize: '16px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          borderRadius: '5px'
+                        }}
+                      >
+                        View Cart
+                      </button>
+                    </div>
+                  );
+                  
             } else {
                 dispatch(AddSubscriptionProduct(product));
                 setToggle(true);
-                toast.success("Item added to subscription cart");
+                toast.success(
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ flex: 1 }}>Item added to subscription cart</span>
+                      <button
+                        onClick={() => navigate(`/subscription-checkout/${product._id}`)}
+                        style={{
+                          padding: '5px 10px',
+                          backgroundColor: 'black',
+                          color: 'white',
+                          fontSize: '16px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          borderRadius: '5px'
+                        }}
+                      >
+                        View Cart
+                      </button>
+                    </div>
+                  );
+                  
             }
         }
         else {
@@ -105,11 +143,47 @@ const ProductDetail = () => {
                     }
                 }
                 dispatch(addToCart({ product_id: product._id, user_id, producttocart }));
-                toast.success("Item added to cart");
+                toast.success(
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>Item added to cart</span>
+                      <button
+                        onClick={() => navigate('/cart')}
+                        style={{
+                          padding: '5px 10px',
+                          backgroundColor: 'black',
+                          color: 'white',
+                          fontSize: '16px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          borderRadius: '5px'
+                        }}
+                      >
+                        View Cart
+                      </button>
+                    </div>
+                );   
             } else {
                 dispatch(AddProduct(product));
                 setToggle(true);
-                toast.success("Item added to cart");
+                toast.success(
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>Item added to cart</span>
+                      <button
+                        onClick={() => navigate('/cart')}
+                        style={{
+                          padding: '5px 10px',
+                          backgroundColor: 'black',
+                          color: 'white',
+                          fontSize: '16px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          borderRadius: '5px'
+                        }}
+                      >
+                        View Cart
+                      </button>
+                    </div>
+                ); 
             }
         }
     }
@@ -369,7 +443,7 @@ const ProductDetail = () => {
                                             !toggle ? (
                                                 <button className="prim_color_bg text-white btn-effect-1" onClick={() => handleAddToCart(productdetail)}>Add to cart</button>
                                             ) : (
-                                                <>
+                                                !existsSubscriptionProduct && <>
                                                     <div className="cart_plus_minus my-3 position-relative">
                                                         <button className="dec qtybutton border-0" onClick={() => handleDecrement(productdetail)} disabled={qty <= 1}>-</button>
                                                         <input type='text' value={qty} className="cart-plus-minus-box" readOnly />

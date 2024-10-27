@@ -456,37 +456,23 @@ const Checkout = () => {
                                                             <h6 className="text_clip_head fw-semibold mb-1">
                                                                 {item.name}
                                                             </h6>
-                                                            <div className="product-ratting d-flex align-items-center">
-                                                                <ul className="d-flex align-items-center p-0 m-0">
-                                                                    <li className="me-1">
-                                                                        <a href="#" tabIndex={0}>
-                                                                            <i className="fa fa-star" />
-                                                                        </a>
-                                                                    </li>
-                                                                    <li className="me-1">
-                                                                        <a href="#" tabIndex={0}>
-                                                                            <i className="fa fa-star" />
-                                                                        </a>
-                                                                    </li>
-                                                                    <li className="me-1">
-                                                                        <a href="#" tabIndex={0}>
-                                                                            <i className="fa fa-star" />
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#" tabIndex={0}>
-                                                                            <i className="fa fa-star-half" />
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                                <p className="text-secondary ps-1">(4.0)</p>
-                                                            </div>
                                                             <div className="text-secondary fw-semibold">
                                                                 {`${item.unit_value} ${item.unit}`} x {item.selQty}
                                                             </div>
-                                                            <h6 className="price_txt prim_color fw-semibold">
-                                                                Rs {item.price}
-                                                            </h6>
+                                                            <div>
+                                                                <div className="d-flex align-items-center">
+                                                                    <p className="me-2 fs-4 prim_color">
+                                                                        <span className="currency-symbol prim_color"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value prim_color">{item.price}</span>
+                                                                    </p>
+                                                                    <p className="fs-5">
+                                                                        <span className="del_line">
+                                                                            <span className="currency-symbol text-secondary"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value">{item.regularPrice}</span>
+                                                                        </span>
+                                                                        <span className="fs-6 text-secondary"> {`${((item.regularPrice - item.price) / item.regularPrice * 100).toFixed(2)}% off`} </span>
+                                                                    </p>
+                                                                </div>
+                                                                <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(item.regularPrice - item.price).toFixed(2)}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}

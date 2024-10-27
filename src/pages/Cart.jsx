@@ -109,13 +109,20 @@ const Cart = () => {
                                                                 </div>
                                                                 <div onClick={() => handleDeleteCart(item)}><i class="fa fa-trash-o text-danger fs-5" aria-hidden="true"></i></div>
                                                             </div>
-
-
+                                                            <div className="d-flex align-items-center">
+                                                                <p className="me-2 prim_color d-flex align-items-center">
+                                                                    <span className="currency-symbol prim_color pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value prim_color">{item.price}</span>
+                                                                </p>
+                                                                <p className="d-flex align-items-center">
+                                                                    <span className="del_line">
+                                                                        <span className="currency-symbol text-secondary"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value">{item.regularPrice}</span>
+                                                                    </span>
+                                                                    <span className="ps-1 text-secondary"> {`${((item.regularPrice - item.price) / item.regularPrice * 100).toFixed(2)}% off`} </span>
+                                                                </p>
+                                                            </div>
                                                             <div className='d-md-flex align-items-center justify-content-between'>
-                                                                <h6 className="price_txt prim_color fw-semibold">
-                                                                    Rs {item.price}
-                                                                </h6>
-                                                                <div className="cart_plus_minus my-3 position-relative">
+                                                                <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(item.regularPrice - item.price).toFixed(2)}</p>
+                                                                <div className="cart_plus_minus position-relative">
                                                                     <button className="dec qtybutton border-0" onClick={() => handleDecrement(item)} disabled={item.selQty <= 1}>-</button>
                                                                     <input type='text' value={item.selQty} className="cart-plus-minus-box" />
                                                                     <button className="inc qtybutton border-0" onClick={() => handleIncrement(item)} disabled={item.stock <= item.selQty}>+</button>
@@ -125,8 +132,6 @@ const Cart = () => {
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-
                                                         </div>
                                                     </div>
                                                 ))
