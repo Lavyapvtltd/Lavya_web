@@ -91,71 +91,54 @@ const Cart = () => {
                                 <div className="row">
                                     <div className="col-lg-8 col-12">
                                         <div className="col-12">
-                                            <div className="table-responsive">
-                                                <table className="table">
-                                                    <tbody>
-                                                        {
-                                                            cart_items?.map((item) => (
-                                                                <tr className="table-rows ">
-                                                                    <td className="">
-                                                                        <div className="form-check">
-                                                                            <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="product-img">
-                                                                            <img src={`${IMAGE_BASE_URL}${item.icon}`} alt="product-img" className="img-fluid" />
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="ps-4">
-                                                                            <h6 className='fw-semibold'>{item.name}</h6>
-                                                                            <p className='text-dark fw-semibold pb-1'>{item.unit_value} {item.unit}</p>
-                                                                            <p>only {item.stock} left in stock-order soon</p>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="ps-4">
-                                                                            <h6 className="mb-0 fw-semibold">Rs {item.price}</h6>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="cart_plus_minus my-3 position-relative">
-                                                                            <button className="dec qtybutton border-0" onClick={() => handleDecrement(item)} disabled={item.selQty <= 1}>-</button>
-                                                                            <input type='text' value={item.selQty} className="cart-plus-minus-box" />
-                                                                            <button className="inc qtybutton border-0" onClick={() => handleIncrement(item)} disabled={item.stock <= item.selQty}>+</button>
-                                                                            <div className='position-absolute'>
-                                                                                {cart_status == "loading" && <Loading />}
-                                                                                {subscription_cart_status == "loading" && <Loading />}
-                                                                            </div>
-                                                                        </div>
-                                                                        {/* <div className="cart_plus_minus my-3">
-                                                                                    <button className="dec qtybutton border-0" onClick={() => handleDecrement(item)} disabled={item.selQty <= 1}>-</button>
-                                                                                    <input type='text' value={item.selQty} className="cart-plus-minus-box" />
-                                                                                    <button className="inc qtybutton border-0" onClick={() => handleIncrement(item)} disabled={item.stock <= item.selQty}>+</button>
-                                                                                </div> */}
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="ps-4">
-                                                                            <h6 className="mb-0 fw-semibold">Rs {item.price * item.selQty}</h6>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div onClick={() => handleDeleteCart(item)}><i class="fa fa-trash-o text-danger fs-5" aria-hidden="true"></i></div>
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
+
+                                            {
+                                                cart_items?.map((item) => (
+                                                    <div className="d-flex align-items-center border rounded-1 p-3 cart_product_check" >
+                                                        <div className="col-lg-3 col-md-3 col-3 border rounded-1 p-1 overflow-hidden img_hover position-relative">
+                                                            <img src={`${IMAGE_BASE_URL}${item.icon}`} alt="product-img" className="img-fluid" />
+                                                        </div>
+                                                        <div className="ps-3 w-100">
+                                                            <div className="d-flex justify-content-between w-100">
+                                                                <div>
+                                                                    <h6 className="text_clip_head fw-semibold mb-1">
+                                                                        {item.name}
+                                                                    </h6>
+                                                                    <p className='text-dark fw-semibold pb-1'>{item.unit_value} {item.unit}</p>
+                                                                    <p>only {item.stock} left in stock-order soon</p>
+                                                                </div>
+                                                                <div onClick={() => handleDeleteCart(item)}><i class="fa fa-trash-o text-danger fs-5" aria-hidden="true"></i></div>
+                                                            </div>
+
+
+                                                            <div className='d-md-flex align-items-center justify-content-between'>
+                                                                <h6 className="price_txt prim_color fw-semibold">
+                                                                    Rs {item.price}
+                                                                </h6>
+                                                                <div className="cart_plus_minus my-3 position-relative">
+                                                                    <button className="dec qtybutton border-0" onClick={() => handleDecrement(item)} disabled={item.selQty <= 1}>-</button>
+                                                                    <input type='text' value={item.selQty} className="cart-plus-minus-box" />
+                                                                    <button className="inc qtybutton border-0" onClick={() => handleIncrement(item)} disabled={item.stock <= item.selQty}>+</button>
+                                                                    <div className='position-absolute'>
+                                                                        {cart_status == "loading" && <Loading />}
+                                                                        {subscription_cart_status == "loading" && <Loading />}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            }
+
                                         </div>
                                     </div>
                                     <div className="col-lg-4 col-12 pt-lg-0 pt-md-5 pt-5">
                                         <div className="cart_totals shadow rounded-1 p-4">
                                             <h4 className="ps-2 fw-semibold">Cart Totals</h4>
                                             {freeDeliveryAmount > subTotal && (
-                                                <div className="m-2" style={{color:"#309a20"}}>
+                                                <div className="m-2" style={{ color: "#309a20" }}>
                                                     Add {freeDeliveryAmount - subTotal} For Free Delivery
                                                 </div>
                                             )}

@@ -495,21 +495,12 @@ input.cart-plus-minus-box {
     overflow: hidden;
 }
 
-.main_slider .carousel-inner .carousel-item::before {
-    position: absolute;
-    content: "";
-    background: #0000006e;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-}
 
 .top_bar {
     background: var(--primary-color);
 }
 
-.top_heading_bar .social-media_links ul li {
+.social-media_links ul li {
     width: 40px;
     height: 40px;
     background: #fff;
@@ -522,7 +513,7 @@ input.cart-plus-minus-box {
     transition: all 0.3s ease;
     box-shadow: 0 0 4px #474646;
 }
-.top_heading_bar .social-media_links ul li:hover {
+.social-media_links ul li:hover {
     background: var(--primary-color);
     color: #fff;
 }
@@ -1312,6 +1303,15 @@ input[type="range"]:focus {
     color: #fff !important;
 }
 
+.cart_product_check .cart_plus_minus {
+    border: 2px solid gainsboro;
+    height: 39px;
+    line-height: 56px;
+    width: 100px;
+    text-align: center;
+    border-radius: 4px;
+}
+
 /* responsive css */
 
 @media (max-width: 280px) {
@@ -1327,16 +1327,31 @@ input[type="range"]:focus {
         font-size: 14px;
     }
     .header_side_bar .side_list .link_bx {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
+    }
+    .header_side_bar  .search-icon {
+        font-size: 14px;
     }
     .header_side_bar .side_list .link_bx .nav_list_link {
-        font-size: 16px;
+        font-size: 14px;
     }
+    .header_side_bar .side_list .link_bx .nav_list_link sup{
+        font-size: 10px !important;
+     }
     .main_slider .carousel-inner .carousel-item {
         height: 100%;
         position: relative;
         overflow: hidden;
+    }
+    .navbar-brand img {
+        width: 63px;
+    }
+    .acnt_name{
+        font-size: 13px;
+    }
+    .header_side_bar .user_list li a {
+        font-size: 12px;
     }
 
     .banner_sec .banner-item img {
@@ -1412,6 +1427,13 @@ input[type="range"]:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
+    .navbar-brand img {
+        width: 70px;
+    }
+    .header_side_bar .side_list .link_bx {
+        height: 40px;
+        width: 40px;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1200px) {

@@ -86,12 +86,11 @@ const Header = () => {
       <div className="container-fluid top_bar py-2">
         <div className="container">
           <div className="row align-items-center top_heading_bar">
-            <div className="col-md-7 col-12">
+            {/* <div className="col-md-7 col-12">
               <div className="left_sidebar">
                 <ul className="d-flex align-items-center justify-content-md-start justify-content-center p-0 m-0">
                   <li className="me-4">
                     <a className="text-white" href=""><i class="fa fa-map-marker" aria-hidden="true"></i> {address}</a></li>
-                  {/* <li><a className="text-white" href="mailto:"><i class="fa fa-envelope-o" aria-hidden="true"></i> info@webmail.com</a></li> */}
                 </ul>
               </div>
             </div>
@@ -105,7 +104,9 @@ const Header = () => {
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
+            <marquee direction="left"> <p class="text-white text-center"><span>USE CODE DHAMAKA10 FOR 10% OFF • LOWEST PRICE ON WHEY PROTEIN • BEST DEALS ON PEANUT BUTTER • 100% AUTHENTIC • </span></p>
+          </marquee>
           </div>
         </div>
       </div>
@@ -114,10 +115,17 @@ const Header = () => {
           <div className="row pt-2">
             <nav className="navbar navbar-expand-lg desk_header">
               <div className="d-flex justify-content-between align-items-center w-100">
-                <div className="col">
+                <div className="col-lg col-md-auto col-auto">
+                <div className='d-flex align-items-center'>
+                  <div className='me-2 d-lg-none d-flex'>
+                    <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    <svg stroke="currentColor" fill="#309a20" stroke-width="0" viewBox="0 0 24 24" height="25px" width="25px" xmlns="http://www.w3.org/2000/svg"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11-6h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-1 6h-4V5h4v4zm-9 4H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6H5v-4h4v4zm8-6c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path></svg>
+                    </a>
+                  </div>
                   <NavLink className="navbar-brand" to="/">
                     <img src="/images/logo.png" alt="" className="img-fluid" />
                   </NavLink>
+                </div>
                 </div>
                 <div className="col">
                   <div className="collapse navbar-collapse d-lg-block d-none" id="navbarScroll">
@@ -163,18 +171,11 @@ const Header = () => {
                 <div className="col">
                   <div className="header_side_bar">
                     <ul className="side_list d-flex align-items-center justify-content-end p-0 m-0">
-                      <li className="link_bx me-3">
-                        <SearchComponent/>
-                      </li>
-                      <li className="link_bx me-3">
-                        <NavLink className="nav_list_link" to="/cart">
-                          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                          <sup className="position-relative" style={{ top: '-7px', left: '4px', fontSize: '14px' }}>{cart_items.length}</sup>
-                        </NavLink>
-                      </li>
-                      <li className="link_bx position-relative">
-                        <div className="nav_list_link">
-                          <i class="fa fa-user-o" aria-hidden="true"></i>
+                    <li className="position-relative me-3">
+                        <div className="nav_list_link acnt_name d-flex align-items-center">
+                          <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                          <span className='ms-1'>Abhishek</span>
+                          <span className='ms-1'><i class="fa-solid fa-chevron-down"></i></span>
                         </div>
                         {
                           isLoggedIn ? (
@@ -196,12 +197,21 @@ const Header = () => {
                           )
                         }
                       </li>
-
-                      <li className="link_bx ms-3 d-lg-none d-flex ">
+                      <li className="link_bx me-3">
+                        <SearchComponent />
+                      </li>
+                      <li className="link_bx">
+                        <NavLink className="nav_list_link" to="/cart">
+                          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                          <sup className="position-relative" style={{ top: '-7px', left: '4px', fontSize: '14px' }}>{cart_items.length}</sup>
+                        </NavLink>
+                      </li>
+                     
+                      {/* <li className="link_bx ms-3 d-lg-none d-flex ">
                         <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                           <i class="fa-solid fa-bars"></i>
                         </a>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>

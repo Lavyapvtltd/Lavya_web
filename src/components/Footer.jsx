@@ -75,12 +75,14 @@ const Footer = () => {
                   </div>
                   <p className="fs-6">Discover a world of purity and taste at our premium dairy store, where we offer a wide range of fresh and high-quality milk products, made from the finest ingredients.</p>
 
-                  <div className="social-media_links mt-3 mb-md-0 mb-4">
-                    <ul className="p-0 m-0 d-flex align-items-center">
-                      <li className="me-3 fs-5"><NavLink to="https://www.facebook.com/profile.php?id=61564893940430&mibextid=ZbWKwL" title="Facebook" target="_blank"><i className="fa fa-facebook"></i></NavLink></li>
-                      <li className="me-3 fs-5"><NavLink to="https://www.instagram.com/lavyaorganic?igsh=enNsaWVmOTlzMmlk" title="Instagram" target="_blank"><i className="fa fa-instagram"></i></NavLink></li>
-                      <li className="me-3 fs-5"><NavLink to="https://youtube.com/@lavyaorganic?si=b4NzYkazmtnOnLEt" title="Youtube" target="_blank"><i className="fa fa-youtube"></i></NavLink></li>
-                    </ul>
+                  <div className="mt-3 mb-md-0 mb-4">
+                    <div className="social-media_links">
+                      <ul className="d-flex align-items-center p-0 m-0">
+                        <li><NavLink to="https://www.facebook.com/profile.php?id=61564893940430&mibextid=ZbWKwL" title="Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></NavLink></li>
+                        <li><NavLink to="https://www.instagram.com/lavyaorganic?igsh=enNsaWVmOTlzMmlk" title="Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></NavLink></li>
+                        <li><NavLink to="https://youtube.com/@lavyaorganic?si=b4NzYkazmtnOnLEt" title="Youtube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></NavLink></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
