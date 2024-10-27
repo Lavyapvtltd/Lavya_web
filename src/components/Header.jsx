@@ -11,7 +11,7 @@ const Header = () => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const {isLoggedIn,user} = useSelector((state) => state.auth);
   const cart_items = useSelector((state) => state.cart.cart);
 
 
@@ -19,68 +19,68 @@ const Header = () => {
     dispatch(logout());
     navigate('/login');
   };
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        getAddress(lat, lng);
-      },
-        (error) => {
-          setError('Error fetching location');
-        }
-      );
-    } else {
-      setError('Geolocation is not supported by this browser.');
-    }
-  };
+  // const getLocation = () => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition((position) => {
+  //       const lat = position.coords.latitude;
+  //       const lng = position.coords.longitude;
+  //       getAddress(lat, lng);
+  //     },
+  //       (error) => {
+  //         setError('Error fetching location');
+  //       }
+  //     );
+  //   } else {
+  //     setError('Geolocation is not supported by this browser.');
+  //   }
+  // };
 
-  const getAddress = (lat, lng) => {
-    const API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}`;
+  // const getAddress = (lat, lng) => {
+  //   const API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";
+  //   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}`;
 
-    axios
-      .get(url)
-      .then((response) => {
-        if (response.data.status === "OK") {
-          const addressComponents = response.data.results[0].address_components;
-          let premise = "";
-          let sublocality = "";
-          let locality = "";
-          let state = "";
-          let postal_code = "";
+  //   axios
+  //     .get(url)
+  //     .then((response) => {
+  //       if (response.data.status === "OK") {
+  //         const addressComponents = response.data.results[0].address_components;
+  //         let premise = "";
+  //         let sublocality = "";
+  //         let locality = "";
+  //         let state = "";
+  //         let postal_code = "";
 
-          addressComponents.forEach((component) => {
-            if (component.types.includes("premise")) {
-              premise = component.long_name;
-            }
-            if (component.types.includes("sublocality")) {
-              sublocality = component.long_name;
-            }
-            if (component.types.includes("locality")) {
-              locality = component.long_name;
-            }
-            if (component.types.includes("administrative_area_level_1")) {
-              state = component.long_name;
-            }
-            if (component.types.includes("postal_code")) {
-              postal_code = component.long_name;
-            }
-          });
+  //         addressComponents.forEach((component) => {
+  //           if (component.types.includes("premise")) {
+  //             premise = component.long_name;
+  //           }
+  //           if (component.types.includes("sublocality")) {
+  //             sublocality = component.long_name;
+  //           }
+  //           if (component.types.includes("locality")) {
+  //             locality = component.long_name;
+  //           }
+  //           if (component.types.includes("administrative_area_level_1")) {
+  //             state = component.long_name;
+  //           }
+  //           if (component.types.includes("postal_code")) {
+  //             postal_code = component.long_name;
+  //           }
+  //         });
 
-          const combinedAddress = `${premise} ${sublocality}, ${locality}, ${state} ${postal_code}`;
-          setAddress(combinedAddress);
-        } else {
-          setError("Unable to fetch address");
-        }
-      })
-      .catch(() => {
-        setError("Error fetching address from API");
-      });
-  };
-  useEffect(() => {
-    getLocation();
-  }, [])
+  //         const combinedAddress = `${premise} ${sublocality}, ${locality}, ${state} ${postal_code}`;
+  //         setAddress(combinedAddress);
+  //       } else {
+  //         setError("Unable to fetch address");
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setError("Error fetching address from API");
+  //     });
+  // };
+  // useEffect(() => {
+  //   getLocation();
+  // }, [])
   return (
     <>
       <div className="container-fluid top_bar py-2">
@@ -106,7 +106,7 @@ const Header = () => {
               </div>
             </div> */}
             <marquee direction="left"> <p class="text-white text-center"><span>USE CODE DHAMAKA10 FOR 10% OFF • LOWEST PRICE ON WHEY PROTEIN • BEST DEALS ON PEANUT BUTTER • 100% AUTHENTIC • </span></p>
-          </marquee>
+            </marquee>
           </div>
         </div>
       </div>
@@ -116,65 +116,29 @@ const Header = () => {
             <nav className="navbar navbar-expand-lg desk_header">
               <div className="d-flex justify-content-between align-items-center w-100">
                 <div className="col-lg col-md-auto col-auto">
-                <div className='d-flex align-items-center'>
-                  <div className='me-2 d-lg-none d-flex'>
-                    <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                    <svg stroke="currentColor" fill="#309a20" stroke-width="0" viewBox="0 0 24 24" height="25px" width="25px" xmlns="http://www.w3.org/2000/svg"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11-6h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-1 6h-4V5h4v4zm-9 4H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6H5v-4h4v4zm8-6c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path></svg>
-                    </a>
+                  <div className='d-flex align-items-center'>
+                    <div className='me-2 d-lg-none d-flex'>
+                      <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                        <svg stroke="currentColor" fill="#309a20" stroke-width="0" viewBox="0 0 24 24" height="25px" width="25px" xmlns="http://www.w3.org/2000/svg"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11-6h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-1 6h-4V5h4v4zm-9 4H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6H5v-4h4v4zm8-6c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path></svg>
+                      </a>
+                    </div>
+                    <NavLink className="navbar-brand" to="/">
+                      <img src="/images/logo.png" alt="" className="img-fluid" />
+                    </NavLink>
                   </div>
-                  <NavLink className="navbar-brand" to="/">
-                    <img src="/images/logo.png" alt="" className="img-fluid" />
-                  </NavLink>
                 </div>
-                </div>
-                <div className="col">
-                  <div className="collapse navbar-collapse d-lg-block d-none" id="navbarScroll">
-                    <ul className="nav_list m-0">
-                      <li>
-                        <NavLink to="/">Home</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/about">About</NavLink>
-                      </li>
-                      {/* <li className="menu-icon">
-                        <a href="#">Shop</a>
-                        <ul>
-                          <li>
-                            <a href="#">Shop</a>
-                          </li>
-                          <li>
-                            <a href="#">Shop Grid</a>
-                          </li>
-                          <li>
-                            <a href="#">Shop Left sidebar</a>
-                          </li>
-                          <li>
-                            <a href="#">Shop right sidebar</a>
-                          </li>
-                          <li>
-                            <a href="#">Shop details </a>
-                          </li>
-                          <li>
-                            <a href="#">Shop details no sidebar </a>
-                          </li>
-                        </ul>
-                      </li> */}
-                      <li>
-                        <NavLink to="/product-list">All Products</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/contact">Contact</NavLink>
-                      </li>
-                    </ul>
+                <div className="col-6 d-md-block d-none">
+                  <div className='d-md-block d-none'>
+                    <SearchComponent />
                   </div>
                 </div>
                 <div className="col">
                   <div className="header_side_bar">
                     <ul className="side_list d-flex align-items-center justify-content-end p-0 m-0">
-                    <li className="position-relative me-3">
+                      <li className="position-relative me-3">
                         <div className="nav_list_link acnt_name d-flex align-items-center">
                           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                          <span className='ms-1'>Abhishek</span>
+                          <span className='ms-1'>{user?.name}</span>
                           <span className='ms-1'><i class="fa-solid fa-chevron-down"></i></span>
                         </div>
                         {
@@ -197,16 +161,17 @@ const Header = () => {
                           )
                         }
                       </li>
-                      <li className="link_bx me-3">
+                      {/* <li className="link_bx me-3">
                         <SearchComponent />
-                      </li>
+                      </li> */}
                       <li className="link_bx">
                         <NavLink className="nav_list_link" to="/cart">
                           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                           <sup className="position-relative" style={{ top: '-7px', left: '4px', fontSize: '14px' }}>{cart_items.length}</sup>
                         </NavLink>
                       </li>
-                     
+                
+
                       {/* <li className="link_bx ms-3 d-lg-none d-flex ">
                         <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                           <i class="fa-solid fa-bars"></i>
@@ -217,6 +182,50 @@ const Header = () => {
                 </div>
               </div>
             </nav>
+          </div>
+          <div className="row pt-0 pb-2 justify-content-center navbar navbar-expand-lg desk_header">
+            <div className="collapse navbar-collapse justify-content-center d-lg-block d-none" id="navbarScroll">
+              <ul className="nav_list m-0">
+                <li>
+                  <NavLink to="/">Home</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/about">About</NavLink>
+                </li>
+                {/* <li className="menu-icon">
+                        <a href="#">Shop</a>
+                        <ul>
+                          <li>
+                            <a href="#">Shop</a>
+                          </li>
+                          <li>
+                            <a href="#">Shop Grid</a>
+                          </li>
+                          <li>
+                            <a href="#">Shop Left sidebar</a>
+                          </li>
+                          <li>
+                            <a href="#">Shop right sidebar</a>
+                          </li>
+                          <li>
+                            <a href="#">Shop details </a>
+                          </li>
+                          <li>
+                            <a href="#">Shop details no sidebar </a>
+                          </li>
+                        </ul>
+                      </li> */}
+                <li>
+                  <NavLink to="/product-list">All Products</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/contact">Contact</NavLink>
+                </li>
+              </ul>
+            </div>
+           <div className='d-md-none d-block'>
+            <SearchComponent />
+           </div>
           </div>
         </div>
       </div>

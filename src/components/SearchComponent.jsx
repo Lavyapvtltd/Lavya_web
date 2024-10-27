@@ -119,6 +119,7 @@ const SearchComponent = () => {
   const handleProductClick = (productId) => {
     navigate(`/product-list/${productId}`);
     setFilteredProducts([]);
+    searchFieldRef.current.value = '';
   };
 
   useEffect(() => {
@@ -127,19 +128,20 @@ const SearchComponent = () => {
 
   return (
     <div className="header-search-wrapper">
-      <span className="search-icon" onClick={toggleSearch}>
+      {/* <span className="search-icon" onClick={toggleSearch}>
         <i className="fa fa-search"></i>
-      </span>
+      </span> */}
       <div className={`search-form-container ${isActive ? 'active' : ''}`}>
-        <label>
+      <div className='position-absolute'>
+        <i className="fa fa-search prim_color "></i>
+      </div>
           <input
             type="search"
-            className="search-input"
+            className="search-input w-100"
             placeholder="Find your product..."
             ref={searchFieldRef}
             onChange={handleChange}
           />
-        </label>
         {/* Display filtered products */}
         {filteredProducts.length > 0 && (
           <div className="search-results position-absolute">

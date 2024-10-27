@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IMAGE_BASE_URL, BASE_URL, API_URL } from "../constants/contant";
+import { IMAGE_BASE_URL, BASE_URL, API_URL, RAZORPAY_KEY_ID } from "../constants/contant";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
@@ -8,8 +8,11 @@ import moment from "moment/moment";
 import { fetchSubscriptionCartAsync } from "../features/subscriptionCartSlice";
 import { updateProductStock } from "../features/productSlice";
 import DeliveryAddress from "../components/DeliveryAddress";
-import { fetchUserAsync, walletAmountDeduction } from "../features/authSlice";
+import { fetchUserAsync, walletAmountAddition, walletAmountDeduction } from "../features/authSlice";
 import { fetchFirstTimeRechargeAsync } from "../features/firstTimeRechargeSlice";
+import Swal from "sweetalert2";
+import { fetchOrdersAsync, fetchSubsciptionOrdersAsync } from "../features/orderSlice";
+
 const SubscriptionCheckout = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -19,9 +22,12 @@ const SubscriptionCheckout = () => {
     const { user, user_id } = useSelector((state) => state.auth);
     const [deliveryCharge, setDeliveryCharge] = useState(0);
     const [packagingCharge, setPackagingCharge] = useState(0);
-    const [wallet, setWallet] = useState(false);
+    const [wallet, setWallet] = useState(true);
     const [toggleRecharge, setToggleRecharge] = useState(false);
+    const [selectedOffer, setSelectedOffer] = useState("");
     const [loading, setLoading] = useState(false);
+    const non_subscription_orders = useSelector(state => state.orders.orders);
+    const subscription_orders = useSelector(state => state.orders.subscription_orders);
     const first_time_recharges = useSelector(state => state.firsttimerecharges.firsttimerecharges);
     const subscription_cart_items = useSelector((state) => state.subscription_cart.subscription_cart);
     const product = subscription_cart_items?.map((cart_item) => {
@@ -48,23 +54,119 @@ const SubscriptionCheckout = () => {
     const subscription_cart_item = product.find((item) => item.id == id);
     const [address, setAddress] = useState("");
 
+    const handleRechargeOfferClick = (offer) => {
+        setSelectedOffer(offer);
+        Swal.fire({
+            html: `The additional amount for the number of days for which you are being offered free milk 
+                   will be added to your wallet along with your recharge value.<br><br>
+                   जितने दिनों के लिए आपको मुफ्त दूध की पेशकश की जा रही है, उतने दिनों की अतिरिक्त राशि 
+                   आपके रिचार्ज मूल्य के साथ आपके वॉलेट में जोड़ दी जाएगी।`,
+        });
+
+    }
+
+    const handleSkip = () => {
+        const data = {
+            status: "SUBSCRIBED",
+            orderPlace: "",
+            product: [subscription_cart_item],
+            shippingaddress: address,
+            user: user,
+            amount: total,
+            orderId: "",
+            deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
+            deliveryType: subscription_cart_item.subscription_type
+        }
+        navigate("/recharge", { state: { data: data } });
+    }
+
+    const handleGetOffer = async () => {
+        if (!selectedOffer) {
+            return toast.error("Please select an offer");
+        }
+        try {
+            setLoading(true);
+            const data = {
+                amount: selectedOffer?.value,
+                currency: "INR",
+                notes: "Recharge Wallet",
+                type: "web"
+            }
+            const res = await axios.post(
+                `${BASE_URL}${API_URL.WALLET_RECHARGE}${user_id}`,
+                data
+            );
+            const result = res.data;
+            const { baseResponse, order } = result;
+            if (baseResponse.status == 1) {
+                setLoading(false);
+                const options = {
+                    key: RAZORPAY_KEY_ID,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'Lavya Organic Foods',
+                    description: '',
+                    order_id: order.id,
+                    handler: async function (response) {
+                        try {
+                            let payment = selectedOffer?.value + selectedOffer?.cashback
+                            const data = {
+                                amount: payment
+                            }
+                            dispatch(walletAmountAddition({ user_id, data }));
+                            navigate(`/recharge-success?id=${order.id}`)
+                        } catch (error) {
+                            toast.error("Something went wrong");
+                        }
+                    },
+                    prefill: {
+                        name: user.name,
+                        email: user.email,
+                        contact: user.phone
+                    },
+                    notes: {
+                        address: "Lavya Organic Foods Corporate Office"
+                    },
+                    theme: {
+                        color: "#3399cc"
+                    },
+                    modal: {
+                        ondismiss: async function () {
+                            toast.error("Transaction cancelled")
+                        }
+                    }
+                };
+                console.log(options)
+                const rzp = new window.Razorpay(options);
+                rzp.open();
+            }
+        } catch (error) {
+            setLoading(false);
+            toast.error("Something went wrong");
+        }
+    }
+
     const handleOrderPlace = async () => {
         if (!address) {
             return toast.error("Please select address");
         }
         if (user.walletBalance < total) {
-            const data = {
-                status: "SUBSCRIBED",
-                orderPlace: "",
-                product: [subscription_cart_item],
-                shippingaddress: address,
-                user: user,
-                amount: total,
-                orderId: "",
-                deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
-                deliveryType: subscription_cart_item.subscription_type
+            if (non_subscription_orders.length === 0 || subscription_orders.length === 0) {
+                setToggleRecharge(true);
+            } else {
+                const data = {
+                    status: "SUBSCRIBED",
+                    orderPlace: "",
+                    product: [subscription_cart_item],
+                    shippingaddress: address,
+                    user: user,
+                    amount: total,
+                    orderId: "",
+                    deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
+                    deliveryType: subscription_cart_item.subscription_type
+                }
+                navigate("/recharge", { state: { data: data } });
             }
-            navigate("/recharge", { state: { data: data } });
         }
         else {
             try {
@@ -113,6 +215,8 @@ const SubscriptionCheckout = () => {
         if (user_id) {
             dispatch(fetchUserAsync(user_id));
             dispatch(fetchSubscriptionCartAsync(user_id));
+            dispatch(fetchOrdersAsync(user_id));
+            dispatch(fetchSubsciptionOrdersAsync(user_id));
         }
     }, [dispatch, user_id]);
     const calculateTotal = () => {
@@ -290,7 +394,7 @@ const SubscriptionCheckout = () => {
                                     <div className="row gy-3 justify-content-center">
                                         {
                                             first_time_recharges?.map((item, index) => (
-                                                <div className="col-12" key={index}>
+                                                <div className="col-12" key={index} onClick={() => { handleRechargeOfferClick(item) }}>
                                                     <div className="recharge_box">
                                                         <h5 className='fw-semibold'>{item?.name}</h5>
                                                         <div className='mt-3 d-flex justify-content-between align-items-center'>
@@ -307,8 +411,10 @@ const SubscriptionCheckout = () => {
                                         }
                                     </div>
                                     <div className='mt-3 d-flex justify-content-between align-items-center w-100'>
-                                        <button type='button' className='recharge_btn bg-white btn-effect-1 prim_color'>Skip</button>
-                                        <button type='button' className='prim_color_bg text-white btn-effect-1'>get Offer</button>
+                                        <button type='button' className='recharge_btn bg-white btn-effect-1 prim_color' onClick={handleSkip}>Skip</button>
+                                        <button type='button' className='prim_color_bg text-white btn-effect-1' onClick={handleGetOffer}>  {loading && <div className="spinner-border me-2" style={{ borderWidth: '3px', height: '1rem', width: '1rem' }} role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>}get Offer</button>
                                     </div>
                                 </div>
                             </div>
