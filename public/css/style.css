@@ -1327,8 +1327,8 @@ input[type="range"]:focus {
         font-size: 14px;
     }
     .header_side_bar .side_list .link_bx {
-        height: 30px;
-        width: 30px;
+        height: 33px;
+        width: 33px;
     }
     .header_side_bar  .search-icon {
         font-size: 14px;
@@ -1348,7 +1348,7 @@ input[type="range"]:focus {
         width: 63px;
     }
     .acnt_name{
-        font-size: 13px;
+        font-size: 14px;
     }
     .header_side_bar .user_list li a {
         font-size: 12px;
@@ -1423,6 +1423,13 @@ input[type="range"]:focus {
     }
     .product_search_input input {
         width: 100%;
+    }
+    .promo_banner .btn-effect-1 {
+        border-radius: 0;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
     }
 }
 

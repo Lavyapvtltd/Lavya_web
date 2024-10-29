@@ -81,6 +81,7 @@ const Checkout = () => {
                         product.forEach((item) => {
                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                         })
+                        dispatch(fetchCartsAsync(user_id));
                         toast.success("Order Created Successfully");
                         setLoading(false);
                         setTimeout(() => {
@@ -130,6 +131,7 @@ const Checkout = () => {
                         product.forEach((item) => {
                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                         })
+                        dispatch(fetchCartsAsync(user_id));
                         toast.success("Order Created Successfully");
                         setLoading(false);
                         setTimeout(() => {
@@ -197,6 +199,7 @@ const Checkout = () => {
                                         product.forEach((item) => {
                                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                                         })
+                                        dispatch(fetchCartsAsync(user_id));
                                         navigate(`/order-success?order_no=${savedorder.order_no}`);
                                     }
                                 } catch (error) {
@@ -272,6 +275,7 @@ const Checkout = () => {
                     const { baseResponse, savedorder } = result;
                     if (baseResponse.status == 1) {
                         toast.success("Order Created Successfully");
+                        dispatch(fetchCartsAsync(user_id));
                         product.forEach((item) => {
                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                         })
@@ -333,6 +337,7 @@ const Checkout = () => {
                                         product.forEach((item) => {
                                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                                         })
+                                        dispatch(fetchCartsAsync(user_id));
                                         navigate(`/order-success?order_no=${savedorder.order_no}`);
                                     }
                                 } catch (error) {
@@ -471,7 +476,7 @@ const Checkout = () => {
                                                                         <span className="fs-6 text-secondary"> {`${((item.regularPrice - item.price) / item.regularPrice * 100).toFixed(2)}% off`} </span>
                                                                     </p>
                                                                 </div>
-                                                                <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(item.regularPrice - item.price).toFixed(2)}</p>
+                                                                <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {((item.regularPrice - item.price) * item.selQty).toFixed(2)}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -487,10 +492,10 @@ const Checkout = () => {
                                                                 <td>Delivery Charges</td>
                                                                 <td>Rs {deliveryCharge}</td>
                                                             </tr>
-                                                            <tr>
+                                                            {/* <tr>
                                                                 <td>Packaging Charges</td>
                                                                 <td>Rs {packagingCharge}</td>
-                                                            </tr>
+                                                            </tr> */}
                                                             <tr>
                                                                 <td>
                                                                     <strong>Order Total</strong>

@@ -8,8 +8,9 @@ import OtpPage from '../components/Otp';
 const Login = () => {
   const [toggleReferralCode, setToggleReferralCode] = useState(false);
   const [showOtpInput, setShowOtpInput] = useState(false);
-  const [user,setUser] = useState({});
-  const [status,setStatus] = useState("EXISTS");
+  const [user, setUser] = useState({});
+  const [status, setStatus] = useState("EXISTS");
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -24,18 +25,21 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
+        setLoading(true);
         const res = await axios.post(`${BASE_URL}${API_URL.OTP_BY_CONTACT}`, values);
         const result = res.data;
         const { baseResponse, response } = result;
         if (baseResponse.status) {
+          setLoading(false);
           setUser(response);
-          console.log(baseResponse.status)
           setStatus(baseResponse.status);
-          setShowOtpInput(true); 
+          setShowOtpInput(true);
         } else {
+          setLoading(false);
           toast.error('Failed to log in');
         }
       } catch (error) {
+        setLoading(false);
         console.error(error);
       }
     },
@@ -84,26 +88,26 @@ const Login = () => {
               <div className="col-lg-5 col-md-6 col-12">
                 <div className="account-login-inner">
                   <form onSubmit={formik.handleSubmit} className="ltn__form-box contact-form-box">
-                  <div className="mb-3">
-                    <div className="flag_input d-flex mb-1 align-items-center">
-                      <div className="flag_img me-2">
-                        <img src="/images/flag.webp" alt="flag" className="img-fluid" />
+                    <div className="mb-3">
+                      <div className="flag_input d-flex mb-1 align-items-center">
+                        <div className="flag_img me-2">
+                          <img src="/images/flag.webp" alt="flag" className="img-fluid" />
+                        </div>
+                        <input
+                          type="text"
+                          name="contact"
+                          placeholder="Phone"
+                          className="w-100 border-0"
+                          value={formik.values.contact}
+                          onChange={handleContactChange}
+                          onBlur={formik.handleBlur}
+                        />
                       </div>
-                      <input
-                        type="text"
-                        name="contact"
-                        placeholder="Phone"
-                        className="w-100 border-0"
-                        value={formik.values.contact}
-                        onChange={handleContactChange}
-                        onBlur={formik.handleBlur}
-                      />
-                    </div>
-                    {formik.touched.contact && formik.errors.contact ? (
+                      {formik.touched.contact && formik.errors.contact ? (
                         <div className="error text-danger fs-6">{formik.errors.contact}</div>
                       ) : null}
 
-                  </div>
+                    </div>
 
                     {toggleReferralCode && (
                       <div className="mb-3">
@@ -120,7 +124,7 @@ const Login = () => {
                     )}
 
                     <div className="col-12 referal_code text-center">
-                      <div 
+                      <div
                         className="text-decoration-underline prim_color"
                         onClick={handleToggleReferralCode}
                       >
@@ -133,6 +137,9 @@ const Login = () => {
                         type="submit"
                         className="btn-effect-1 theme-btn-1 prim_color_bg text-white w-100 rounded-2 py-2"
                       >
+                        {loading && <div className="spinner-border me-2" style={{ borderWidth: '3px', height: '1rem', width: '1rem' }} role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>}
                         Sign Up
                       </button>
                     </div>
@@ -156,7 +163,7 @@ const Login = () => {
         </div>
       ) : (
         <div className="otp-container">
-         <OtpPage user={user} numDigits={6} mobile={user.contact} status={status}/>
+          <OtpPage user={user} numDigits={6} mobile={user.contact} status={status} />
         </div>
       )}
     </>

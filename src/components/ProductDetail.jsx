@@ -88,47 +88,47 @@ const ProductDetail = () => {
                 dispatch(addToSubscriptionCart({ product_id: product._id, user_id, producttosubscriptioncart }));
                 toast.success(
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ flex: 1 }}>Item added to subscription cart</span>
-                      <button
-                        onClick={() => navigate(`/subscription-checkout/${product._id}`)}
-                        style={{
-                          padding: '5px 10px',
-                          backgroundColor: 'black',
-                          color: 'white',
-                          fontSize: '16px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          borderRadius: '5px'
-                        }}
-                      >
-                        View Cart
-                      </button>
+                        <span style={{ flex: 1 }}>Item added to subscription cart</span>
+                        <button
+                            onClick={() => navigate(`/subscription-checkout/${product._id}`)}
+                            style={{
+                                padding: '5px 10px',
+                                backgroundColor: 'black',
+                                color: 'white',
+                                fontSize: '16px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                borderRadius: '5px'
+                            }}
+                        >
+                            View Cart
+                        </button>
                     </div>
-                  );
-                  
+                );
+
             } else {
                 dispatch(AddSubscriptionProduct(product));
                 setToggle(true);
                 toast.success(
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ flex: 1 }}>Item added to subscription cart</span>
-                      <button
-                        onClick={() => navigate(`/subscription-checkout/${product._id}`)}
-                        style={{
-                          padding: '5px 10px',
-                          backgroundColor: 'black',
-                          color: 'white',
-                          fontSize: '16px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          borderRadius: '5px'
-                        }}
-                      >
-                        View Cart
-                      </button>
+                        <span style={{ flex: 1 }}>Item added to subscription cart</span>
+                        <button
+                            onClick={() => navigate(`/subscription-checkout/${product._id}`)}
+                            style={{
+                                padding: '5px 10px',
+                                backgroundColor: 'black',
+                                color: 'white',
+                                fontSize: '16px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                borderRadius: '5px'
+                            }}
+                        >
+                            View Cart
+                        </button>
                     </div>
-                  );
-                  
+                );
+
             }
         }
         else {
@@ -145,45 +145,45 @@ const ProductDetail = () => {
                 dispatch(addToCart({ product_id: product._id, user_id, producttocart }));
                 toast.success(
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span>Item added to cart</span>
-                      <button
-                        onClick={() => navigate('/cart')}
-                        style={{
-                          padding: '5px 10px',
-                          backgroundColor: 'black',
-                          color: 'white',
-                          fontSize: '16px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          borderRadius: '5px'
-                        }}
-                      >
-                        View Cart
-                      </button>
+                        <span>Item added to cart</span>
+                        <button
+                            onClick={() => navigate('/cart')}
+                            style={{
+                                padding: '5px 10px',
+                                backgroundColor: 'black',
+                                color: 'white',
+                                fontSize: '16px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                borderRadius: '5px'
+                            }}
+                        >
+                            View Cart
+                        </button>
                     </div>
-                );   
+                );
             } else {
                 dispatch(AddProduct(product));
                 setToggle(true);
                 toast.success(
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span>Item added to cart</span>
-                      <button
-                        onClick={() => navigate('/cart')}
-                        style={{
-                          padding: '5px 10px',
-                          backgroundColor: 'black',
-                          color: 'white',
-                          fontSize: '16px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          borderRadius: '5px'
-                        }}
-                      >
-                        View Cart
-                      </button>
+                        <span>Item added to cart</span>
+                        <button
+                            onClick={() => navigate('/cart')}
+                            style={{
+                                padding: '5px 10px',
+                                backgroundColor: 'black',
+                                color: 'white',
+                                fontSize: '16px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                borderRadius: '5px'
+                            }}
+                        >
+                            View Cart
+                        </button>
                     </div>
-                ); 
+                );
             }
         }
     }
@@ -569,8 +569,14 @@ const ProductDetail = () => {
                                                 )
                                             )
                                         }
+                                        {
+                                            !productdetail.subscription_active && <div className="d-flex align-items-center">
+                                                <button className="ms-2 prim_color_bg text-white btn-effect-1" onClick={() => navigate(`/cart`)}>
+                                                    View Cart
+                                                </button>
+                                            </div>
+                                        }
                                     </div>
-
                                 </div>
                             </div>
                             <div className="row mt-5">

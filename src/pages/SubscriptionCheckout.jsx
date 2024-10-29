@@ -220,7 +220,7 @@ const SubscriptionCheckout = () => {
         }
     }, [dispatch, user_id]);
     const calculateTotal = () => {
-        const tot = subscription_cart_item.price * subscription_cart_item.selQty;
+        const tot = subscription_cart_item?.price * subscription_cart_item?.selQty;
         setSubTotal(tot);
         const pay = tot + deliveryCharge + packagingCharge;
         setTotal(pay);
@@ -254,9 +254,9 @@ const SubscriptionCheckout = () => {
                                                             <div className="d-flex align-items-center border rounded-1 p-3">
                                                                 <div className="col-lg-3 col-md-3 col-4 border rounded-1 p-1 overflow-hidden img_hover position-relative">
                                                                     <img
-                                                                        src={`${IMAGE_BASE_URL}${subscription_cart_item.icon}`}
+                                                                        src={`${IMAGE_BASE_URL}${subscription_cart_item?.icon}`}
                                                                         className="img-fluid"
-                                                                        alt={subscription_cart_item.name}
+                                                                        alt={subscription_cart_item?.name}
                                                                     />
                                                                 </div>
                                                                 <div className="ps-3">
@@ -264,21 +264,21 @@ const SubscriptionCheckout = () => {
                                                                         {subscription_cart_item.name}
                                                                     </h6>
                                                                     <div className="text-secondary fw-semibold">
-                                                                        {`${subscription_cart_item.unitValue} ${subscription_cart_item.unit}`} x {subscription_cart_item.selQty}
+                                                                        {`${subscription_cart_item.unitValue} ${subscription_cart_item?.unit}`} x {subscription_cart_item?.selQty}
                                                                     </div>
                                                                     <div>
                                                                         <div className="d-flex align-items-center">
                                                                             <p className="me-2 fs-4 prim_color">
-                                                                                <span className="currency-symbol prim_color"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value prim_color">{subscription_cart_item.price}</span>
+                                                                                <span className="currency-symbol prim_color"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value prim_color">{subscription_cart_item?.price}</span>
                                                                             </p>
                                                                             <p className="fs-5">
                                                                                 <span className="del_line">
-                                                                                    <span className="currency-symbol text-secondary"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value">{subscription_cart_item.regularPrice}</span>
+                                                                                    <span className="currency-symbol text-secondary"><i class="fa fa-inr" aria-hidden="true"></i></span> <span className="currency-value">{subscription_cart_item?.regularPrice}</span>
                                                                                 </span>
-                                                                                <span className="fs-6 text-secondary"> {`${((subscription_cart_item.regularPrice - subscription_cart_item.price) / subscription_cart_item.regularPrice * 100).toFixed(2)}% off`} </span>
+                                                                                <span className="fs-6 text-secondary"> {`${((subscription_cart_item.regularPrice - subscription_cart_item?.price) / subscription_cart_item?.regularPrice * 100).toFixed(2)}% off`} </span>
                                                                             </p>
                                                                         </div>
-                                                                        <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(subscription_cart_item.regularPrice - subscription_cart_item.price).toFixed(2)}</p>
+                                                                        <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {((subscription_cart_item?.regularPrice - subscription_cart_item?.price) * subscription_cart_item?.selQty).toFixed(2)}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -293,10 +293,10 @@ const SubscriptionCheckout = () => {
                                                                             <td>Delivery Charges</td>
                                                                             <td>Rs {deliveryCharge}</td>
                                                                         </tr>
-                                                                        <tr>
+                                                                        {/* <tr>
                                                                             <td>Packaging Charges</td>
                                                                             <td>Rs {packagingCharge}</td>
-                                                                        </tr>
+                                                                        </tr> */}
                                                                         <tr>
                                                                             <td>
                                                                                 <strong>Order Total</strong>

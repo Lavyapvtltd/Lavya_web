@@ -121,7 +121,7 @@ const Cart = () => {
                                                                 </p>
                                                             </div>
                                                             <div className='d-md-flex align-items-center justify-content-between'>
-                                                                <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span> {(item.regularPrice - item.price).toFixed(2)}</p>
+                                                                <p className='d-flex align-items-center text-secondary'>You are saving  <span className="currency-symbol text-secondary px-1"><i class="fa fa-inr" aria-hidden="true"></i></span>{((item.regularPrice - item.price) * item.selQty).toFixed(2)}</p>
                                                                 <div className="cart_plus_minus position-relative">
                                                                     <button className="dec qtybutton border-0" onClick={() => handleDecrement(item)} disabled={item.selQty <= 1}>-</button>
                                                                     <input type='text' value={item.selQty} className="cart-plus-minus-box" />
@@ -157,10 +157,10 @@ const Cart = () => {
                                                         <td>Delivery Charges</td>
                                                         <td>Rs {deliveryCharge}</td>
                                                     </tr>
-                                                    <tr>
+                                                    {/* <tr>
                                                         <td>Packaging Charges</td>
                                                         <td>Rs {packagingCharge}</td>
-                                                    </tr>
+                                                    </tr> */}
                                                     <tr>
                                                         <td><strong>Order Total</strong></td>
                                                         <td><strong>Rs {total}</strong></td>

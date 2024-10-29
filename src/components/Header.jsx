@@ -5,20 +5,37 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
 import SearchComponent from './SearchComponent';
+import { BASE_URL, API_URL } from '../constants/contant';
 
 const Header = () => {
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {isLoggedIn,user} = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
   const cart_items = useSelector((state) => state.cart.cart);
-
-
+  const [toggle, setToggle] = useState(false);
+  const [offerHeadings,setOfferHeadings] = useState([]);
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
+
+  const getAllOfferHeadings = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}${API_URL.GET_ALL_OFFER_HEADINGS}`);
+      const result = res.data;
+      const { baseResponse, response } = result;
+      if (baseResponse.status == 1) {
+        setOfferHeadings(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    getAllOfferHeadings();
+  },[])
   // const getLocation = () => {
   //   if (navigator.geolocation) {
   //     navigator.geolocation.getCurrentPosition((position) => {
@@ -83,6 +100,25 @@ const Header = () => {
   // }, [])
   return (
     <>
+      {
+        !toggle && <div className="container-fluid promo_banner py-2" style={{ background: '#ffc673' }}>
+          <div className="container">
+            <div className="row align-items-center">
+              <div className='d-flex justify-content-between align-items-center'>
+                <div className="w-auto px-1">
+                  <button type='button' className='bg-transparent shadow-none border-0 text-dark' onClick={() => { setToggle(true) }}><i class="fa-regular fa-x text-dark"></i></button>
+                </div>
+                <div className="w-auto px-1"> <p><span>Get 10% off on first order+ 1% cashback on app! </span></p>  </div>
+                <div className="w-auto px-1">
+                  <NavLink to="https://play.google.com/store/apps/details?id=com.lavya_applications.Lavya" target="_blank" className="prim_color_bg text-white btn-effect-1 px-3 py-1">
+                    Get App
+                  </NavLink>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
       <div className="container-fluid top_bar py-2">
         <div className="container">
           <div className="row align-items-center top_heading_bar">
@@ -105,7 +141,7 @@ const Header = () => {
                 </div>
               </div>
             </div> */}
-            <marquee direction="left"> <p class="text-white text-center"><span>USE CODE DHAMAKA10 FOR 10% OFF • LOWEST PRICE ON WHEY PROTEIN • BEST DEALS ON PEANUT BUTTER • 100% AUTHENTIC • </span></p>
+            <marquee direction="left"> <p class="text-white text-center"><span>{offerHeadings[0]?.description}</span></p>
             </marquee>
           </div>
         </div>
@@ -119,7 +155,7 @@ const Header = () => {
                   <div className='d-flex align-items-center'>
                     <div className='me-2 d-lg-none d-flex'>
                       <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                        <svg stroke="currentColor" fill="#309a20" stroke-width="0" viewBox="0 0 24 24" height="25px" width="25px" xmlns="http://www.w3.org/2000/svg"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11-6h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-1 6h-4V5h4v4zm-9 4H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6H5v-4h4v4zm8-6c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path></svg>
+                        <svg stroke="currentColor" fill="#309a20" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11-6h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-1 6h-4V5h4v4zm-9 4H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6H5v-4h4v4zm8-6c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path></svg>
                       </a>
                     </div>
                     <NavLink className="navbar-brand" to="/">
@@ -170,7 +206,7 @@ const Header = () => {
                           <sup className="position-relative" style={{ top: '-7px', left: '4px', fontSize: '14px' }}>{cart_items.length}</sup>
                         </NavLink>
                       </li>
-                
+
 
                       {/* <li className="link_bx ms-3 d-lg-none d-flex ">
                         <a className="nav_list_link" href="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
@@ -223,9 +259,9 @@ const Header = () => {
                 </li>
               </ul>
             </div>
-           <div className='d-md-none d-block'>
-            <SearchComponent />
-           </div>
+            <div className='d-md-none d-block'>
+              <SearchComponent />
+            </div>
           </div>
         </div>
       </div>
