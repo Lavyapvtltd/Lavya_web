@@ -4,7 +4,7 @@ import { NavLink, useSearchParams } from 'react-router-dom'
 
 const OrderSuccess = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const order_no = searchParams.get('order_no');
+    const transactionId = searchParams.get('transactionId');
     return (
         <>
             <div className="container-fluid order_success py-5">
@@ -16,7 +16,7 @@ const OrderSuccess = () => {
                                     <img src="/images/check-mark.png" className='w-25' alt="" />
                                 </div>
                                 <h4 className='prim_color fw-semibold'>Order placed, thank you!</h4>
-                                <p>Your order no is {order_no}</p>
+                                <p>Your Transaction Id Is {transactionId}</p>
                                 <div className='mt-3'>
                                     <NavLink to="/order-history" className="btn-ordr bg-white border-2 btn-effect-1 me-md-3 mb-lg-0 mb-md-0 mb-3  prim_color">View Order</NavLink>
                                     <NavLink to="/" className="prim_color_bg text-white btn-effect-1" >Continue Shopping</NavLink>

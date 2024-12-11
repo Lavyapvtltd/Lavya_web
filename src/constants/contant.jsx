@@ -3,8 +3,8 @@ export const BASE_URL = "https://api.lavyacompany.com/api/v1";
 export const IMAGE_BASE_URL = "https://api.lavyacompany.com/resources/";
 
 // LOCAL;
-// export const BASE_URL = "http://192.168.1.15:9291/api/v1";
-// export const IMAGE_BASE_URL = "http://192.168.1.15:9291/resources/";
+// export const BASE_URL = "http://192.168.1.13:9291/api/v1";
+// export const IMAGE_BASE_URL = "http://192.168.1.13:9291/resources/";
 
 export const ROUTES_CONST = {
     INDEX: '/',

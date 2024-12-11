@@ -151,10 +151,106 @@ const Checkout = () => {
                     return toast.error("Please select payment type");
                 }
                 const deducted_amount = total - finalTotal;
+                // try {
+                //     setLoading(true);
+                //     const data = {
+                //         status: "PROCCESSING",
+                //         orderPlace: "",
+                //         product: product,
+                //         shippingaddress: address,
+                //         user: user,
+                //         amount: finalTotal,
+                //         deductedWalletAmount: deducted_amount,
+                //         deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
+                //         deliveryType: product[0].subscription_type,
+                //         paymentOption: flexRadioDefault,
+                //         walletDeductedAmount: deducted_amount,
+                //         type: "web"
+                //     }
+                //     const res = await axios.post(
+                //         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
+                //         data
+                //     );
+                //     const result = res.data;
+                //     const { baseResponse, order, savedorder } = result;
+                //     if (baseResponse.status == 1) {
+                //         setLoading(false);
+                //         const options = {
+                //             key: RAZORPAY_KEY_ID,
+                //             amount: order.amount,
+                //             currency: order.currency,
+                //             name: 'Lavya Organic Foods',
+                //             description: '',
+                //             order_id: order.id,
+                //             handler: async function (response) {
+                //                 try {
+                //                     const data = { status: "ORDERED", paymentStatus: "PAIDONLINE" };
+                //                     const res = await axios.patch(
+                //                         `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
+                //                         data
+                //                     );
+                //                     const result = res.data;
+                //                     const { baseResponse, response } = result;
+                //                     if (baseResponse.status == "1") {
+                //                         const data = {
+                //                             amount: savedorder.walletDeductedAmount
+                //                         }
+                //                         dispatch(walletAmountDeduction({ user_id, data }));
+                //                         product.forEach((item) => {
+                //                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
+                //                         })
+                //                         dispatch(fetchCartsAsync(user_id));
+                //                         navigate(`/order-success?order_no=${savedorder.order_no}`);
+                //                     }
+                //                 } catch (error) {
+                //                     toast.error("Something went wrong");
+                //                 }
+                //             },
+                //             prefill: {
+                //                 name: user.name,
+                //                 email: user.email,
+                //                 contact: user.phone
+                //             },
+                //             notes: {
+                //                 address: "Lavya Organic Foods Corporate Office"
+                //             },
+                //             theme: {
+                //                 color: "#3399cc"
+                //             },
+                //             modal: {
+                //                 ondismiss: async function () {
+                //                     try {
+                //                         const data = { status: "FAILED", paymentStatus: "FAILED" };
+                //                         const res = await axios.patch(
+                //                             `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
+                //                             data
+                //                         );
+                //                         const result = res.data;
+                //                         const { baseResponse, response } = result;
+                //                         if (baseResponse.status == "1") {
+                //                             toast.error("Order cancelled")
+                //                         }
+                //                     } catch (error) {
+                //                         toast.error("Something went wrong");
+                //                     }
+                //                 }
+                //             }
+                //         };
+                //         const rzp = new window.Razorpay(options);
+                //         rzp.open();
+                //     } else {
+                //         setLoading(false);
+                //         toast.error(baseResponse.message);
+                //     }
+                // } catch (error) {
+                //     setLoading(false);
+                //     toast.error("Something went wrong");
+                // }
                 try {
                     setLoading(true);
-                    const data = {
-                        status: "PROCCESSING",
+                    const order_data = {
+                        status: "ORDERED", 
+                        paymentStatus: "PAIDONLINE",
                         orderPlace: "",
                         product: product,
                         shippingaddress: address,
@@ -164,83 +260,20 @@ const Checkout = () => {
                         deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
-                        walletDeductedAmount: deducted_amount,
-                        type: "web"
+                        walletDeductedAmount: deducted_amount
+                    }
+                    const data = {
+                        order_data:order_data
                     }
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
                         data
                     );
                     const result = res.data;
-                    const { baseResponse, order, savedorder } = result;
+                    const { baseResponse, response } = result;
                     if (baseResponse.status == 1) {
                         setLoading(false);
-                        const options = {
-                            key: RAZORPAY_KEY_ID,
-                            amount: order.amount,
-                            currency: order.currency,
-                            name: 'Lavya Organic Foods',
-                            description: '',
-                            order_id: order.id,
-                            handler: async function (response) {
-                                try {
-                                    const data = { status: "ORDERED", paymentStatus: "PAIDONLINE" };
-                                    const res = await axios.patch(
-                                        `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
-                                        data
-                                    );
-                                    const result = res.data;
-                                    const { baseResponse, response } = result;
-                                    if (baseResponse.status == "1") {
-                                        const data = {
-                                            amount: savedorder.walletDeductedAmount
-                                        }
-                                        dispatch(walletAmountDeduction({ user_id, data }));
-                                        product.forEach((item) => {
-                                            dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
-                                        })
-                                        dispatch(fetchCartsAsync(user_id));
-                                        navigate(`/order-success?order_no=${savedorder.order_no}`);
-                                    }
-                                } catch (error) {
-                                    toast.error("Something went wrong");
-                                }
-                            },
-                            prefill: {
-                                name: user.name,
-                                email: user.email,
-                                contact: user.phone
-                            },
-                            notes: {
-                                address: "Lavya Organic Foods Corporate Office"
-                            },
-                            theme: {
-                                color: "#3399cc"
-                            },
-                            modal: {
-                                ondismiss: async function () {
-                                    try {
-                                        const data = { status: "FAILED", paymentStatus: "FAILED" };
-                                        const res = await axios.patch(
-                                            `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
-                                            data
-                                        );
-                                        const result = res.data;
-                                        const { baseResponse, response } = result;
-                                        if (baseResponse.status == "1") {
-                                            toast.error("Order cancelled")
-                                        }
-                                    } catch (error) {
-                                        toast.error("Something went wrong");
-                                    }
-                                }
-                            }
-                        };
-                        const rzp = new window.Razorpay(options);
-                        rzp.open();
-                    } else {
-                        setLoading(false);
-                        toast.error(baseResponse.message);
+                        window.location.href = response?.data?.instrumentResponse?.redirectInfo?.url;
                     }
                 } catch (error) {
                     setLoading(false);
@@ -293,10 +326,102 @@ const Checkout = () => {
                 }
             }
             else {
+                // try {
+                //     setLoading(true);
+                //     const data = {
+                //         status: "PROCCESSING",
+                //         orderPlace: "",
+                //         product: product,
+                //         shippingaddress: address,
+                //         user: user,
+                //         amount: finalTotal,
+                //         deductedWalletAmount: 0,
+                //         deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
+                //         deliveryType: product[0].subscription_type,
+                //         paymentOption: flexRadioDefault,
+                //         walletDeductedAmount: 0,
+                //         type: "web"
+                //     }
+                //     const res = await axios.post(
+                //         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
+                //         data
+                //     );
+                //     const result = res.data;
+                //     const { baseResponse, order, savedorder } = result;
+                //     if (baseResponse.status == 1) {
+                //         setLoading(false);
+                //         const options = {
+                //             key: RAZORPAY_KEY_ID,
+                //             amount: order.amount,
+                //             currency: order.currency,
+                //             name: 'Lavya Organic Foods',
+                //             description: '',
+                //             order_id: order.id,
+                //             handler: async function (response) {
+                //                 try {
+                //                     const data = { status: "ORDERED", paymentStatus: "PAIDONLINE" };
+                //                     const res = await axios.patch(
+                //                         `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
+                //                         data
+                //                     );
+                //                     const result = res.data;
+                //                     const { baseResponse, response } = result;
+                //                     if (baseResponse.status == "1") {
+                //                         product.forEach((item) => {
+                //                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
+                //                         })
+                //                         dispatch(fetchCartsAsync(user_id));
+                //                         navigate(`/order-success?order_no=${savedorder.order_no}`);
+                //                     }
+                //                 } catch (error) {
+                //                     toast.error("Something went wrong");
+                //                 }
+                //             },
+                //             prefill: {
+                //                 name: user.name,
+                //                 email: user.email,
+                //                 contact: user.phone
+                //             },
+                //             notes: {
+                //                 address: "Lavya Organic Foods Corporate Office"
+                //             },
+                //             theme: {
+                //                 color: "#3399cc"
+                //             },
+                //             modal: {
+                //                 ondismiss: async function () {
+                //                     try {
+                //                         const data = { status: "FAILED", paymentStatus: "FAILED" };
+                //                         const res = await axios.patch(
+                //                             `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
+                //                             data
+                //                         );
+                //                         const result = res.data;
+                //                         const { baseResponse, response } = result;
+                //                         if (baseResponse.status == "1") {
+                //                             toast.error("Order cancelled")
+                //                         }
+                //                     } catch (error) {
+                //                         toast.error("Something went wrong");
+                //                     }
+                //                 }
+                //             }
+                //         };
+                //         const rzp = new window.Razorpay(options);
+                //         rzp.open();
+                //     } else {
+                //         setLoading(false);
+                //         toast.error(baseResponse.message);
+                //     }
+                // } catch (error) {
+                //     setLoading(false);
+                //     toast.error("Something went wrong");
+                // }
                 try {
                     setLoading(true);
-                    const data = {
-                        status: "PROCCESSING",
+                    const order_data = {
+                        status: "ORDERED", 
+                        paymentStatus: "PAIDONLINE",
                         orderPlace: "",
                         product: product,
                         shippingaddress: address,
@@ -306,79 +431,20 @@ const Checkout = () => {
                         deliveryDate: moment(product[0].start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                         deliveryType: product[0].subscription_type,
                         paymentOption: flexRadioDefault,
-                        walletDeductedAmount: 0,
-                        type: "web"
+                        walletDeductedAmount: 0
+                    }
+                    const data = {
+                        order_data:order_data
                     }
                     const res = await axios.post(
                         `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
                         data
                     );
                     const result = res.data;
-                    const { baseResponse, order, savedorder } = result;
+                    const { baseResponse, response } = result;
                     if (baseResponse.status == 1) {
                         setLoading(false);
-                        const options = {
-                            key: RAZORPAY_KEY_ID,
-                            amount: order.amount,
-                            currency: order.currency,
-                            name: 'Lavya Organic Foods',
-                            description: '',
-                            order_id: order.id,
-                            handler: async function (response) {
-                                try {
-                                    const data = { status: "ORDERED", paymentStatus: "PAIDONLINE" };
-                                    const res = await axios.patch(
-                                        `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
-                                        data
-                                    );
-                                    const result = res.data;
-                                    const { baseResponse, response } = result;
-                                    if (baseResponse.status == "1") {
-                                        product.forEach((item) => {
-                                            dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
-                                        })
-                                        dispatch(fetchCartsAsync(user_id));
-                                        navigate(`/order-success?order_no=${savedorder.order_no}`);
-                                    }
-                                } catch (error) {
-                                    toast.error("Something went wrong");
-                                }
-                            },
-                            prefill: {
-                                name: user.name,
-                                email: user.email,
-                                contact: user.phone
-                            },
-                            notes: {
-                                address: "Lavya Organic Foods Corporate Office"
-                            },
-                            theme: {
-                                color: "#3399cc"
-                            },
-                            modal: {
-                                ondismiss: async function () {
-                                    try {
-                                        const data = { status: "FAILED", paymentStatus: "FAILED" };
-                                        const res = await axios.patch(
-                                            `${BASE_URL}${API_URL.UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID}${savedorder.order_no}`,
-                                            data
-                                        );
-                                        const result = res.data;
-                                        const { baseResponse, response } = result;
-                                        if (baseResponse.status == "1") {
-                                            toast.error("Order cancelled")
-                                        }
-                                    } catch (error) {
-                                        toast.error("Something went wrong");
-                                    }
-                                }
-                            }
-                        };
-                        const rzp = new window.Razorpay(options);
-                        rzp.open();
-                    } else {
-                        setLoading(false);
-                        toast.error(baseResponse.message);
+                        window.location.href = response?.data?.instrumentResponse?.redirectInfo?.url;
                     }
                 } catch (error) {
                     setLoading(false);

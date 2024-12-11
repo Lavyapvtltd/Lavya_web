@@ -84,61 +84,83 @@ const SubscriptionCheckout = () => {
         if (!selectedOffer) {
             return toast.error("Please select an offer");
         }
+        // try {
+        //     setLoading(true);
+        //     const data = {
+        //         amount: selectedOffer?.value,
+        //         currency: "INR",
+        //         notes: "Recharge Wallet",
+        //         type: "web"
+        //     }
+        //     const res = await axios.post(
+        //         `${BASE_URL}${API_URL.WALLET_RECHARGE}${user_id}`,
+        //         data
+        //     );
+        //     const result = res.data;
+        //     const { baseResponse, order } = result;
+        //     if (baseResponse.status == 1) {
+        //         setLoading(false);
+        //         const options = {
+        //             key: RAZORPAY_KEY_ID,
+        //             amount: order.amount,
+        //             currency: order.currency,
+        //             name: 'Lavya Organic Foods',
+        //             description: '',
+        //             order_id: order.id,
+        //             handler: async function (response) {
+        //                 try {
+        //                     let payment = selectedOffer?.value + selectedOffer?.cashback
+        //                     const data = {
+        //                         amount: payment
+        //                     }
+        //                     dispatch(walletAmountAddition({ user_id, data }));
+        //                     navigate(`/recharge-success?id=${order.id}`)
+        //                 } catch (error) {
+        //                     toast.error("Something went wrong");
+        //                 }
+        //             },
+        //             prefill: {
+        //                 name: user.name,
+        //                 email: user.email,
+        //                 contact: user.phone
+        //             },
+        //             notes: {
+        //                 address: "Lavya Organic Foods Corporate Office"
+        //             },
+        //             theme: {
+        //                 color: "#3399cc"
+        //             },
+        //             modal: {
+        //                 ondismiss: async function () {
+        //                     toast.error("Transaction cancelled")
+        //                 }
+        //             }
+        //         };
+        //         console.log(options)
+        //         const rzp = new window.Razorpay(options);
+        //         rzp.open();
+        //     }
+        // } catch (error) {
+        //     setLoading(false);
+        //     toast.error("Something went wrong");
+        // }
         try {
             setLoading(true);
+            let payment = selectedOffer?.value + selectedOffer?.cashback
             const data = {
                 amount: selectedOffer?.value,
-                currency: "INR",
-                notes: "Recharge Wallet",
-                type: "web"
+                cashback:0,
+                addedamount:payment
             }
             const res = await axios.post(
                 `${BASE_URL}${API_URL.WALLET_RECHARGE}${user_id}`,
                 data
             );
             const result = res.data;
-            const { baseResponse, order } = result;
+            const { baseResponse,response } = result;
             if (baseResponse.status == 1) {
                 setLoading(false);
-                const options = {
-                    key: RAZORPAY_KEY_ID,
-                    amount: order.amount,
-                    currency: order.currency,
-                    name: 'Lavya Organic Foods',
-                    description: '',
-                    order_id: order.id,
-                    handler: async function (response) {
-                        try {
-                            let payment = selectedOffer?.value + selectedOffer?.cashback
-                            const data = {
-                                amount: payment
-                            }
-                            dispatch(walletAmountAddition({ user_id, data }));
-                            navigate(`/recharge-success?id=${order.id}`)
-                        } catch (error) {
-                            toast.error("Something went wrong");
-                        }
-                    },
-                    prefill: {
-                        name: user.name,
-                        email: user.email,
-                        contact: user.phone
-                    },
-                    notes: {
-                        address: "Lavya Organic Foods Corporate Office"
-                    },
-                    theme: {
-                        color: "#3399cc"
-                    },
-                    modal: {
-                        ondismiss: async function () {
-                            toast.error("Transaction cancelled")
-                        }
-                    }
-                };
-                console.log(options)
-                const rzp = new window.Razorpay(options);
-                rzp.open();
+                window.location.href = response?.data?.instrumentResponse?.redirectInfo?.url;
             }
         } catch (error) {
             setLoading(false);
