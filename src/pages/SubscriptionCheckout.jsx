@@ -220,7 +220,7 @@ const SubscriptionCheckout = () => {
                     dispatch(walletAmountDeduction({ user_id, data }));
                     dispatch(updateProductStock({ productId: subscription_cart_item.id, qty: subscription_cart_item.selQty }));
                     setTimeout(() => {
-                        navigate(`/order-success?order_no=${response.order_no}`)
+                        navigate(`/order-success?transactionId=${response.order_no}`)
                     }, 1000)
                 } else {
                     setLoading(false);

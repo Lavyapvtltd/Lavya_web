@@ -37,7 +37,7 @@ const Recharge = () => {
                         setLoading(false);
                         toast.success("Order Subscribed Successfully");
                         setTimeout(() => {
-                            navigate(`/order-success?order_no=${response.order_no}`)
+                            navigate(`/order-success?transactionId=${response.order_no}`)
                         }, 1000)
                     } else {
                         setLoading(false);

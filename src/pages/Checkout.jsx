@@ -85,7 +85,7 @@ const Checkout = () => {
                         toast.success("Order Created Successfully");
                         setLoading(false);
                         setTimeout(() => {
-                            navigate(`/order-success?order_no=${savedorder.order_no}`)
+                            navigate(`/order-success?transactionId=${savedorder.order_no}`)
                         }, 1000);
                     } else {
                         setLoading(false);
@@ -135,7 +135,7 @@ const Checkout = () => {
                         toast.success("Order Created Successfully");
                         setLoading(false);
                         setTimeout(() => {
-                            navigate(`/order-success?order_no=${savedorder.order_no}`)
+                            navigate(`/order-success?transactionId=${savedorder.order_no}`)
                         }, 1000)
                     } else {
                         setLoading(false);
@@ -200,7 +200,7 @@ const Checkout = () => {
                 //                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                 //                         })
                 //                         dispatch(fetchCartsAsync(user_id));
-                //                         navigate(`/order-success?order_no=${savedorder.order_no}`);
+                //                         navigate(`/order-success?transactionId=${savedorder.order_no}`);
                 //                     }
                 //                 } catch (error) {
                 //                     toast.error("Something went wrong");
@@ -314,7 +314,7 @@ const Checkout = () => {
                         })
                         setLoading(false);
                         setTimeout(() => {
-                            navigate(`/order-success?order_no=${savedorder.order_no}`)
+                            navigate(`/order-success?transactionId=${savedorder.order_no}`)
                         }, 1000)
                     } else {
                         setLoading(false);
@@ -371,7 +371,7 @@ const Checkout = () => {
                 //                             dispatch(updateProductStock({ productId: item.id, qty: item.selQty }));
                 //                         })
                 //                         dispatch(fetchCartsAsync(user_id));
-                //                         navigate(`/order-success?order_no=${savedorder.order_no}`);
+                //                         navigate(`/order-success?transactionId=${savedorder.order_no}`);
                 //                     }
                 //                 } catch (error) {
                 //                     toast.error("Something went wrong");
