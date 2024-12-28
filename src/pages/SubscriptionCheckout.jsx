@@ -172,7 +172,25 @@ const SubscriptionCheckout = () => {
         if (!address) {
             return toast.error("Please select address");
         }
-        if (user.walletBalance < total) {
+        if(!wallet){
+            if (non_subscription_orders.length === 0 || subscription_orders.length === 0) {
+                setToggleRecharge(true);
+            } else {
+                const data = {
+                    status: "SUBSCRIBED",
+                    orderPlace: "",
+                    product: [subscription_cart_item],
+                    shippingaddress: address,
+                    user: user,
+                    amount: total,
+                    orderId: "",
+                    deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
+                    deliveryType: subscription_cart_item.subscription_type
+                }
+                navigate("/recharge", { state: { data: data } });
+            }
+        }
+        else if (user.walletBalance < total) {
             if (non_subscription_orders.length === 0 || subscription_orders.length === 0) {
                 setToggleRecharge(true);
             } else {

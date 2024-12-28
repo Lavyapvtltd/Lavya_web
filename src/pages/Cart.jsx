@@ -59,22 +59,34 @@ const Cart = () => {
     }
 
     const calculateTotal = () => {
+        // Calculate subtotal
         let tot = 0;
         cart_items.forEach((item) => {
             tot += item.price * item.selQty;
         });
-        setSubTotal(tot);
+    
+        // Calculate delivery charge
+        let deliveryCharge = 0;
         if (tot < freeDeliveryAmount) {
-            setDeliveryCharge(50);
+            cart_items.forEach((item) => {
+                deliveryCharge += 50 * item.selQty;
+            });
         }
+    
+        // Calculate total amount to be paid
         const pay = tot + deliveryCharge + packagingCharge;
+    
+        // Update state
+        setSubTotal(tot);
+        setDeliveryCharge(deliveryCharge);
         setTotal(pay);
     };
-
+    
     useEffect(() => {
         calculateTotal();
-        localStorage.setItem("cart", JSON.stringify(cart_items))
+        localStorage.setItem("cart", JSON.stringify(cart_items));
     }, [cart_items]);
+    
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -101,7 +113,7 @@ const Cart = () => {
                                                         <div className="ps-3 w-100">
                                                             <div className="d-flex justify-content-between w-100">
                                                                 <div>
-                                                                    <h6 className="text_clip_head fw-semibold mb-1">
+                                                                    <h6 className="text_clip_head fw-semibold mb-1" onClick={() => navigate(`/product-list/${item._id}`)}>
                                                                         {item.name}
                                                                     </h6>
                                                                     <p className='text-dark fw-semibold pb-1'>{item.unit_value} {item.unit}</p>
@@ -142,11 +154,6 @@ const Cart = () => {
                                     <div className="col-lg-4 col-12 pt-lg-0 pt-md-5 pt-5">
                                         <div className="cart_totals shadow rounded-1 p-4">
                                             <h4 className="ps-2 fw-semibold">Cart Totals</h4>
-                                            {freeDeliveryAmount > subTotal && (
-                                                <div className="m-2" style={{ color: "#309a20" }}>
-                                                    Add {freeDeliveryAmount - subTotal} For Free Delivery
-                                                </div>
-                                            )}
                                             <table className="table mb-0">
                                                 <tbody>
                                                     <tr>
@@ -170,6 +177,11 @@ const Cart = () => {
                                             <div className="coupon-button text-center" style={{ cursor: "pointer" }} onClick={handleCheckOut}>
                                                 <div className="text-white text-decoration-none fw-bold">Proceed to checkout</div>
                                             </div>
+                                            {freeDeliveryAmount > subTotal && (
+                                                <div className="m-2" style={{ color: "#309a20" }}>
+                                                    Add items worth {freeDeliveryAmount - subTotal} to unlock free delivery
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

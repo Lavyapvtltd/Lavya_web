@@ -1431,6 +1431,9 @@ input[type="range"]:focus {
         font-weight: 500;
         white-space: nowrap;
     }
+    .main_side_screen .side_main_img{
+        height: 100% !important;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
@@ -1440,6 +1443,9 @@ input[type="range"]:focus {
     .header_side_bar .side_list .link_bx {
         height: 40px;
         width: 40px;
+    }
+    .main_side_screen .side_main_img{
+        height: 100% !important;
     }
 }
 

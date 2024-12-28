@@ -94,13 +94,14 @@ const Login = () => {
                           <img src="/images/flag.webp" alt="flag" className="img-fluid" />
                         </div>
                         <input
-                          type="text"
+                          type="tel"
                           name="contact"
                           placeholder="Phone"
                           className="w-100 border-0"
                           value={formik.values.contact}
                           onChange={handleContactChange}
                           onBlur={formik.handleBlur}
+                          pattern="[0-9]*"
                         />
                       </div>
                       {formik.touched.contact && formik.errors.contact ? (

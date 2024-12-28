@@ -30,6 +30,8 @@ import SubscriptionCheckout from './pages/SubscriptionCheckout.jsx';
 import SubscriptionProducts from './pages/SubscriptionProducts.jsx';
 import OrderSuccess from './pages/OrderSuccess.jsx';
 import RechargeSuccess from './pages/RechargeSuccess.jsx';
+import RechargeFailed from './pages/RechargeFailed.jsx';
+import OrderFailed from './pages/OrderFailed.jsx';
 
 const router = createBrowserRouter([
   {
@@ -169,10 +171,26 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: `${ROUTES_CONST.RECHARGE_FAILED}`,
+        element: (
+          <ProtectedRoute>
+            <RechargeFailed />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: `${ROUTES_CONST.ORDER_SUCCESS}`,
         element: (
           <ProtectedRoute>
             <OrderSuccess />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: `${ROUTES_CONST.ORDER_FAILED}`,
+        element: (
+          <ProtectedRoute>
+            <OrderFailed />
           </ProtectedRoute>
         ),
       },

@@ -481,18 +481,29 @@ const Checkout = () => {
         }
     }, [])
     const calculateTotal = () => {
+        // Calculate subtotal
         let tot = 0;
         cart_items.forEach((item) => {
             tot += item.price * item.selQty;
         });
-        setSubTotal(tot);
+    
+        // Calculate delivery charge
+        let deliveryCharge = 0;
         if (tot < freeDeliveryAmount) {
-            setDeliveryCharge(50);
+            cart_items.forEach((item) => {
+                deliveryCharge += 50 * item.selQty;
+            });
         }
+    
+        // Calculate total amount to be paid
         const pay = tot + deliveryCharge + packagingCharge;
+    
+        // Update state
+        setSubTotal(tot);
+        setDeliveryCharge(deliveryCharge);
         setTotal(pay);
     };
-
+    
     useEffect(() => {
         calculateTotal();
     }, [cart_items]);
