@@ -83,6 +83,12 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: `${ROUTES_CONST.TERMS_CONDITIONS}`,
+        element: (
+          <TermsCondition />
+        ),
+      },
+      {
         path: `${ROUTES_CONST.CHECKOUT}`,
         element: (
           <ProtectedRoute>
@@ -119,14 +125,6 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Recharge />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: `${ROUTES_CONST.TERMS_CONDITIONS}`,
-        element: (
-          <ProtectedRoute>
-            <TermsCondition />
           </ProtectedRoute>
         ),
       },

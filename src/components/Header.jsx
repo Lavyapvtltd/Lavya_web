@@ -192,7 +192,8 @@ const Header = () => {
                             </ul>
                           ) : (
                             <ul class="user_list position-absolute bg-white">
-                              <li><NavLink to="/login">Login</NavLink></li>
+                              <li className='acc_brd'><NavLink to="/login">Login</NavLink></li>
+                              <li><NavLink to="/term-conditions?type=2">Terms & conditions</NavLink></li>
                             </ul>
                           )
                         }
