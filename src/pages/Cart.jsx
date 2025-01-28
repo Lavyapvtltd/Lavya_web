@@ -178,10 +178,32 @@ const Cart = () => {
                                                 <div className="text-white text-decoration-none fw-bold">Proceed to checkout</div>
                                             </div>
                                             {freeDeliveryAmount > subTotal && (
-                                                <div className="m-2" style={{ color: "#309a20" }}>
-                                                    Add items worth {freeDeliveryAmount - subTotal} to unlock free delivery
+                                                <div 
+                                                    className="m-2 d-flex align-items-center justify-content-between" 
+                                                    style={{
+                                                    border: "1px solid #309a20",
+                                                    borderRadius: "8px",
+                                                    padding: "12px",
+                                                    backgroundColor: "#e8f5e9",
+                                                    color: "#309a20",
+                                                    fontSize: "14px",
+                                                    fontWeight: "500",
+                                                    }}
+                                                >
+                                                    <div>
+                                                    {/* Add items worth ₹{freeDeliveryAmount - subTotal} more to unlock free delivery! */}
+                                                    
+                                                        Add items worth ₹1100 to enjoy free delivery!
+
+                                                    </div>
+                                                    <img 
+                                                    src="../../public/images/free.png" 
+                                                    alt="Free Delivery" 
+                                                    style={{ height: "24px", width: "24px" }}
+                                                    />
                                                 </div>
                                             )}
+
                                         </div>
                                     </div>
                                 </div>

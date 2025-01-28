@@ -56,7 +56,16 @@ const Home = () => {
       dispatch(fetchCartsAsync(user_id));
       dispatch(fetchSubscriptionCartAsync(user_id))
     }
-  }, [])
+  }, []);
+
+  const images = {
+    "image1": "/images/For all your needs (1).jpg",
+    "image2": "/images/For all your needs (3).jpg",
+    "image3": "/images/For all your needs (4).jpg",
+    "image4": "/images/For all your needs.jpg",
+  };
+
+
   return (
     <>
       <Slider />
@@ -334,6 +343,37 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <div className="container-fluid foot_banner py-md-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12 mb-4">
+              <div className="heading_sec text-center">
+                <h2 className="fw-semibold">Trial Products</h2>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            {
+              Object.values(images).map((image, index) => (
+                <div className="col-lg-3 col-md-6 col-sm-12" key={index} onClick={()=>handleBannerClick()}>
+                  <div className="banner-item mb-4 img_hover rounded-2">
+                    <a href="#">
+                      <img 
+                        src={image} 
+                        style={{ height: '200px', aspectRatio: '1/1', objectFit: 'contain' }} 
+                        className="img-fluid w-100 rounded-2" 
+                        alt={`Banner ${index + 1}`} 
+                      />
+                    </a>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
 
       <div className="container-fluid py-3 testimonial-section">
         <div className="container">
