@@ -32,6 +32,7 @@ import OrderSuccess from './pages/OrderSuccess.jsx';
 import RechargeSuccess from './pages/RechargeSuccess.jsx';
 import RechargeFailed from './pages/RechargeFailed.jsx';
 import OrderFailed from './pages/OrderFailed.jsx';
+import SubcriptionCancelSuccess from './pages/SubscriptionCancelSuccess.jsx';
 
 const router = createBrowserRouter([
   {
@@ -197,6 +198,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <TransactionHistory />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: `${ROUTES_CONST.SUBSCRIPTION_CANCEL_SUCCESS}`,
+        element: (
+          <ProtectedRoute>
+            <SubcriptionCancelSuccess />
           </ProtectedRoute>
         ),
       },

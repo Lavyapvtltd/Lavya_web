@@ -6,9 +6,11 @@ import { API_URL, BASE_URL } from '../constants/contant';
 import { toast } from 'react-toastify';
 import { fetchUserAsync, setUser } from '../features/authSlice';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const AccountDetails = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {user,user_id} = useSelector((state) => state.auth);
     const validationSchema = Yup.object().shape({
@@ -37,12 +39,10 @@ const AccountDetails = () => {
                             <img src="/images/avtar.png" alt="profile" className="img-fluid" />
                         </div>
                         <div className="position-relative">
-                            <a href="#">
-                            <span className="wallet_icon">
+                            <span className="wallet_icon" onClick={()=>{navigate("/recharge")}}>
                             <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="20" height="20" viewBox="0 0 458.5 458.5" fill="currentColor"><path d="M336.7 344c-22 0-39.9-18-39.9-39.9V238c0-22 18-39.8 39.9-39.8h105.7v-65.9c0-17-13.8-30.7-30.7-30.7h-381c-17 0-30.7 13.7-30.7 30.7v277.6c0 17 13.8 30.8 30.7 30.8h381c17 0 30.7-13.8 30.7-30.8V344H336.7z"></path><path d="M440.5 220H336.7c-10 0-18 8-18 18V304c0 10 8 18 18 18h103.8c10 0 18-8 18-18V238c0-10-8-18-18-18zm-68 77a26 26 0 1 1 0-52 26 26 0 0 1 0 52zM358.2 45.2A39.7 39.7 0 0 0 308 20L152 71.6h214.9l-8.7-26.4z"></path></svg>
                             </span>
                             <div className="score_rupee position-relative"><span className="pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span>{user.walletBalance}</div>
-                            </a>
                         </div>
                     </div>
                 </div>

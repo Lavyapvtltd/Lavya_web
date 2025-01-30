@@ -36,6 +36,8 @@ const Orders = () => {
                 setSelectedOrder(null);
                 setReason("");
                 dispatch(fetchOrdersAsync(user_id));
+                document.body.style.overflow = "auto";
+                document.body.style.paddingRight = "0px"; 
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -62,11 +64,11 @@ const Orders = () => {
                                         <Spinner />
                                     ) : (
                                         orders?.length > 0 ? (
-                                            orders?.map((order) => (
-                                                <div>
+                                            orders?.map((order,index) => (
+                                                <div key={index}>
                                                     {
-                                                        order?.product?.map((product) => (
-                                                            <div className="col-lg-12 col-md-12 col-12">
+                                                        order?.product?.map((product,productIndex) => (
+                                                            <div className="col-lg-12 col-md-12 col-12" key={productIndex}>
                                                                 <div className="d-flex align-items-center border rounded-1 p-3">
                                                                     <div className="rounded-1 p-1 overflow-hidden position-relative">
                                                                         <img

@@ -172,14 +172,13 @@ const Header = () => {
                   <div className="header_side_bar">
                     <ul className="side_list d-flex align-items-center justify-content-end p-0 m-0">
                       <li className="position-relative me-3">
-                        <div className="nav_list_link acnt_name d-flex align-items-center">
-                          <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                          <span className='ms-1'>{user?.name}</span>
-                          <span className='ms-1'><i class="fa-solid fa-chevron-down"></i></span>
-                        </div>
+                          <button class="nav_list_link acnt_name d-flex align-items-center bg-transparent p-0 border-0 shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                             <span className='ms-1'>{user?.name}</span>
+                             <span className='ms-1'><i class="fa-solid fa-chevron-down"></i></span>
+                          </button>
                         {
                           isLoggedIn ? (
-                            <ul class="user_list position-absolute bg-white">
+                            <ul class="user_list dropdown-menu position-absolute bg-white">
                               <li className='acc_brd'><NavLink to="/profile">Account Details</NavLink></li>
                               <li className='acc_brd'><NavLink to="/recharge">Recharge</NavLink></li>
                               <li className='acc_brd'><NavLink to="/vacation">Vacation</NavLink></li>
@@ -191,7 +190,7 @@ const Header = () => {
                               <li><a href="" onClick={handleLogout}>Logout</a></li>
                             </ul>
                           ) : (
-                            <ul class="user_list position-absolute bg-white">
+                            <ul class="user_list dropdown-menu position-absolute bg-white">
                               <li className='acc_brd'><NavLink to="/login">Login</NavLink></li>
                               <li><NavLink to="/term-conditions?type=2">Terms & conditions</NavLink></li>
                             </ul>

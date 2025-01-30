@@ -29,6 +29,7 @@ export const ROUTES_CONST = {
     TRANSACTION_HISTORY: "/transaction-history",
     PRODUCT_LIST: '/product-list',
     PRODUCT_DETAIL: "/product-list/:id",
+    SUBSCRIPTION_CANCEL_SUCCESS: "/subscription-cancel-success",
     PAGE_NOT_FOUND: '*',
 }
 

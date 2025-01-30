@@ -11,7 +11,7 @@ const TransactionDetail = ({transaction}) => {
                         <p className='text-secondary'>{new Date(transaction.createdAt).toLocaleString()}</p>
                     </div>
                     <div className="history_amount">
-                        <p class="text-danger d-flex align-items-center fs-6 fw-semibold"><span class="currency-symbol text-danger pe-1"><i class="fa fa-inr" aria-hidden="true"></i></span> <span class="currency-value text-danger">{transaction.amount}</span></p>
+                        <p class={`${transaction.transaction_type=="Dr"?"text-danger":"text-success"} d-flex align-items-center fs-6 fw-semibold`}><span class={`${transaction.transaction_type=="Dr"?"text-danger":"text-success"} currency-symbol pe-1`}><i class="fa fa-inr" aria-hidden="true"></i></span> <span class={`${transaction.transaction_type=="Dr"?"text-danger":"text-success"} currency-value`}>{transaction.amount}</span></p>
                         <div className='mt-2'>
                             <button type='button' className={`${transaction.transaction_type=="Dr"?"bg-danger":"bg-success"} rounded-5 text-white px-4 py-1 border-0`}>{transaction.transaction_type=="Dr"?"Debit":"Credit"}</button>
                         </div>

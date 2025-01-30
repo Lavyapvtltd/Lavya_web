@@ -349,7 +349,7 @@ const Home = () => {
           <div className="row">
             <div className="col-12 mb-4">
               <div className="heading_sec text-center">
-                <h2 className="fw-semibold">Trial Products</h2>
+                <h2 className="fw-semibold">Milk Trial Pack</h2>
               </div>
             </div>
           </div>

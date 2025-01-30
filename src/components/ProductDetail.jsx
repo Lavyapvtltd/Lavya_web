@@ -11,7 +11,7 @@ import { addToCart } from '../features/cartSlice';
 import { addToSubscriptionCart } from '../features/subscriptionCartSlice';
 import Loading from './Loading';
 import { fetchSubsciptionOrdersAsync } from '../features/orderSlice';
-import { API_URL, BASE_URL } from '../constants/contant';
+import { API_URL, BASE_URL,ROUTES_CONST } from '../constants/contant';
 import axios from "axios";
 import RatingReview from './RatingReview';
 
@@ -56,6 +56,9 @@ const ProductDetail = () => {
                 toast.success("Subscription Cancel Successfully");
                 setReason("");
                 dispatch(fetchSubsciptionOrdersAsync(user_id));
+                setTimeout(() => {
+                    navigate(`${ROUTES_CONST.SUBSCRIPTION_CANCEL_SUCCESS}`)    
+                },500)
             }
         } catch (error) {
             toast.error("Something went wrong");
