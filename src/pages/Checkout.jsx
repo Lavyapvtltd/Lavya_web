@@ -14,6 +14,7 @@ const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const freeDeliveryAmount = 1199;
+    const [nextDay, setNextDay] = useState('');
     const { user, user_id, isLoggedIn } = useSelector((state) => state.auth);
     const cart_items = useSelector((state) => state.cart.cart);
     const [subTotal, setSubTotal] = useState(0);
@@ -35,7 +36,7 @@ const Checkout = () => {
             unitValue: cart_item.unit_value,
             unit: cart_item.unit,
             subscription_type: cart_item.subscribed_type,
-            start_date: cart_item.start_date,
+            start_date: nextDay,
             selQty: cart_item.selQty,
             regularPrice: cart_item.regularPrice,
             subscription_active: cart_item.subscription_active,
@@ -68,7 +69,7 @@ const Checkout = () => {
                     }
                     setLoading(true);
                     const res = await axios.post(
-                        `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
+                        `${BASE_URL}${API_URL.CREATE_NEW_ORDER_BY_WALLET_AND_COD}`,
                         data
                     );
                     const result = res.data;
@@ -118,7 +119,7 @@ const Checkout = () => {
                         type: "web"
                     }
                     const res = await axios.post(
-                        `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
+                        `${BASE_URL}${API_URL.CREATE_NEW_ORDER_BY_WALLET_AND_COD}`,
                         data
                     );
                     const result = res.data;
@@ -301,7 +302,7 @@ const Checkout = () => {
                     }
                     setLoading(true);
                     const res = await axios.post(
-                        `${BASE_URL}${API_URL.CREATE_NEW_ORDER}`,
+                        `${BASE_URL}${API_URL.CREATE_NEW_ORDER_BY_WALLET_AND_COD}`,
                         data
                     );
                     const result = res.data;
@@ -506,9 +507,14 @@ const Checkout = () => {
     
     useEffect(() => {
         calculateTotal();
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const formattedDate = `${day}-${month}-${year}`;
+        setNextDay(formattedDate);
     }, [cart_items]);
-
-
     return (
         <>
             <div className="container-fluid checkout-section py-5">

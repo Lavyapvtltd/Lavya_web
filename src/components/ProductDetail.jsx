@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductDetailAsync } from '../features/productDetailSlice';
-import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ProductImages from './ProductImages';
 import Spinner from './Spinner';
 import { AddProduct, IncProduct, DecProduct } from '../features/cartSlice';
@@ -16,6 +16,8 @@ import axios from "axios";
 import RatingReview from './RatingReview';
 
 const ProductDetail = () => {
+    const location = useLocation();
+    const { trial } = location.state || {};
     const [searchParams, setSearchParams] = useSearchParams();
     const order_id = searchParams.get('order_id');
     const navigate = useNavigate();
@@ -56,6 +58,8 @@ const ProductDetail = () => {
                 toast.success("Subscription Cancel Successfully");
                 setReason("");
                 dispatch(fetchSubsciptionOrdersAsync(user_id));
+                document.body.style.overflow = "auto";
+                document.body.style.paddingRight = "0px"; 
                 setTimeout(() => {
                     navigate(`${ROUTES_CONST.SUBSCRIPTION_CANCEL_SUCCESS}`)    
                 },500)
@@ -192,6 +196,10 @@ const ProductDetail = () => {
     }
     const handleIncrement = async (product) => {
         if (product.subscription_active) {
+            if( qty == 1 && Object?.keys(trial || {})?.length > 0){
+                toast.error("You can't add more than one trial product");
+                return;
+            }
             if (isLoggedIn) {
                 try {
                     const producttosubscriptioncart = {
@@ -568,7 +576,7 @@ const ProductDetail = () => {
                                                 </>
                                             ) : (
                                                 productdetail.subscription_active && toggle && (
-                                                    <button className="ms-2 prim_color_bg text-white btn-effect-1" onClick={() => { navigate(`/subscription-checkout/${productdetail._id}`) }}>Confirm Subscription</button>
+                                                    <button className="ms-2 prim_color_bg text-white btn-effect-1" onClick={() => { navigate(`/subscription-checkout/${productdetail._id}`, { state: { date : convertDateFormat(nextDay),trial:trial } } ) }}>Confirm Subscription</button>
                                                 )
                                             )
                                         }

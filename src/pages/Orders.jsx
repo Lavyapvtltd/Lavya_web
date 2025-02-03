@@ -80,7 +80,7 @@ const Orders = () => {
                                                                     </div>
                                                                     <div className="ps-3 w-100">
                                                                         <div className='w-100 d-flex align-items-center justify-content-between'>
-                                                                            <h6 className="text_clip_head fw-semibold mb-1">{product.name}</h6>
+                                                                            <h6 className="text_clip_head fw-semibold mb-1" onClick={() => navigate(`/product-list/${product.id}`)}>{product.name}</h6>
                                                                             <div className=' ms-2'>
                                                                                 <p>{moment(order.createdAt).format("DD MMM YY")}</p>
                                                                                 <p className='fw-semibold prim_color'>{order.order_no}</p>

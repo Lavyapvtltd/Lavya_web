@@ -1,22 +1,24 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom"
-import { fetchProductsAsync } from '../features/productSlice';
-import { fetchCategoriesAsync } from '../features/categorySlice';
-import { fetchTestimonialsAsync } from '../features/testimonialSlice';
-import { fetchCartsAsync } from '../features/cartSlice';
-import { fetchSubscriptionCartAsync } from '../features/subscriptionCartSlice';
-import Product from '../components/Product';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchProductsAsync } from "../features/productSlice";
+import { fetchCategoriesAsync } from "../features/categorySlice";
+import { fetchTestimonialsAsync } from "../features/testimonialSlice";
+import { fetchCartsAsync } from "../features/cartSlice";
+import { fetchSubscriptionCartAsync } from "../features/subscriptionCartSlice";
+import Product from "../components/Product";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
-import Category from '../components/Category';
-import Spinner from '../components/Spinner';
-import Slider from '../components/Slider';
-import Testimonial from '../components/Testimonial';
-import { fetchBannersAsync } from '../features/bannerSlice';
-import { IMAGE_BASE_URL } from '../constants/contant';
+import Category from "../components/Category";
+import Spinner from "../components/Spinner";
+import Slider from "../components/Slider";
+import Testimonial from "../components/Testimonial";
+import { fetchBannersAsync } from "../features/bannerSlice";
+import { IMAGE_BASE_URL } from "../constants/contant";
+import { fetchTrialsAsync } from "../features/trialSlice";
+import { use } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -36,35 +38,29 @@ const Home = () => {
   const testimonials = useSelector((state) => state.testimonials.testimonials);
   const testimonial_status = useSelector((state) => state.testimonials.status);
   const banners = useSelector((state) => state.banners.banners);
+  const trials = useSelector((state) => state.trials.trials);
   const topBanners = banners.slice(0, 4);
   const remainingBanners = banners.slice(4);
   const handleProductClick = (productId) => {
     navigate(`/product-list/${productId}`);
   };
   const handleCategoryClick = (categoryId) => {
-    navigate('/product-list', { state: { categoryId: categoryId } });
+    navigate("/product-list", { state: { categoryId: categoryId } });
   };
   const handleBannerClick = () => {
-    navigate("/product-list")
-  }
+    navigate("/product-list");
+  };
   useEffect(() => {
     dispatch(fetchProductsAsync());
     dispatch(fetchCategoriesAsync());
     dispatch(fetchTestimonialsAsync());
     dispatch(fetchBannersAsync());
+    dispatch(fetchTrialsAsync());
     if (isLoggedIn) {
       dispatch(fetchCartsAsync(user_id));
-      dispatch(fetchSubscriptionCartAsync(user_id))
+      dispatch(fetchSubscriptionCartAsync(user_id));
     }
   }, []);
-
-  const images = {
-    "image1": "/images/For all your needs (1).jpg",
-    "image2": "/images/For all your needs (3).jpg",
-    "image3": "/images/For all your needs (4).jpg",
-    "image4": "/images/For all your needs.jpg",
-  };
-
 
   return (
     <>
@@ -114,13 +110,14 @@ const Home = () => {
                       },
                     }}
                   >
-                    {
-                      categories?.map((category, index) => (
-                        <SwiperSlide key={index} onClick={() => handleCategoryClick(category._id)}>
-                          <Category category={category} />
-                        </SwiperSlide>
-                      ))
-                    }
+                    {categories?.map((category, index) => (
+                      <SwiperSlide
+                        key={index}
+                        onClick={() => handleCategoryClick(category._id)}
+                      >
+                        <Category category={category} />
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 ) : (
                   <h4 className="text-center">Categories not found</h4>
@@ -129,7 +126,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-
       </div>
 
       <div className="container-fluid banner_sec py-5">
@@ -137,15 +133,26 @@ const Home = () => {
           <div className="row">
             <div className="col-12">
               <div className="row">
-                {
-                  topBanners?.map((item, index) => (
-                    <div className="col-lg-6 col-md-6 col-6" key={index} onClick={handleBannerClick}>
-                      <div className="banner-item mb-4 img_hover rounded-2">
-                        <img src={`${IMAGE_BASE_URL}${item.image}`} style={{ height: '300px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                      </div>
+                {topBanners?.map((item, index) => (
+                  <div
+                    className="col-lg-6 col-md-6 col-6"
+                    key={index}
+                    onClick={handleBannerClick}
+                  >
+                    <div className="banner-item mb-4 img_hover rounded-2">
+                      <img
+                        src={`${IMAGE_BASE_URL}${item.image}`}
+                        style={{
+                          height: "300px",
+                          aspectRatio: "1/1",
+                          objectFit: "cover",
+                        }}
+                        className="img-fluid w-100 rounded-2"
+                        alt="Banner Image"
+                      />
                     </div>
-                  ))
-                }
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -196,13 +203,14 @@ const Home = () => {
                   },
                 }}
               >
-                {
-                  products?.map((product, index) => (
-                    <SwiperSlide key={index} onClick={() => handleProductClick(product._id)}>
-                      <Product product={product} />
-                    </SwiperSlide>
-                  ))
-                }
+                {products?.map((product, index) => (
+                  <SwiperSlide
+                    key={index}
+                    onClick={() => handleProductClick(product._id)}
+                  >
+                    <Product product={product} />
+                  </SwiperSlide>
+                ))}
               </Swiper>
             ) : (
               <h4 className="text-center">Products not found</h4>
@@ -254,13 +262,14 @@ const Home = () => {
                   },
                 }}
               >
-                {
-                  feature_products?.map((product, index) => (
-                    <SwiperSlide key={index} onClick={() => handleProductClick(product._id)}>
-                      <Product product={product} />
-                    </SwiperSlide>
-                  ))
-                }
+                {feature_products?.map((product, index) => (
+                  <SwiperSlide
+                    key={index}
+                    onClick={() => handleProductClick(product._id)}
+                  >
+                    <Product product={product} />
+                  </SwiperSlide>
+                ))}
               </Swiper>
             ) : (
               <h4 className="text-center">Feature products not found</h4>
@@ -269,21 +278,27 @@ const Home = () => {
         </div>
       </div>
 
-
       <div className="container-fluid foot_banner py-md-5">
         <div className="container">
           <div className="row">
-            {
-              remainingBanners.map((item, index) => (
-                <div className="col-lg-4" key={index} onClick={handleBannerClick}>
-                  <div className="banner-item mb-4 img_hover rounded-2">
-                    <a href="">
-                      <img src={`${IMAGE_BASE_URL}${item.image}`}style={{ height: '200px', aspectRatio: '1/1', objectFit: 'cover' }} className="img-fluid w-100 rounded-2" alt="Banner Image" />
-                    </a>
-                  </div>
+            {remainingBanners.map((item, index) => (
+              <div className="col-lg-4" key={index} onClick={handleBannerClick}>
+                <div className="banner-item mb-4 img_hover rounded-2">
+                  <a href="">
+                    <img
+                      src={`${IMAGE_BASE_URL}${item.image}`}
+                      style={{
+                        height: "200px",
+                        aspectRatio: "1/1",
+                        objectFit: "cover",
+                      }}
+                      className="img-fluid w-100 rounded-2"
+                      alt="Banner Image"
+                    />
+                  </a>
                 </div>
-              ))
-            }
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -332,7 +347,10 @@ const Home = () => {
                 }}
               >
                 {subscription_products.map((product, index) => (
-                  <SwiperSlide key={index} onClick={() => handleProductClick(product._id)}>
+                  <SwiperSlide
+                    key={index}
+                    onClick={() => handleProductClick(product._id)}
+                  >
                     <Product product={product} />
                   </SwiperSlide>
                 ))}
@@ -353,27 +371,36 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="row">
-            {
-              Object.values(images).map((image, index) => (
-                <div className="col-lg-3 col-md-6 col-sm-12" key={index} onClick={()=>handleBannerClick()}>
-                  <div className="banner-item mb-4 img_hover rounded-2">
-                    <a href="#">
-                      <img 
-                        src={image} 
-                        style={{ height: '200px', aspectRatio: '1/1', objectFit: 'contain' }} 
-                        className="img-fluid w-100 rounded-2" 
-                        alt={`Banner ${index + 1}`} 
-                      />
-                    </a>
+          <div className="container-fluid foot_banner py-md-5">
+            <div className="container">
+              <div className="row">
+                {trials.map((trial, index) => (
+                  <div
+                    className="col-lg-4"
+                    key={index}
+                    onClick={()=>{navigate(`/product-list/${trial?.product_id}`, { state: { trial: trial } })}}
+                  >
+                    <div className="banner-item mb-4 img_hover rounded-2">
+                      <a href="">
+                        <img
+                          src={`${IMAGE_BASE_URL}${trial.image}`}
+                          style={{
+                            height: "200px",
+                            aspectRatio: "1/1",
+                            objectFit: "cover",
+                          }}
+                          className="img-fluid w-100 rounded-2"
+                          alt="Banner Image"
+                        />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              ))
-            }
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
 
       <div className="container-fluid py-3 testimonial-section">
         <div className="container">
@@ -391,7 +418,7 @@ const Home = () => {
               <Swiper
                 className="testimonial"
                 pagination={{
-                  el: '.bannerPagination',
+                  el: ".bannerPagination",
                   clickable: true,
                 }}
                 modules={[Pagination, Autoplay]}
@@ -551,7 +578,6 @@ const Home = () => {
         </div>
       </div> */}
     </>
-
   );
 };
 

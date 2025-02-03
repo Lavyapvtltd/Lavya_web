@@ -31,7 +31,7 @@ const Slider = () => {
                 {sliders?.map((banner, index) => (
                     <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
                         <img src={`${IMAGE_BASE_URL}${banner.image}`} className="d-block w-100" alt={`Slide ${index + 1}`} />
-                        <div className="carousel-caption d-none d-md-block">
+                        {/* <div className="carousel-caption d-none d-md-block">
                             <h6>100% genuine Products</h6>
                             <h1>
                                 Tasty & Healthy <br /> Organic Food
@@ -40,7 +40,7 @@ const Slider = () => {
                             <div className="btn_wrapper mt-2">
                                 <button className="prim_color_bg text-white btn-effect-1" onClick={()=>{navigate("/product-list")}}>Explore Products</button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 ))}
             </div>

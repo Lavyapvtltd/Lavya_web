@@ -1,4 +1,4 @@
-// LIVE;
+// // LIVE;
 export const BASE_URL = "https://api.lavyacompany.com/api/v1";
 export const IMAGE_BASE_URL = "https://api.lavyacompany.com/resources/";
 
@@ -57,6 +57,7 @@ export const API_URL = {
     GET_ALL_RECHARGES: '/recharge/get-all-offer',
     WALLET_RECHARGE:'/login/recharge-wallet/',
     CREATE_NEW_ORDER: '/order/create-new-order',
+    CREATE_NEW_ORDER_BY_WALLET_AND_COD:'/order/create-order-by-wallet-and-cod',
     GET_ORDER_BY_ID:'/order/get-order-by-id/',
     GET_PAYMENT_ID_BY_ORDER_ID:'/login/payment-id-by-order/',
     UPDATE_ORDER_AND_PAYMENT_STATUS_BY_ORDER_ID:'/order/update-order-and-payment-status/',
@@ -78,6 +79,7 @@ export const API_URL = {
     GET_ALL_RATING:'/rating/get-all-rating/',
     GET_ALL_FIRST_TIME_RECHARGE:'/first-time-recharge/get-all-first-time-offer',
     GET_ALL_OFFER_HEADINGS:'/offer-heading/get-all-offer-heading',
+    GET_ALL_TRIALS:'/trial/get-all-trials'
 }
 
 export const GOOGLE_MAP_API_KEY = "AIzaSyA76OKDCbizM99zuhLvExdBx666iLNEAm0";

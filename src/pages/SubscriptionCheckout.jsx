@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IMAGE_BASE_URL, BASE_URL, API_URL, RAZORPAY_KEY_ID } from "../constants/contant";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment/moment";
 import { fetchSubscriptionCartAsync } from "../features/subscriptionCartSlice";
 import { updateProductStock } from "../features/productSlice";
@@ -14,6 +14,9 @@ import Swal from "sweetalert2";
 import { fetchOrdersAsync, fetchSubsciptionOrdersAsync } from "../features/orderSlice";
 
 const SubscriptionCheckout = () => {
+    const location = useLocation();
+    const { date,trial } = location.state || {};
+    console.log({trial})
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -39,7 +42,7 @@ const SubscriptionCheckout = () => {
             unitValue: cart_item.unit_value,
             unit: cart_item.unit,
             subscription_type: cart_item.subscribed_type,
-            start_date: cart_item.start_date,
+            start_date: date,
             subscription_dates: [],
             selQty: cart_item.selQty,
             regularPrice: cart_item.regularPrice,
@@ -75,7 +78,8 @@ const SubscriptionCheckout = () => {
             amount: total,
             orderId: "",
             deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
-            deliveryType: subscription_cart_item.subscription_type
+            deliveryType: subscription_cart_item.subscription_type,
+            trial_product_detail: trial || {}
         }
         navigate("/recharge", { state: { data: data } });
     }
@@ -185,7 +189,8 @@ const SubscriptionCheckout = () => {
                     amount: total,
                     orderId: "",
                     deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
-                    deliveryType: subscription_cart_item.subscription_type
+                    deliveryType: subscription_cart_item.subscription_type,
+                    trial_product_detail: trial || {}
                 }
                 navigate("/recharge", { state: { data: data } });
             }
@@ -203,7 +208,8 @@ const SubscriptionCheckout = () => {
                     amount: total,
                     orderId: "",
                     deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
-                    deliveryType: subscription_cart_item.subscription_type
+                    deliveryType: subscription_cart_item.subscription_type,
+                    trial_product_detail: trial || {}
                 }
                 navigate("/recharge", { state: { data: data } });
             }
@@ -222,6 +228,7 @@ const SubscriptionCheckout = () => {
                     deliveryDate: moment(subscription_cart_item.start_date, 'DD-MM-YYYY').format("Do MMM YY"),
                     deliveryType: subscription_cart_item.subscription_type,
                     paymentOption: "Wallet",
+                    trial_product_detail: trial || {}
                 }
                 const res = await axios.post(
                     `${BASE_URL}${API_URL.CREATE_SUBSCRIPTION_ORDER}`,
@@ -267,7 +274,12 @@ const SubscriptionCheckout = () => {
     };
 
     useEffect(() => {
-        calculateTotal();
+        if(Object.keys(trial || {}).length > 0){
+            setSubTotal(trial?.price);
+            setTotal(trial?.price);
+        }else{
+            calculateTotal();
+        }
     }, [subscription_cart_item]);
     useEffect(() => {
         dispatch(fetchFirstTimeRechargeAsync());

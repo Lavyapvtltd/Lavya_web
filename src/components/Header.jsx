@@ -173,6 +173,7 @@ const Header = () => {
                     <ul className="side_list d-flex align-items-center justify-content-end p-0 m-0">
                       <li className="position-relative me-3">
                           <button class="nav_list_link acnt_name d-flex align-items-center bg-transparent p-0 border-0 shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                             <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                              <span className='ms-1'>{user?.name}</span>
                              <span className='ms-1'><i class="fa-solid fa-chevron-down"></i></span>
                           </button>
