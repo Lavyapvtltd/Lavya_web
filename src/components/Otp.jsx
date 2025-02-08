@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUserId, setUser } from '../features/authSlice';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { ROUTES_CONST } from '../constants/contant';
 
 const OtpPage = ({ numDigits, mobile, user, status }) => {
   const [otp, setOtp] = useState(new Array(numDigits).fill(''));
@@ -75,14 +76,14 @@ const OtpPage = ({ numDigits, mobile, user, status }) => {
           const objectModify = { ...user, verfiyStatus:true };
           dispatch(setUser(objectModify));
           setTimeout(() => {
-            navigate("/");
+            navigate(-1);
           }, 500)
         } else {
           dispatch(setUserId(user._id));
           const objectModify = { ...user, verfiyStatus:false };
           dispatch(setUser(objectModify));
           setTimeout(() => {
-            navigate("/user-detail");
+            navigate(`${ROUTES_CONST.USER_DETAIL}`);
           }, 500)
         }
       } else {
@@ -90,7 +91,7 @@ const OtpPage = ({ numDigits, mobile, user, status }) => {
         const objectModify = { ...user, verfiyStatus:false };
         dispatch(setUser(objectModify));
         setTimeout(() => {
-          navigate("/user-detail");
+          navigate(`${ROUTES_CONST.USER_DETAIL}`);
         }, 500)
       }
     }

@@ -19,6 +19,7 @@ import { fetchBannersAsync } from "../features/bannerSlice";
 import { IMAGE_BASE_URL } from "../constants/contant";
 import { fetchTrialsAsync } from "../features/trialSlice";
 import { use } from "react";
+import ScrollToTrialPack from "../components/ScrollToTrialPack";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ const Home = () => {
 
   return (
     <>
+      <ScrollToTrialPack/>
       <Slider />
       <div className="container-fluid product_sliders categories_box py-5">
         <div className="container">
@@ -362,7 +364,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="container-fluid foot_banner py-md-5">
+      <div className="container-fluid foot_banner py-md-5" id="milk-trial-pack">
         <div className="container">
           <div className="row">
             <div className="col-12 mb-4">

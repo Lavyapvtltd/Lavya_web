@@ -38,6 +38,7 @@ const ProductDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [reason, setReason] = useState("");
+    const [trialCliamed,setTrialClaimed] = useState(false);
 
     const handleCancelSubscription = async () => {
         if (!reason) {
@@ -196,7 +197,7 @@ const ProductDetail = () => {
     }
     const handleIncrement = async (product) => {
         if (product.subscription_active) {
-            if( qty == 1 && Object?.keys(trial || {})?.length > 0){
+            if( qty == 1 && Object?.keys(trial || {})?.length > 0 && !trialCliamed){
                 toast.error("You can't add more than one trial product");
                 return;
             }
@@ -301,10 +302,16 @@ const ProductDetail = () => {
 
     useEffect(() => {
         if (productdetail.subscription_active) {
-            const isExists = subscription_orders.find((item) => item?.product[0]?.id === productdetail._id);
+            const isExists = subscription_orders.find((item) => item?.product[0]?.id === productdetail._id && item?.status == "SUBSCRIBED");
             if (isExists) {
                 setExistsSubscriptionProduct(isExists);
                 setSelectedSubscription(isExists.deliveryType);
+            }
+            const isTrialClaim = subscription_orders.some((item) => 
+                item?.product[0]?.id === productdetail._id && item?.trial_product_detail
+            );   
+            if (isTrialClaim) {
+                setTrialClaimed(true);
             }
         }
     }, [subscription_orders])
@@ -576,7 +583,7 @@ const ProductDetail = () => {
                                                 </>
                                             ) : (
                                                 productdetail.subscription_active && toggle && (
-                                                    <button className="ms-2 prim_color_bg text-white btn-effect-1" onClick={() => { navigate(`/subscription-checkout/${productdetail._id}`, { state: { date : convertDateFormat(nextDay),trial:trial } } ) }}>Confirm Subscription</button>
+                                                    <button className="ms-2 prim_color_bg text-white btn-effect-1" onClick={() => { navigate(`/subscription-checkout/${productdetail._id}`, { state: { date : convertDateFormat(nextDay),trial:trialCliamed ? {} : trial } } ) }}>Confirm Subscription</button>
                                                 )
                                             )
                                         }

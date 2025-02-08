@@ -13,6 +13,7 @@ const DeliveryAddress = ({ setAddress }) => {
     const dispatch = useDispatch();
     const { user, user_id } = useSelector((state) => state.auth);
     const addresses = useSelector(state => state.addresses.addresses);
+    console.log({addresses})
     const locations = useSelector(state => state.locations.locations);
     const [placeSelected, setPlaceSelected] = useState(false);
     const loc = locations.map((item) => {
@@ -141,7 +142,7 @@ const DeliveryAddress = ({ setAddress }) => {
                                             <div>
                                                 <h6 className="mb-1 fw-semibold">{user?.name}</h6>
                                                 <p>
-                                                    {item?.location}
+                                                    {`${item?.street},${item?.address},${item?.landmark},${item?.location}`}
                                                     <button className="ps-1 border-0" style={{background:'none'}} onClick={() => handleEditAddress(item)}><i className="fa-regular fa-pen-to-square text-danger"></i></button>
                                                 </p>
                                                 <p className="">Mobile: {item?.alternatephone}</p>

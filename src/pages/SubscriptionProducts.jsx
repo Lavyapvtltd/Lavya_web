@@ -48,7 +48,7 @@ const SubscriptionProducts = () => {
                                                         </div>
                                                         <div className="ps-3 w-100">
                                                             <div className='w-100 d-flex align-items-center justify-content-between'>
-                                                                <h6 className="text_clip_head fw-semibold mb-1">{order?.product[0]?.name}</h6>
+                                                                <h6 className="text_clip_head fw-semibold mb-1" onClick={() => navigate(`/product-list/${order?.product[0]?.id}`)}>{order?.product[0]?.name}</h6>
                                                                 <div className='ms-2'>
                                                                     <p>{order.deliveryDate}</p>
                                                                     <p className='fw-semibold prim_color'>{order.order_no}</p>

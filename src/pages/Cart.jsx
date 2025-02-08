@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { addToCart, deleteToCart } from '../features/cartSlice';
 import Checkout from './Checkout';
 import Loading from '../components/Loading';
+import FreeDeliveryProgress from '../components/FreeDeliveryProgress';
 const Cart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -177,33 +178,7 @@ const Cart = () => {
                                             <div className="coupon-button text-center" style={{ cursor: "pointer" }} onClick={handleCheckOut}>
                                                 <div className="text-white text-decoration-none fw-bold">Proceed to checkout</div>
                                             </div>
-                                            {freeDeliveryAmount > subTotal && (
-                                                <div 
-                                                    className="m-2 d-flex align-items-center justify-content-between" 
-                                                    style={{
-                                                    border: "1px solid #309a20",
-                                                    borderRadius: "8px",
-                                                    padding: "12px",
-                                                    backgroundColor: "#e8f5e9",
-                                                    color: "#309a20",
-                                                    fontSize: "14px",
-                                                    fontWeight: "500",
-                                                    }}
-                                                >
-                                                    <div>
-                                                    {/* Add items worth ₹{freeDeliveryAmount - subTotal} more to unlock free delivery! */}
-                                                    
-                                                        Add items worth ₹1100 to enjoy free delivery!
-
-                                                    </div>
-                                                    <img 
-                                                    src="../../public/images/free.png" 
-                                                    alt="Free Delivery" 
-                                                    style={{ height: "24px", width: "24px" }}
-                                                    />
-                                                </div>
-                                            )}
-
+                                            <FreeDeliveryProgress  subTotal={subTotal} freeDeliveryAmount={freeDeliveryAmount} />
                                         </div>
                                     </div>
                                 </div>

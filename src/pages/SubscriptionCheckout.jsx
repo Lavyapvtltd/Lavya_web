@@ -16,7 +16,6 @@ import { fetchOrdersAsync, fetchSubsciptionOrdersAsync } from "../features/order
 const SubscriptionCheckout = () => {
     const location = useLocation();
     const { date,trial } = location.state || {};
-    console.log({trial})
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -177,7 +176,7 @@ const SubscriptionCheckout = () => {
             return toast.error("Please select address");
         }
         if(!wallet){
-            if (non_subscription_orders.length === 0 || subscription_orders.length === 0) {
+            if ((non_subscription_orders.length === 0 || subscription_orders.length === 0) && Object.keys(trial || {}).length == 0) {
                 setToggleRecharge(true);
             } else {
                 const data = {
@@ -196,7 +195,7 @@ const SubscriptionCheckout = () => {
             }
         }
         else if (user.walletBalance < total) {
-            if (non_subscription_orders.length === 0 || subscription_orders.length === 0) {
+            if ((non_subscription_orders.length === 0 || subscription_orders.length === 0) && Object.keys(trial || {}).length == 0) {
                 setToggleRecharge(true);
             } else {
                 const data = {
