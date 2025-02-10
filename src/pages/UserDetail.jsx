@@ -89,7 +89,7 @@ const UserDetail = () => {
                                             <Field
                                                 type="date"
                                                 name="dob"
-                                                className="w-100 custom-date-input text-secondary"
+                                                className="w-100 custom-date-input text-secondary date-input"
                                             />
                                             <ErrorMessage name="dob" component="div" className="text-danger" />
                                         </div>

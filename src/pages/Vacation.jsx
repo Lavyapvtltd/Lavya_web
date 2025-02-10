@@ -82,11 +82,11 @@ const Vacation = () => {
                                         <Form>
                                             <div className="row">
                                                 <div className="col-lg-12 col-md-12 col-12 mb-4">
-                                                    <Field type="date" name="start_date" className="p-3 w-100 position-relative" style={{ width: "100% !important", minWidth: "100% !important" }} min={new Date(Date.now()).toISOString().split('T')[0]} />
+                                                    <Field type="date" name="start_date" className="p-3 w-100 position-relative date-input" style={{ width: "100% !important", minWidth: "100% !important" }} min={new Date(Date.now()).toISOString().split('T')[0]} />
                                                     <ErrorMessage name="start_date" component="div" className="text-danger" />
                                                 </div>
                                                 <div className="col-lg-12 col-md-12 col-12 mb-4">
-                                                    <Field type="date" name="end_date" className="p-3 w-100 position-relative" style={{ width: "100% !important", minWidth: "100% !important" }} min={new Date(Date.now()).toISOString().split('T')[0]} />
+                                                    <Field type="date" name="end_date" className="p-3 w-100 position-relative date-input" style={{ width: "100% !important", minWidth: "100% !important" }} min={new Date(Date.now()).toISOString().split('T')[0]} />
                                                     <ErrorMessage name="end_date" component="div" className="text-danger" />
                                                 </div>
                                             </div>

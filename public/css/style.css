@@ -1312,6 +1312,20 @@ input[type="range"]:focus {
     border-radius: 4px;
 }
 
+.offer_img{
+    z-index: 9;
+}
+
+.offer_img::before{
+    position: absolute;
+    content: "";
+    background-color: #da9900;
+    left: -14px;
+    height: 49px;
+    width: 72px;
+    z-index: -1;
+    border-radius: 0 16px 15px 0;
+}
 /* responsive css */
 
 @media (max-width: 280px) {
@@ -1433,6 +1447,22 @@ input[type="range"]:focus {
     }
     .main_side_screen .side_main_img{
         height: 100% !important;
+    }
+    .offer_img::before {
+        position: absolute;
+        content: "";
+        background-color: #da9900;
+        left: -20px;
+        height: 49px;
+        width: 57px;
+        z-index: -1;
+        border-radius: 0 16px 15px 0;
+    }
+    .offer_img img{
+       height: 35px;
+    }
+    .wallet_about_box .wallet_price_box .price_txt {
+        font-size: 12px;
     }
 }
 

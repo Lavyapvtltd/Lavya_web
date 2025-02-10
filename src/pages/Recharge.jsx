@@ -390,7 +390,7 @@ const Recharge = () => {
                                                         <div className="wallet_about_box mt-2">
                                                             {
                                                                 recharges?.map((recharge, index) => (
-                                                                    <div key={index} className="wallet_list_price_tab mb-2" onClick={() => {
+                                                                    <div key={index} className="wallet_list_price_tab mb-2 overflow-hidden" onClick={() => {
                                                                         if(Object.keys(trial || {}).length > 0){
                                                                             toast.error("You cannot modify the amount while using a trial product.");
                                                                             return;
@@ -401,6 +401,11 @@ const Recharge = () => {
                                                                         <input className="form-check-input d-none position-absolute" name="flexRadioDefault" type="radio" id={`priceCheck${index}`} />
                                                                         <label className="form-check-label wallet_price_box position-relative d-flex w-100" htmlFor={`priceCheck${index}`}>
                                                                             <ul className="p-0 m-0 d-flex align-items-center w-100 justify-content-between">
+                                                                                <li>
+                                                                                  <span className='offer_img position-relative d-flex align-items-center justify-content-center'>
+                                                                                   <img src="/images/offer.webp" alt="offer" className="img-fluid" />
+                                                                                  </span>
+                                                                                </li>
                                                                                 <li className="pe-1 text-center">
                                                                                     <div className="fw-semibold price_txt">Cost Price</div>
                                                                                     <p>{recharge?.value}</p>
