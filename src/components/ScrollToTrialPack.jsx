@@ -33,7 +33,7 @@ const ScrollToTrialPack = () => {
       onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
       onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
     >
-      <span role="img" aria-label="milk">🥛</span> Trial Pack
+      <span role="img" aria-label="milk">🥛</span> Milk Trial Pack
     </button>
   );
 };

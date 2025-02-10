@@ -10,7 +10,7 @@ import { walletAmountAddition } from '../features/authSlice';
 const Recharge = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { data } = location.state || {};
+    const { data,trial } = location.state || {};
     const dispatch = useDispatch();
     const recharges = useSelector(state => state.recharges.recharges);
     const { user_id, user } = useSelector((state) => state.auth);
@@ -237,7 +237,18 @@ const Recharge = () => {
             }
         }
     }
+    const handleChange = (e) => {
+        if(Object.keys(trial || {}).length > 0){
+            toast.error("You cannot modify the amount while using a trial product.");
+            return;
+        } 
+        setAmount(e.target.value);
+    }
     const handleAmountClick = (amount) => {
+        if(Object.keys(trial || {}).length > 0){
+            toast.error("You cannot modify the amount while using a trial product.");
+            return;
+        }
         setAmount(amount);
     }
     const handleRechargeClick = (recharge) => {
@@ -292,12 +303,12 @@ const Recharge = () => {
                                                             if (e.target.checked) {
                                                                 setPaymentOption(e.target.value);
                                                             }
-                                                        }} checked />
+                                                        }} checked={Object.keys(trial || {}).length == 0} />
                                                         <label class="form-check-label d-flex ms-2" for="walletRadio1">Setup Autopay</label>
                                                     </button>
                                                 </h2>
 
-                                                <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div id="collapseOne" className={`accordion-collapse collapse ${Object.keys(trial || {}).length == 0 ? 'show' : ''}`} aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                     <div className="accordion-body">
                                                         <div className="mb-3">
                                                             <input
@@ -305,7 +316,7 @@ const Recharge = () => {
                                                                 className="form-control rounded-1"
                                                                 id="exampleFormControlInput1"
                                                                 value={amount}
-                                                                onChange={(e) => setAmount(e.target.value)}
+                                                                onChange={handleChange}
                                                             />
                                                         </div>
                                                         <div className="amount_list">
@@ -342,11 +353,11 @@ const Recharge = () => {
                                                             if (e.target.checked) {
                                                                 setPaymentOption(e.target.value);
                                                             }
-                                                        }} />
+                                                        }} checked={Object.keys(trial || {}).length > 0}/>
                                                         <label class="form-check-label d-flex ms-2" for="walletRadio2">Recharge Once</label>
                                                     </button>
                                                 </h2>
-                                                <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div id="collapseTwo" className={`accordion-collapse collapse ${Object.keys(trial || {}).length > 0 ? 'show' : ''}`} aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                     <div className="accordion-body">
                                                         <div className="mb-3">
                                                             <input
@@ -354,6 +365,7 @@ const Recharge = () => {
                                                                 className="form-control rounded-1"
                                                                 id="exampleFormControlInput1"
                                                                 value={amount}
+                                                                onChange={handleChange}
                                                             />
                                                         </div>
                                                         <div className="amount_list">
@@ -362,6 +374,10 @@ const Recharge = () => {
                                                                     recharges?.map((recharge, index) => (
                                                                         <li className='d-inline-block me-2' key={index}>
                                                                             <button type='button' className='bg-white fw-semibold' onClick={() => {
+                                                                                if(Object.keys(trial || {}).length > 0){
+                                                                                    toast.error("You cannot modify the amount while using a trial product.");
+                                                                                    return;
+                                                                                }
                                                                                 document.getElementById(`priceCheck${index}`).checked = true;
                                                                                 handleRechargeClick(recharge)
                                                                             }}>{recharge?.value}</button>
@@ -375,6 +391,10 @@ const Recharge = () => {
                                                             {
                                                                 recharges?.map((recharge, index) => (
                                                                     <div key={index} className="wallet_list_price_tab mb-2" onClick={() => {
+                                                                        if(Object.keys(trial || {}).length > 0){
+                                                                            toast.error("You cannot modify the amount while using a trial product.");
+                                                                            return;
+                                                                        }
                                                                         document.getElementById(`priceCheck${index}`).checked = true;
                                                                         handleRechargeClick(recharge)
                                                                     }}>
@@ -441,7 +461,7 @@ const Recharge = () => {
                                                                 className="form-control rounded-1"
                                                                 id="exampleFormControlInput1"
                                                                 value={amount}
-                                                                onChange={(e) => setAmount(e.target.value)}
+                                                                onChange={handleChange}
                                                             />
                                                         </div>
                                                         <div className="amount_list">

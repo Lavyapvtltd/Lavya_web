@@ -80,7 +80,7 @@ const SubscriptionCheckout = () => {
             deliveryType: subscription_cart_item.subscription_type,
             trial_product_detail: trial || {}
         }
-        navigate("/recharge", { state: { data: data } });
+        navigate("/recharge", { state: { data: data,trial:trial } });
     }
 
     const handleGetOffer = async () => {
@@ -191,7 +191,7 @@ const SubscriptionCheckout = () => {
                     deliveryType: subscription_cart_item.subscription_type,
                     trial_product_detail: trial || {}
                 }
-                navigate("/recharge", { state: { data: data } });
+                navigate("/recharge", { state: { data: data,trial:trial } });
             }
         }
         else if (user.walletBalance < total) {
@@ -210,7 +210,7 @@ const SubscriptionCheckout = () => {
                     deliveryType: subscription_cart_item.subscription_type,
                     trial_product_detail: trial || {}
                 }
-                navigate("/recharge", { state: { data: data } });
+                navigate("/recharge", { state: { data: data,trial:trial } });
             }
         }
         else {
