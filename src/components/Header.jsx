@@ -163,7 +163,7 @@ const Header = () => {
                     </NavLink>
                   </div>
                 </div>
-                <div className="col-6 d-md-block d-none">
+                <div className="col-lg-5 col-md-5 d-md-block d-none">
                   <div className='d-md-block d-none'>
                     <SearchComponent />
                   </div>

@@ -284,6 +284,11 @@ const Recharge = () => {
     useEffect(() => {
         dispatch(fetchRechagresAsync());
     }, [])
+    useEffect(() => {
+        if(Object.keys(trial || {}).length > 0){
+            setPaymentOption("recharge once")
+        }
+    },[])
     return (
         <>
             <div className="container-fluid py-3">
@@ -292,7 +297,7 @@ const Recharge = () => {
                         <div className="col-lg-7 col-md-9 col-12">
                             <div className="row wallet_sec gy-lg-0 gy-md-3 gy-3">
                                 <div className="col-lg-12 col-md-12 col-12 mb-3" onClick={() => {
-                                    document.getElementById(`walletRadio1`).checked = true;
+                                    setPaymentOption('setup autopay');
                                 }}>
                                     <div className="wallet_box rounded-2">
                                         <div className="accordion" id="accordionExample">
@@ -303,12 +308,12 @@ const Recharge = () => {
                                                             if (e.target.checked) {
                                                                 setPaymentOption(e.target.value);
                                                             }
-                                                        }} checked={Object.keys(trial || {}).length == 0} />
+                                                        }} checked={paymentOption == 'setup autopay'} />
                                                         <label class="form-check-label d-flex ms-2" for="walletRadio1">Setup Autopay</label>
                                                     </button>
                                                 </h2>
 
-                                                <div id="collapseOne" className={`accordion-collapse collapse ${Object.keys(trial || {}).length == 0 ? 'show' : ''}`} aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div id="collapseOne" className={`accordion-collapse collapse ${paymentOption == 'setup autopay' ? 'show' : ''}`} aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                     <div className="accordion-body">
                                                         <div className="mb-3">
                                                             <input
@@ -342,7 +347,7 @@ const Recharge = () => {
                                     </div>
                                 </div>
                                 <div className="col-lg-12 col-md-12 col-12 mb-3" onClick={() => {
-                                    document.getElementById(`walletRadio2`).checked = true;
+                                    setPaymentOption('recharge once');
                                 }}>
                                     <div className="wallet_box rounded-2">
                                         <div className="accordion" id="accordionExample">
@@ -353,11 +358,11 @@ const Recharge = () => {
                                                             if (e.target.checked) {
                                                                 setPaymentOption(e.target.value);
                                                             }
-                                                        }} checked={Object.keys(trial || {}).length > 0}/>
+                                                        }} checked={paymentOption == 'recharge once'}/>
                                                         <label class="form-check-label d-flex ms-2" for="walletRadio2">Recharge Once</label>
                                                     </button>
                                                 </h2>
-                                                <div id="collapseTwo" className={`accordion-collapse collapse ${Object.keys(trial || {}).length > 0 ? 'show' : ''}`} aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div id="collapseTwo" className={`accordion-collapse collapse ${paymentOption == 'recharge once' ? 'show' : ''}`} aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                     <div className="accordion-body">
                                                         <div className="mb-3">
                                                             <input
@@ -369,65 +374,92 @@ const Recharge = () => {
                                                             />
                                                         </div>
                                                         <div className="amount_list">
-                                                            <ul className='p-0 m-0'>
-                                                                {
-                                                                    recharges?.map((recharge, index) => (
-                                                                        <li className='d-inline-block me-2' key={index}>
-                                                                            <button type='button' className='bg-white fw-semibold' onClick={() => {
-                                                                                if(Object.keys(trial || {}).length > 0){
-                                                                                    toast.error("You cannot modify the amount while using a trial product.");
-                                                                                    return;
-                                                                                }
-                                                                                document.getElementById(`priceCheck${index}`).checked = true;
+                                                            <ul className="p-0 m-0">
+                                                                {recharges?.map((recharge, index) => (
+                                                                    <li className="d-inline-block me-2" key={index}>
+                                                                        <button 
+                                                                            type="button" 
+                                                                            className={`bg-white fw-semibold ${selectedRecharge === index ? 'selected-button' : ''}`} 
+                                                                            onClick={() => {
+                                                                                if(Object.keys(trial || {}).length > 0) return toast.error("You can't add more than one trial product");
                                                                                 handleRechargeClick(recharge)
-                                                                            }}>{recharge?.value}</button>
-                                                                        </li>
-                                                                    ))
-                                                                }
+                                                                            }}
+                                                                            style={{ 
+                                                                                border: selectedRecharge?._id === recharge?._id ? "2px solid #309a20" : "1px solid #ccc",
+                                                                                padding: "8px 12px",
+                                                                                borderRadius: "5px",
+                                                                                cursor: "pointer"
+                                                                            }}
+                                                                        >
+                                                                            {recharge?.value}
+                                                                        </button>
+                                                                    </li>
+                                                                ))}
                                                             </ul>
                                                         </div>
 
                                                         <div className="wallet_about_box mt-2">
-                                                            {
-                                                                recharges?.map((recharge, index) => (
-                                                                    <div key={index} className="wallet_list_price_tab mb-2 overflow-hidden" onClick={() => {
-                                                                        if(Object.keys(trial || {}).length > 0){
-                                                                            toast.error("You cannot modify the amount while using a trial product.");
-                                                                            return;
-                                                                        }
-                                                                        document.getElementById(`priceCheck${index}`).checked = true;
-                                                                        handleRechargeClick(recharge)
-                                                                    }}>
-                                                                        <input className="form-check-input d-none position-absolute" name="flexRadioDefault" type="radio" id={`priceCheck${index}`} />
-                                                                        <label className="form-check-label wallet_price_box position-relative d-flex w-100" htmlFor={`priceCheck${index}`}>
-                                                                            <ul className="p-0 m-0 d-flex align-items-center w-100 justify-content-between">
+                                                            {recharges?.map((recharge, index) => (
+                                                                <div 
+                                                                    key={index} 
+                                                                    className="wallet_list_price_tab mb-2 overflow-hidden d-flex align-items-center justify-content-between" 
+                                                                    onClick={(event) => {
+                                                                        if(Object.keys(trial || {}).length > 0) return;
+                                                                        handleRechargeClick(recharge);
+                                                                    }}
+                                                                >
+                                                                    <input 
+                                                                        className="form-check-input d-none position-absolute" 
+                                                                        name="flexRadioDefault" 
+                                                                        type="radio" 
+                                                                        id={`priceCheck${index}`} 
+                                                                        checked={selectedRecharge?._id === recharge?._id} 
+                                                                        onChange={() => {}} 
+                                                                    />
+                                                                    <label 
+                                                                        className="form-check-label wallet_price_box position-relative d-flex w-100 align-items-center" 
+                                                                        htmlFor={`priceCheck${index}`} 
+                                                                        style={{ borderColor: selectedRecharge?._id === recharge?._id ? "#309a20" : "" }}
+                                                                    >
+                                                                        <ul className="p-0 m-0 d-flex align-items-center w-100 justify-content-between">
+                                                                            {selectedRecharge?._id === recharge?._id && (
                                                                                 <li>
-                                                                                  <span className='offer_img position-relative d-flex align-items-center justify-content-center'>
-                                                                                   <img src="/images/offer.webp" alt="offer" className="img-fluid" />
-                                                                                  </span>
+                                                                                    <span className='offer_img position-relative d-flex align-items-center justify-content-center'>
+                                                                                        <img src="/images/offer.webp" alt="offer" className="img-fluid" />
+                                                                                    </span>
                                                                                 </li>
-                                                                                <li className="pe-1 text-center">
-                                                                                    <div className="fw-semibold price_txt">Cost Price</div>
-                                                                                    <p>{recharge?.value}</p>
-                                                                                </li>
-                                                                                <li className="pe-1 text-center">
-                                                                                    <div className="fw-semibold price_txt">Cashback</div>
-                                                                                    <p>{recharge?.cashback}</p>
-                                                                                </li>
-                                                                                <li className="text-center">
-                                                                                    <div className="fw-semibold price_txt">Validity</div>
-                                                                                    <p>{recharge?.validity}</p>
-                                                                                </li>
-                                                                                <li className="ps-1 text-center">
-                                                                                    <button type="button" className="border-0" style={{ background: 'none' }}>
-                                                                                        <i className="fa-solid fa-xmark"></i>
-                                                                                    </button>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </label>
-                                                                    </div>
-                                                                ))
-                                                            }
+                                                                            )}
+                                                                            <li className="pe-1 text-center">
+                                                                                <div className="fw-semibold price_txt">Cost Price</div>
+                                                                                <p>{recharge?.value}</p>
+                                                                            </li>
+                                                                            <li className="pe-1 text-center">
+                                                                                <div className="fw-semibold price_txt">Cashback</div>
+                                                                                <p>{recharge?.cashback}</p>
+                                                                            </li>
+                                                                            <li className="text-center">
+                                                                                <div className="fw-semibold price_txt">Validity</div>
+                                                                                <p>{recharge?.validity}</p>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </label>
+
+                                                                    {/* Close Button in the Same Row */}
+                                                                    {selectedRecharge?._id === recharge?._id && (
+                                                                        <button 
+                                                                            type="button" 
+                                                                            className="border-0 ms-2" 
+                                                                            style={{ background: 'none' }} 
+                                                                            onClick={(event) => {
+                                                                                event.stopPropagation(); 
+                                                                                setSelectedRecharge({});
+                                                                            }}
+                                                                        >
+                                                                            <i className="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -437,7 +469,7 @@ const Recharge = () => {
                                 </div>
                                 <div className="col-lg-12 col-md-12 col-12 mb-3" onClick={() => {
                                     if (data && typeof data === 'object') {
-                                        document.getElementById(`walletRadio3`).checked = true;
+                                        setPaymentOption('payViaCash');
                                     }
                                 }}>
                                     <div className="wallet_box rounded-2">
@@ -445,20 +477,22 @@ const Recharge = () => {
                                             <div className="accordion-item">
                                                 <h2 className="accordion-header" id="headingThree">
                                                     <button className="accordion-button bg-none" onClick={() => handlePayViaCash()} type="button"
-                                                        data-bs-toggle={data && typeof data === 'object' ? "collapse" : ""}
+                                                        data-bs-toggle={paymentOption == 'payViaCash' ? "collapse" : ""}
                                                         data-bs-target="#collapseThree"
                                                         aria-expanded="true"
                                                         aria-controls="collapseThree"
                                                     >
                                                         <input class="form-check-input" type="radio" name="paymentoption" id="walletRadio3" value="payViaCash" onChange={(e) => {
-                                                            if (e.target.checked) {
-                                                                setPaymentOption(e.target.value);
+                                                            if (data && typeof data === 'object') {
+                                                                if (e.target.checked) { 
+                                                                    setPaymentOption(e.target.value);   
+                                                                }
                                                             }
-                                                        }} />
+                                                        }} checked = {paymentOption === 'payViaCash'}/>
                                                         <label class="form-check-label d-flex ms-2" for="walletRadio3">Pay Via Cash</label>
                                                     </button>
                                                 </h2>
-                                                <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                <div id="collapseThree" className={`accordion-collapse collapse ${paymentOption == 'payViaCash' ? 'show' : ''}`}  aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                     <div className="accordion-body">
                                                         <div className="mb-3">
                                                             <input

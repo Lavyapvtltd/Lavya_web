@@ -289,28 +289,28 @@ const SubscriptionCheckout = () => {
                 !toggleRecharge ? (
                     <div className="container-fluid checkout-section py-5">
                         <div className="container">
-                            <div className="row">
+                            <div className="row g-4">
                                 <DeliveryAddress setAddress={setAddress} />
                                 <div className="col-lg-6 col-md-6 col-12">
                                     {
                                         subscription_cart_item ? (
                                             <>
                                                 <div className="col-12">
-                                                    <div className="card_total_box p-5">
+                                                    <div className="card_total_box p-md-5 p-3">
                                                         <div className="d-flex justify-content-between">
                                                             <h5 className="fw-semibold">Your order</h5>
                                                             <p className="fw-semibold text-secondary">Subtotal</p>
                                                         </div>
                                                         <div className="order_place_check py-2">
-                                                            <div className="d-flex align-items-center border rounded-1 p-3">
-                                                                <div className="col-lg-3 col-md-3 col-4 border rounded-1 p-1 overflow-hidden img_hover position-relative">
+                                                            <div className="d-flex align-items-md-center align-items-start flex-md-row flex-column border rounded-1 p-3">
+                                                                <div className="col-lg-3 col-md-3 col-12 border rounded-1 p-1 overflow-hidden img_hover position-relative">
                                                                     <img
                                                                         src={`${IMAGE_BASE_URL}${subscription_cart_item?.icon}`}
                                                                         className="img-fluid"
                                                                         alt={subscription_cart_item?.name}
                                                                     />
                                                                 </div>
-                                                                <div className="ps-3">
+                                                                <div className="ps-md-3 pt-md-0 pt-3">
                                                                     <h6 className="text_clip_head fw-semibold mb-1">
                                                                         {subscription_cart_item.name}
                                                                     </h6>

@@ -161,6 +161,7 @@
     cursor: pointer;
     z-index: 999;
     position: relative;
+    text-align: start;
   }
   .date-input::-webkit-calendar-picker-indicator {
     opacity: 0 !important;

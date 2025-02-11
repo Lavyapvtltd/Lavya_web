@@ -99,7 +99,7 @@ const Home = () => {
                         spaceBetween: 10,
                       },
                       640: {
-                        slidesPerView: 4,
+                        slidesPerView: 3,
                         spaceBetween: 10,
                       },
                       1024: {
@@ -192,7 +192,7 @@ const Home = () => {
                     spaceBetween: 10,
                   },
                   640: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 10,
                   },
                   1024: {
@@ -251,7 +251,7 @@ const Home = () => {
                     spaceBetween: 10,
                   },
                   640: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 10,
                   },
                   1024: {
@@ -284,7 +284,7 @@ const Home = () => {
         <div className="container">
           <div className="row">
             {remainingBanners.map((item, index) => (
-              <div className="col-lg-4" key={index} onClick={handleBannerClick}>
+              <div className="col-lg-4 col-md-4" key={index} onClick={handleBannerClick}>
                 <div className="banner-item mb-4 img_hover rounded-2">
                   <a href="">
                     <img
@@ -335,7 +335,7 @@ const Home = () => {
                     spaceBetween: 10,
                   },
                   640: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 10,
                   },
                   1024: {
@@ -372,13 +372,9 @@ const Home = () => {
                 <h2 className="fw-semibold">Milk Trial Pack</h2>
               </div>
             </div>
-          </div>
-          <div className="container-fluid foot_banner py-md-5">
-            <div className="container">
-              <div className="row">
                 {trials.map((trial, index) => (
                   <div
-                    className="col-lg-4"
+                    className="col-lg-4 col-md-4"
                     key={index}
                     onClick={()=>{navigate(`/product-list/${trial?.product_id}`, { state: { trial: trial } })}}
                   >
@@ -401,8 +397,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+     
 
       <div className="container-fluid py-3 testimonial-section">
         <div className="container">

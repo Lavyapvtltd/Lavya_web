@@ -65,7 +65,7 @@ const Footer = () => {
       <footer className="mt-5">
         <div className="container-fluid footer_upper py-5">
           <div className="container">
-            <div className="row">
+            <div className="row g-4">
               <div className="col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="footer-widget footer-about-widget">
                   <div className="footer-logo mb-2">
@@ -146,13 +146,13 @@ const Footer = () => {
         </div>
         <div className="container-fluid copyRight_box prim_color_bg py-4">
           <div className="container">
-            <div className="row">
-              <div className="col-md-5 col-12">
-                <div className="copyright_txt clearfix text-md-start text-center">
-                  <p className="fs-6 text-white">All Rights Reserved @ Company <span class="current-year">{new Date().getFullYear()}</span></p>
+            <div className="row align-items-center">
+              <div className="col-lg-6 col-md-12 col-12">
+                <div className="copyright_txt clearfix text-lg-start text-center">
+                  <p className="fs-6 text-white m-0">All Rights Reserved @ Company <span class="current-year">{new Date().getFullYear()}</span></p>
                 </div>
               </div>
-              <div className="col-md-6 col-12 align-self-center d-flex justify-content-md-end justify-content-center">
+              <div className="col-lg-6 col-md-12 col-12 align-self-center d-flex justify-content-lg-end justify-content-center">
                 <div className="services_btm">
                   <ul className="p-0 m-0 d-flex align-items-center">
                     <li className="text-white me-3"><NavLink to="/term-conditions?type=1">Privacy &amp; Policy</NavLink></li>

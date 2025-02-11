@@ -276,6 +276,7 @@ input:focus {
     color: #fff;
     padding: 7px 12px;
     border-radius: 3px;
+    white-space: nowrap;
 }
 
 .cart_plus_minus {
@@ -450,7 +451,8 @@ input.cart-plus-minus-box {
 .header_side_bar ul li .user_list {
     min-width: 180px;
     right: 0;
-    z-index: 999;
+    left:auto;
+    z-index: 9999;
     box-shadow: 0 0 3px #000;
     border-top: 1px solid #ececec;
     top: 130%;
@@ -462,6 +464,7 @@ input.cart-plus-minus-box {
         top 0.2s ease 0.1s;
     opacity: 0;
     visibility: hidden;
+    background: #fff;
 }
 .header_side_bar .user_list li {
     padding: 5px 10px;
@@ -1204,9 +1207,6 @@ input[type="range"]:focus {
     border-radius: 4px;
     padding: 8px 8px;
 }
-.wallet_about_box .form-check-input:checked[type="radio"] + .wallet_price_box {
-    border-color: var(--primary-color) !important;
-}
 
 .transaction_history .history_box {
     box-shadow: 0 0 3px #737373;
@@ -1464,11 +1464,17 @@ input[type="range"]:focus {
     .wallet_about_box .wallet_price_box .price_txt {
         font-size: 12px;
     }
+    .about-section img{
+        height: auto !important;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
     .navbar-brand img {
         width: 70px;
+    }
+    .label_detail {
+        font-size: 12px;
     }
     .header_side_bar .side_list .link_bx {
         height: 40px;
@@ -1502,7 +1508,7 @@ input[type="range"]:focus {
 
 @media (min-width: 1400px) {
     .container {
-        max-width: 78%;
+        max-width: 90%;
     }
 }
 @media (min-width: 1800px) {

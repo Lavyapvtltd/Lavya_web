@@ -109,7 +109,7 @@ const DeliveryAddress = ({ setAddress }) => {
 
     return (
         <>
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-12 col-12">
                 <div className="col-12">
                     <div className="address_checkout rounded-2">
                         <div className="d-flex align-items-center justify-content-between p-3" style={{ borderBottom: "1px solid #000" }}>
