@@ -7,10 +7,15 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategoriesAsync } from "../features/categorySlice";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { categories, status } = useSelector((state) => state.categories);
+  const handleCategoryClick = (categoryId) => {
+    navigate("/product-list", { state: { categoryId: categoryId } });
+  };
   useEffect(() => {
     dispatch(fetchCategoriesAsync());
   }, []);

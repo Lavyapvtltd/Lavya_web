@@ -36,13 +36,11 @@ const Home = () => {
   const testimonial_status = useSelector((state) => state.testimonials.status);
   const banners = useSelector((state) => state.banners.banners);
   const trials = useSelector((state) => state.trials.trials);
+  const trial_status = useSelector((state) => state.trials.status);
   const topBanners = banners.slice(0, 4);
   const remainingBanners = banners.slice(4);
   const handleProductClick = (productId) => {
     navigate(`/product-list/${productId}`);
-  };
-  const handleCategoryClick = (categoryId) => {
-    navigate("/product-list", { state: { categoryId: categoryId } });
   };
   const handleBannerClick = () => {
     navigate("/product-list");
@@ -60,7 +58,7 @@ const Home = () => {
 
   return (
     <>
-      <ScrollToTrialPack/>
+      <ScrollToTrialPack />
       <Slider />
       <div className="container-fluid product_sliders categories_box py-5">
         <div className="container">
@@ -71,7 +69,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <Categories/>
+          <Categories />
         </div>
       </div>
 
@@ -229,7 +227,11 @@ const Home = () => {
         <div className="container">
           <div className="row">
             {remainingBanners.map((item, index) => (
-              <div className="col-lg-4 col-md-4" key={index} onClick={handleBannerClick}>
+              <div
+                className="col-lg-4 col-md-4"
+                key={index}
+                onClick={handleBannerClick}
+              >
                 <div className="banner-item mb-4 img_hover rounded-2">
                   <a href="">
                     <img
@@ -317,11 +319,19 @@ const Home = () => {
                 <h2 className="fw-semibold">Milk Trial Pack</h2>
               </div>
             </div>
+            {trial_status === "loading" ? (
+              <Spinner />
+            ) : trials?.length > 0 ? (
+              <>
                 {trials.map((trial, index) => (
                   <div
                     className="col-lg-4 col-md-4"
                     key={index}
-                    onClick={()=>{navigate(`/product-list/${trial?.product_id}`, { state: { trial: trial } })}}
+                    onClick={() => {
+                      navigate(`/product-list/${trial?.product_id}`, {
+                        state: { trial },
+                      });
+                    }}
                   >
                     <div className="banner-item mb-4 img_hover rounded-2">
                       <a href="">
@@ -339,10 +349,13 @@ const Home = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
+              </>
+            ) : (
+              <p>No trials available</p>
+            )}
           </div>
-     
+        </div>
+      </div>
 
       <div className="container-fluid py-3 testimonial-section">
         <div className="container">
