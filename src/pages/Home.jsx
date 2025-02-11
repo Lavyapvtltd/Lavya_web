@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchProductsAsync } from "../features/productSlice";
-import { fetchCategoriesAsync } from "../features/categorySlice";
 import { fetchTestimonialsAsync } from "../features/testimonialSlice";
 import { fetchCartsAsync } from "../features/cartSlice";
 import { fetchSubscriptionCartAsync } from "../features/subscriptionCartSlice";
@@ -11,14 +10,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
-import Category from "../components/Category";
+import Categories from "../components/Categories";
 import Spinner from "../components/Spinner";
 import Slider from "../components/Slider";
 import Testimonial from "../components/Testimonial";
 import { fetchBannersAsync } from "../features/bannerSlice";
 import { IMAGE_BASE_URL } from "../constants/contant";
 import { fetchTrialsAsync } from "../features/trialSlice";
-import { use } from "react";
 import ScrollToTrialPack from "../components/ScrollToTrialPack";
 
 const Home = () => {
@@ -33,9 +31,7 @@ const Home = () => {
   });
   let feature_products = [];
   feature_products = [...products].reverse();
-  const categories = useSelector((state) => state.categories.categories);
   const product_status = useSelector((state) => state.products.status);
-  const category_status = useSelector((state) => state.categories.status);
   const testimonials = useSelector((state) => state.testimonials.testimonials);
   const testimonial_status = useSelector((state) => state.testimonials.status);
   const banners = useSelector((state) => state.banners.banners);
@@ -53,7 +49,6 @@ const Home = () => {
   };
   useEffect(() => {
     dispatch(fetchProductsAsync());
-    dispatch(fetchCategoriesAsync());
     dispatch(fetchTestimonialsAsync());
     dispatch(fetchBannersAsync());
     dispatch(fetchTrialsAsync());
@@ -76,57 +71,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="row justify-content-center">
-            <div className="col-lg-10 col-md-12 col-12">
-              <div className="row justify-content-center align-items-center">
-                {category_status === "loading" ? (
-                  <Spinner />
-                ) : categories?.length > 0 ? (
-                  <Swiper
-                    className="category_carousel"
-                    pagination={{ el: ".bannerPagination" }}
-                    modules={[Pagination, Autoplay]}
-                    slidesPerView={6}
-                    spaceBetween={20}
-                    loop={true}
-                    autoplay={{
-                      delay: 2500,
-                      disableOnInteraction: false,
-                    }}
-                    breakpoints={{
-                      320: {
-                        slidesPerView: 3,
-                        spaceBetween: 10,
-                      },
-                      640: {
-                        slidesPerView: 3,
-                        spaceBetween: 10,
-                      },
-                      1024: {
-                        slidesPerView: 6,
-                        spaceBetween: 20,
-                      },
-                      1440: {
-                        slidesPerView: 6,
-                        spaceBetween: 30,
-                      },
-                    }}
-                  >
-                    {categories?.map((category, index) => (
-                      <SwiperSlide
-                        key={index}
-                        onClick={() => handleCategoryClick(category._id)}
-                      >
-                        <Category category={category} />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                ) : (
-                  <h4 className="text-center">Categories not found</h4>
-                )}
-              </div>
-            </div>
-          </div>
+          <Categories/>
         </div>
       </div>
 

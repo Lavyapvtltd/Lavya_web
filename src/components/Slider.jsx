@@ -3,14 +3,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IMAGE_BASE_URL } from '../constants/contant';
 import { useNavigate } from 'react-router';
 import { fetchSlidersAsync } from '../features/sliderSlice';
+import SliderShimmer from '../shimmer/SliderShimmer';
 
 const Slider = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const sliders = useSelector((state) => state.sliders.sliders);
+    const {sliders,status} = useSelector((state) => state.sliders);
     useEffect(() => {
         dispatch(fetchSlidersAsync());
     }, [dispatch]);
+    
+    if (status === "loading") {
+        return <SliderShimmer />; 
+    }    
     return (
         <div id="carouselExampleCaptions" className="main_slider carousel slide" data-bs-ride="carousel">
             <div className="carousel-indicators">
