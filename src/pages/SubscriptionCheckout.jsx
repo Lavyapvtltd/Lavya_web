@@ -283,6 +283,9 @@ const SubscriptionCheckout = () => {
     useEffect(() => {
         dispatch(fetchFirstTimeRechargeAsync());
     }, [])
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [toggleRecharge]); 
     return (
         <>
             {

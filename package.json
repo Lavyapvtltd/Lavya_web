@@ -28,6 +28,7 @@
     "sweetalert2": "^11.14.1",
     "swiper": "^11.1.12",
     "vite-plugin-pwa": "^0.20.5",
+    "yet-another-react-lightbox": "^3.21.7",
     "yup": "^1.4.0"
   },
   "devDependencies": {
